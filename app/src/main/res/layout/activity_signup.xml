@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Signup">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/e_mail_signup"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:hint="이메일 주소"
+        android:maxLines="1"
+        android:inputType="text"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.31"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <TextView
+        android:id="@+id/title"
+        android:height="150px"
+        android:width="300px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="회원가입 폼"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        tools:layout_editor_absoluteX="177dp"
+        tools:layout_editor_absoluteY="111dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/password"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:hint="패스워드"
+        android:maxLines="1"
+        android:textSize="10dp"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.316"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Linear" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/password2"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:hint="패스워드 확인"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.316"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <LinearLayout
+        android:id="@+id/Linear"
+        android:layout_width="350dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputnumber">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/verifycode"
+            android:layout_width="204dp"
+            android:layout_height="60dp"
+            android:hint="인증코드를 입력해주세요"
+            android:inputType="number"
+            android:maxLines="1"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/Timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/verify_btn"
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:text="확인"
+            android:textSize="8dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/back"
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="0dp"
+        android:textSize="25dp"
+        android:text="←"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.00"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/verify"
+        android:layout_width="90dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="175dp"
+        android:textSize="8dp"
+        android:text="중복 확인"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toEndOf="@+id/e_mail_signup"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/checkemail"
+        android:layout_width="197dp"
+        android:layout_height="22dp"
+        android:textSize="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.233"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/e_mail_signup" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/inputnumber"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:inputType="number"
+        android:maxLines="1"
+        android:hint="전화번호 입력해주세요(010을 제외한 나머지 8자리)"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.316"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkemail" />
+
+    <Button
+        android:id="@+id/sendveritication"
+        android:layout_width="90dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:text="인증번호 발송"
+        android:textSize="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/inputnumber"
+        app:layout_constraintTop_toBottomOf="@+id/verify" />
+
+    <Button
+        android:id="@+id/next0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다음"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.996"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password2"
+        app:layout_constraintVertical_bias="0.965" />
+
+    <TextView
+        android:id="@+id/checkpassword"
+        android:layout_width="204dp"
+        android:layout_height="20dp"
+        android:text=""
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.246"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password2"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
