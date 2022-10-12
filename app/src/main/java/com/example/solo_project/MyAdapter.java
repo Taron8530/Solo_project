@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.solo_project.ViewType;
 
 import java.util.ArrayList;
 
@@ -31,12 +30,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if(viewType == ViewType.CENTER_JOIN)
+        if(viewType == 0)
         {
             view = inflater.inflate(R.layout.center_join, parent, false);
             return new CenterViewHolder(view);
         }
-        else if(viewType == ViewType.LEFT_CHAT)
+        else if(viewType == 1)
         {
             view = inflater.inflate(R.layout.left_chat, parent, false);
             return new LeftViewHolder(view);

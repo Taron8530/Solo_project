@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.InputType;
@@ -44,9 +46,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Signup extends AppCompatActivity {
-    private boolean emailcheck = false;
-    private boolean passwordcheck = false;
-    private boolean codecheck = false;
     FirebaseAuth mauth;
     private String verficationID;
     @Override
@@ -146,7 +145,7 @@ public class Signup extends AppCompatActivity {
                     Toast T = Toast.makeText(Signup.this,"번호를 입력해주세요",Toast.LENGTH_SHORT);
                     T.show();
                 }else{
-                    sendverificationcode(number);
+                    send_verificationcode(number);
                 }
             }
         });
@@ -235,7 +234,7 @@ public class Signup extends AppCompatActivity {
         }
     };
 
-    public void sendverificationcode(String number){
+    public void send_verificationcode(String number){
         EditText num = findViewById(R.id.inputnumber);
         EditText E = findViewById(R.id.verifycode);
         Button btn = findViewById(R.id.verify_btn);
@@ -273,5 +272,20 @@ public class Signup extends AppCompatActivity {
                 }
             }
         });
+    }
+    public void Timer(TextView time){
+        int timer = 300; //300초 변수 선언
+        int hour = (timer - 1) / 5;
+
+
+        time.post(new Runnable() {
+            @Override
+            public void run() {
+                if(timer <= 0){
+                    return;
+                }
+            }
+        });
+
     }
 }
