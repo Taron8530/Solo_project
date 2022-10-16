@@ -9,6 +9,7 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/e_mail"
+
         android:layout_width="250dp"
         android:layout_height="55dp"
         android:layout_marginTop="20dp"
@@ -57,7 +58,6 @@
         android:layout_height="55dp"
         android:layout_marginTop="40dp"
         android:text="로그인"
-        android:background="@drawable/item_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,21 +86,23 @@
         android:layout_width="280dp"
         android:layout_height="55dp"
         android:layout_marginTop="48dp"
+        android:background="@drawable/kakao_login_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submit"
-        android:background="@drawable/kakao_login_btn" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
         android:id="@+id/naver_login_btn"
         android:layout_width="280dp"
         android:layout_height="55dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/naver_login_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/kakao_login_btn"
-        android:background="@drawable/naver_login_btn"/>
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

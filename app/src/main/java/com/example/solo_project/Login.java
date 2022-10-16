@@ -44,9 +44,9 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         SharedPreferences sf = getSharedPreferences("user_verify",MODE_PRIVATE);
         String v = sf.getString("user_verify","");
-        setContentView(R.layout.activity_login);
         if(v!=""){
             Intent I = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(I);

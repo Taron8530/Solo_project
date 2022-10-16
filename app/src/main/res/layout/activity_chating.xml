@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chating">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="414dp"
+        android:layout_height="68dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+      <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/chating_text"
+          android:singleLine="true"
+          android:maxLines="1"
+          android:layout_width="322dp"
+          android:layout_height="67dp"
+          android:hint="입력해주세요" />
+
+      <Button
+          android:id="@+id/send_chating"
+          android:layout_width="150dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="전송" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/Chat_scroll"
+        android:layout_width="412dp"
+        android:layout_height="612dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chating_recyclerview"
+            android:layout_width="417dp"
+            android:layout_height="612dp" />
+      </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/chat_exit"
+        android:layout_width="61dp"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:text="←"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
