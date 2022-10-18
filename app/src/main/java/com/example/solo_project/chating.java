@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,6 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;   //json
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,31 +38,34 @@ public class chating extends AppCompatActivity {
     String read; //서버에서 보내오는 문자열
     private RecyclerView recyclerView;
     private Button chat_btn;
-    private HorizontalScrollView scroll;
     private String TAG = "Chat_Activity";
     //시간
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String sender;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chating);
         chat_btn = findViewById(R.id.send_chating);
+        Intent i = getIntent();
+        nickname = i.getStringExtra("my_nickname");
+        sender = i.getStringExtra("sender");
+        Log.e("닉네임 화깅ㄴ",nickname);
         mHandler = new Handler();//핸들러 변수
         recyclerView = findViewById(R.id.chating_recyclerview); //리사이클러뷰 할당
         message = findViewById(R.id.chating_text);
 
         LinearLayoutManager manager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false);//리사이클러뷰 매니저
-
         recyclerView.setLayoutManager(manager); // LayoutManager 등록
-
+        dataList = new ArrayList<>();
+        adapter = new MyAdapter(dataList);
         recyclerView.setAdapter(adapter); //리사이클러뷰에 어뎁터 장착
-
         Waiting_msg(); //서버에서 보내는 메세지 받을 준비
         chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!message.getText().toString().trim().equals("")){
-                    sendMsg(message.getText().toString());
+                    sendMsg(message.getText().toString(),sender);
                     Log.e(TAG,"눌림");
                 }
             }
@@ -78,13 +85,22 @@ public class chating extends AppCompatActivity {
             }
         }.start();
     }
-    public void sendMsg(String msg){
+    public void sendMsg(String msg,String sender){
         new Thread() {
             @Override
             public void run() {
                 super.run();
                 try {
-                    sendWriter.println(nickname +"/"+ msg);
+                    JSONObject jsonObject = new JSONObject();
+                    JSONArray jsonArray = new JSONArray();
+                    JSONObject wrapObject = new JSONObject();
+                    jsonObject.put("sender",sender);
+                    jsonObject.put("messege",msg);
+                    jsonObject.put("nickname",nickname);
+                    jsonArray.put(jsonObject);
+                    wrapObject.put("list",jsonArray);
+
+                    sendWriter.println(wrapObject);
                     sendWriter.flush();
                     message.setText("");
                 } catch (Exception e) {
@@ -127,6 +143,7 @@ public class chating extends AppCompatActivity {
         @Override
         public void run() {
             if(Msgs[0].equals(nickname)){
+                Log.e("봐바라",Msgs[0]);
                 dataList.add(new chat_item(Msgs[1],Msgs[0],Msgs[2],2));
             }else{
                 dataList.add(new chat_item(Msgs[1],Msgs[0],Msgs[2],1));

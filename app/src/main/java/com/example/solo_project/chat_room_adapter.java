@@ -17,9 +17,9 @@ import java.util.ArrayList;
 public class chat_room_adapter extends RecyclerView.Adapter<chat_room_adapter.ViewHolder> {
     String TAG = "main_adapter";
     ArrayList<chat_room_item> lists;
-    private main_adapter.OnItemClickListener mListener = null ;
+    private chat_room_adapter.OnItemClickListener mListener = null ;
 
-    public void setOnItemClickListener(main_adapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(chat_room_adapter.OnItemClickListener listener) {
         mListener = listener ;
     }
     public interface OnItemClickListener {
@@ -69,7 +69,7 @@ public class chat_room_adapter extends RecyclerView.Adapter<chat_room_adapter.Vi
         public void onbind(chat_room_item item) {
             Log.e(TAG, "onbind: 호출됨");
             last_msg.setText(item.getLast_msg());
-            nickname.setText("판매자: "+item.getNickname());;
+            nickname.setText(item.getNickname());;
             Glide.with(itemView).load("http://35.166.40.164/profile/"+nickname+".png").override(100, 100).circleCrop().error(R.drawable.app_icon).into(profile);
         }
     }

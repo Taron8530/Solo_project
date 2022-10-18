@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="71dp"
         android:orientation="horizontal"
+        android:layout_marginTop="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <ImageView
             android:id="@+id/chat_room_profile"
             android:layout_width="16dp"

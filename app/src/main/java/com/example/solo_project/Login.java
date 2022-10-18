@@ -91,7 +91,7 @@ public class Login extends AppCompatActivity {
                 public void onClick(View view) {
                     Log.e("getHash",getKeyHash(Login.this));
 
-                    KakaoSdk.init(Login.this, "8666d84ac4195731f47eea9eae8e7c17");
+                    KakaoSdk.init(Login.this, "4d73f7809329175f76afdf054f1e3e42");
 
                     if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(Login.this)){
                         UserApiClient.getInstance().loginWithKakaoTalk(Login.this,(oAuthToken, error) -> {
@@ -124,8 +124,7 @@ public class Login extends AppCompatActivity {
         Google_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent I = new Intent(Login.this,MainActivity.class);
-                startActivity(I);
+                Log.e("HashKey",getKeyHash(Login.this));
 
             }
         });
@@ -136,6 +135,7 @@ public class Login extends AppCompatActivity {
             PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
             if (packageInfo == null)
                 return null;
+
 
             for (Signature signature : packageInfo.signatures) {
                 try {

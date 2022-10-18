@@ -51,7 +51,8 @@ public class Signup extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mauth = FirebaseAuth.getInstance();
+        setContentView(R.layout.activity_signup);
+//        mauth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_signup);
         TextView back = findViewById(R.id.back);
         Button verify = findViewById(R.id.verify);

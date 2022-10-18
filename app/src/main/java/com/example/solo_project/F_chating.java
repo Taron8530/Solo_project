@@ -1,10 +1,12 @@
 package com.example.solo_project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,10 +46,29 @@ public class F_chating extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        Log.e(TAG,nickname);
-        View root = inflater.inflate(R.layout.fragment_f_chating, container, false); // 뷰 변수
+        View root = inflater.inflate(R.layout.fragment_f_chating, container, false);
+        Log.e("로그 확인!","root 할당됨");// 뷰 변수
         recyclerView = root.findViewById(R.id.chat_room_recyclerview);
+        Log.e("로그 확인!",String.valueOf(recyclerView));
         adapter = new chat_room_adapter();
+        Log.e("로그 확인!","어뎁터 할당됨");
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
         adapter.setLists(list);
+        list.add(new chat_room_item("루디","안녕하세요","2시"));
+        adapter.notifyDataSetChanged();
+        adapter.setOnItemClickListener(new chat_room_adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Log.e("itemcl",list.get(position).getNickname()+" 눌림");
+                Intent i = new Intent(getActivity(),chating.class);
+                i.putExtra("my_nickname",nickname);
+                i.putExtra("sender",list.get(position).getNickname());
+                getActivity().startActivity(i);
+            }
+        });
         return root;
     }
 }
