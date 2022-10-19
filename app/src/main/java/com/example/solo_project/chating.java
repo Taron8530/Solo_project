@@ -91,16 +91,17 @@ public class chating extends AppCompatActivity {
             public void run() {
                 super.run();
                 try {
-                    JSONObject jsonObject = new JSONObject();
-                    JSONArray jsonArray = new JSONArray();
-                    JSONObject wrapObject = new JSONObject();
-                    jsonObject.put("sender",sender);
-                    jsonObject.put("messege",msg);
-                    jsonObject.put("nickname",nickname);
-                    jsonArray.put(jsonObject);
-                    wrapObject.put("list",jsonArray);
+//                    JSONObject jsonObject = new JSONObject();
+//                    JSONArray jsonArray = new JSONArray();
+//                    JSONObject wrapObject = new JSONObject();
+//                    jsonObject.put("sender",sender);
+//                    jsonObject.put("messege",msg);
+//                    jsonObject.put("nickname",nickname);
+//                    jsonArray.put(jsonObject);
+//                    wrapObject.put("list",jsonArray);
+//                    Log.e("JSON",wrapObject.toString());
 
-                    sendWriter.println(wrapObject);
+                    sendWriter.println(sender+"/"+nickname +"/"+msg);
                     sendWriter.flush();
                     message.setText("");
                 } catch (Exception e) {
@@ -109,6 +110,20 @@ public class chating extends AppCompatActivity {
             }
         }.start();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            sendWriter.println("close"+nickname);
+            sendWriter.flush();
+            socket.close();
+            sendWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void Waiting_msg(){
         new Thread() {
             public void run() {
@@ -142,13 +157,14 @@ public class chating extends AppCompatActivity {
 
         @Override
         public void run() {
-            if(Msgs[0].equals(nickname)){
+            if(Msgs[1].equals(nickname)){
                 Log.e("봐바라",Msgs[0]);
-                dataList.add(new chat_item(Msgs[1],Msgs[0],Msgs[2],2));
+                dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],2));
             }else{
-                dataList.add(new chat_item(Msgs[1],Msgs[0],Msgs[2],1));
+                dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],1));
             }
             adapter.notifyDataSetChanged();
         }
     }
+
 }

@@ -70,7 +70,8 @@ public class chat_room_adapter extends RecyclerView.Adapter<chat_room_adapter.Vi
             Log.e(TAG, "onbind: 호출됨");
             last_msg.setText(item.getLast_msg());
             nickname.setText(item.getNickname());;
-            Glide.with(itemView).load("http://35.166.40.164/profile/"+nickname+".png").override(100, 100).circleCrop().error(R.drawable.app_icon).into(profile);
+            Log.e("이미지",item.getNickname());
+            Glide.with(itemView).load("http://35.166.40.164/profile/"+item.getNickname()+".png").override(100, 100).circleCrop().error(R.drawable.app_icon).into(profile);
         }
     }
 }
