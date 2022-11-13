@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,8 +27,10 @@ public class used_info extends AppCompatActivity {
     private TextView used_name;
     private TextView price;
     private TextView detail;
+    private Button chat_btn;
     private ImageView profile;
     private int image_size;
+    private String MyNickname;
 
     private ArrayList<String> images;
     @Override
@@ -40,7 +43,9 @@ public class used_info extends AppCompatActivity {
         price = findViewById(R.id.used_info_price);
         used_name = findViewById(R.id.used_info_name);
         profile = findViewById(R.id.user_profile);
+        chat_btn = findViewById(R.id.go_chating);
         images = new ArrayList<>();
+        MyNickname = i.getStringExtra("my_nickname");
         nickname.setText("판매자:   " +i.getStringExtra("nickname"));
         detail.setText("설명글 \n\n\n"+i.getStringExtra("detail"));
         price.setText(i.getStringExtra("price")+" 원");
@@ -70,6 +75,14 @@ public class used_info extends AppCompatActivity {
             }
         });
         setupIndicators(images.size());
+        chat_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent I = new Intent(used_info.this,chating.class);
+                I.putExtra("my_nickname",MyNickname);
+                I.putExtra("sender",i.getStringExtra("nickname"));
+            }
+        });
     }
     private void setupIndicators(int count) {
         ImageView[] indicators = new ImageView[count];

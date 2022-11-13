@@ -67,6 +67,7 @@ public class F_profile extends Fragment {
                 .load("http://35.166.40.164/profile/"+nickname+".png")
                 .circleCrop()
                 .override(600,600)
+                .error(R.drawable.app_icon)
                 .into(profile);
         email_view.setText(email);
         nickname_view.setText(nickname);

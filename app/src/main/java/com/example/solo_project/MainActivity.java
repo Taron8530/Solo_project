@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("Main",nickname+"/"+email);
         home_fregment = new F_home();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, home_fregment).commit();
+        setTitle("홈");
         BottomNavigationView bottom = findViewById(R.id.bottom_menu);
         bottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -40,14 +41,17 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab_home:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, home_fregment).commit();
                         Log.e("프래그먼트", "여긴 홈");
+                        setTitle("홈");
                         return true;
                     case R.id.tab_chating:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, chating_fregment).commit();
                         Log.e("프래그먼트", "여긴 채팅");
+                        setTitle("채팅");
                         return true;
                     case R.id.tab_profile:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, profile_fregment).commit();
                         Log.e("프래그먼트", "여긴 프로필");
+                        setTitle("프로필");
                         return true;
                     case R.id.tab_add:
                         Intent I = new Intent(MainActivity.this,used_add.class);

@@ -52,7 +52,7 @@ public class Signup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-//        mauth = FirebaseAuth.getInstance();
+        mauth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_signup);
         TextView back = findViewById(R.id.back);
         Button verify = findViewById(R.id.verify);
@@ -242,13 +242,13 @@ public class Signup extends AppCompatActivity {
         E.setVisibility(View.VISIBLE);
         btn.setVisibility(View.VISIBLE);
         num.setInputType(InputType.TYPE_NULL);
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mauth)
-                        .setPhoneNumber("+82 10"+number)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .build();
+        PhoneAuthOptions options;
+        options = PhoneAuthOptions.newBuilder(mauth)
+                .setPhoneNumber("+82 10"+number)       // Phone number to verify
+                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                .setActivity(this)                 // Activity (for callback binding)
+                .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
 
     }

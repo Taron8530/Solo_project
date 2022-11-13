@@ -216,11 +216,6 @@ public class Signup_prof extends AppCompatActivity {
                 filepath = getRealPathFromURI(Uri);
                 Log.e("ㅇㅇ", filepath);
                 Log.e("onActivityResult: ", Uri.toString());
-                Glide.with(this)
-                        .load(Uri)
-                        .centerCrop()
-                        .override(600,600)
-                        .into((ImageView) findViewById(R.id.profilebtn));
             }
 
         }

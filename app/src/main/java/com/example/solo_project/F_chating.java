@@ -57,15 +57,13 @@ public class F_chating extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
         adapter.setLists(list);
-        list.add(new chat_room_item("로디","안녕하세요","2시"));
+        list.add(new chat_room_item("로디","안녕하세요"));
 
-        list.add(new chat_room_item("테스트 유저","구매 가능한가요?","2시"));
+        list.add(new chat_room_item("테스트 유저","구매 가능한가요?"));
 
-        list.add(new chat_room_item("하이","넵 그때 봬요","2시"));
+        list.add(new chat_room_item("하이","넵 그때 봬요"));
 
-        list.add(new chat_room_item("테론","안사요 ㅡㅡ","2시"));
-
-        list.add(new chat_room_item("콜라","너무 비싸요 ","2시"));
+        list.add(new chat_room_item("테스트","넹"));
         adapter.notifyDataSetChanged();
         adapter.setOnItemClickListener(new chat_room_adapter.OnItemClickListener() {
             @Override

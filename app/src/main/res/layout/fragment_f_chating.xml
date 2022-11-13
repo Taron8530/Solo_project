@@ -14,9 +14,9 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="49dp"
+            android:gravity="center"
             android:text="대화 목록"
             android:textSize="25dp"
-            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +24,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chat_room_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="678dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

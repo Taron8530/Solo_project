@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -28,6 +30,8 @@ public class frag_salehistory_ing extends Fragment {
     //    TextView back;
     public frag_salehistory_ing(String nickname){
         this.nickname = nickname;
+
+    }public frag_salehistory_ing(){
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
