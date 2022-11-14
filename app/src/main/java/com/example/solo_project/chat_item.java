@@ -7,9 +7,9 @@ public class chat_item {
     private String name;
     private String time;
     private int viewType;
-    private Uri uri;
+    private String uri;
 
-    public chat_item(String content, String name , String time, Uri uri,int viewType) {
+    public chat_item(String content, String name , String time, String uri,int viewType) {
         this.content = content;
         this.name = name;
         this.time = time;
@@ -20,7 +20,7 @@ public class chat_item {
         return content;
     }
 
-    public Uri getUri(){
+    public String getUri(){
         return uri;
     }
 

@@ -1,10 +1,12 @@
 package com.example.solo_project;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -28,7 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import java.util.*;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
@@ -44,6 +47,13 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class chating extends AppCompatActivity {
     String nickname; //닉네임
@@ -272,6 +282,7 @@ public class chating extends AppCompatActivity {
         i.setAction(i.ACTION_GET_CONTENT);
         startActivityForResult(i, 1);
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -286,10 +297,42 @@ public class chating extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Uri Uri = data.getData();
+                Log.e("테스트 로그","진입");
                 try {
                     String path = getRealPathFromURI(Uri);
                     Log.e("ㅇㅇ", path);
-                    dataList.add(new chat_item("",nickname,"",Uri,3));
+                    ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+                    File file = new File(path);
+                    Log.e("테스트 로그","파일 생성");
+                    Log.e("realPath",path);
+//                    if (!file.exists()) {       // 원하는 경로에 폴더가 있는지 확인
+//                        file.mkdirs();    // 하위폴더를 포함한 폴더를 전부 생성
+//                    }
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                    String filenum = get_file_number();
+                    Log.e("테스트 로그",filenum);
+                    MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("uploaded_file",filenum, requestBody);
+                    Call<String> call = apiInterface.chat_file_upload(fileToUpload,filenum);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if(response.body() != null){
+                                if(response.equals("실패")){
+                                    Toast.makeText(chating.this, "이미지 업로드에 실패했습니다", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Log.e("테스트 로그 확인!","http://35.166.40.164/file/"+response.body());
+                                    sendMsg(response.body(),sender);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(chating.this, "이미지 업로드에 실패했습니다", Toast.LENGTH_SHORT).show();
+                            Log.e("테스트 로그",t.toString());
+                        }
+                    });
+                    dataList.add(new chat_item("",nickname,"",Uri.toString(),3));
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
                 }catch (Exception e){
@@ -299,6 +342,21 @@ public class chating extends AppCompatActivity {
             }
 
         }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private String get_file_number(){
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit,rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return generatedString;
     }
     private String getRealPathFromURI(Uri contentUri) {
         if (contentUri.getPath().startsWith("/storage")) {
@@ -330,7 +388,11 @@ public class chating extends AppCompatActivity {
 
         @Override
         public void run() {
-            dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],null,1));
+            if(Msgs[2].contains(".png")){
+                dataList.add(new chat_item("",Msgs[1],Msgs[3],"http://35.166.40.164/file/"+Msgs[2],0));
+            }else{
+                dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],null,1));
+            }
             adapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(dataList.size() - 1);
         }

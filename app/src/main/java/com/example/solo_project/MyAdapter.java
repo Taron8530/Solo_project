@@ -60,6 +60,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     {
         if(viewHolder instanceof Left_image_chat)
         {
+            ((Left_image_chat) viewHolder).name.setText(myDataList.get(position).getName());
+            Glide.with(context).load(myDataList.get(position).getUri()).into(((Left_image_chat) viewHolder).image);
+            ((Left_image_chat) viewHolder).time.setText(myDataList.get(position).getTime());
+            Glide.with(((Left_image_chat) viewHolder).itemView).load("http://35.166.40.164/profile/"+myDataList.get(position).getName()+".png").override(100, 100).error(R.drawable.app_icon).circleCrop().into(((Left_image_chat) viewHolder).profile);
+
 //            ((Left_image_chat) viewHolder).content.setText(myDataList.get(position).getContent());
         }
         else if(viewHolder instanceof LeftViewHolder)

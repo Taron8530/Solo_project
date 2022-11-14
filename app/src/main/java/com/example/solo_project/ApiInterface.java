@@ -56,5 +56,9 @@ public interface ApiInterface {
     //판매중 아이템 불러오기
     @GET("select_sale_history.php")
     Call<ArrayList<item_model>> select_sale_history(@Query("nickname") String nickname);
+    //채팅에서 파일 보내기
+    @Multipart
+    @POST("chat_file_upload.php")
+    Call<String> chat_file_upload(@Part MultipartBody.Part file,@Part("file_num") String file_num);
 
 }
