@@ -20,6 +20,8 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -91,6 +93,7 @@ public class chating extends AppCompatActivity {
         sender_profile = findViewById(R.id.sender_profile);
         top_bar = findViewById(R.id.chat_top_bar);
         chat_plus = findViewById(R.id.chat_plus);
+        chat_btn.setClickable(false);
         Glide.with(chating.this)
                 .load("http://35.166.40.164/profile/"+sender+".png")
                 .circleCrop()
@@ -140,6 +143,28 @@ public class chating extends AppCompatActivity {
                 Intent I = new Intent(chating.this,Profile_view.class);
                 I.putExtra("nickname",sender);
                 startActivity(I);
+            }
+        });
+        //버튼 활성화 비 활성화 로직 구현하기!!
+        message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //공부 해야댐
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(message.getText().toString().trim()!=null){
+                    chat_btn.setClickable(true);
+                }else{
+                    chat_btn.setClickable(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //공부해야댐
+
             }
         });
     }
