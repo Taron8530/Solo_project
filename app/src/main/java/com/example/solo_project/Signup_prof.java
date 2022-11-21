@@ -11,11 +11,13 @@ import androidx.core.content.PermissionChecker;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,7 +39,10 @@ import com.bumptech.glide.Glide;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -163,6 +168,7 @@ public class Signup_prof extends AppCompatActivity {
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
                     Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname);
                     UpdatePhoto(nickname);
+                    filepath = getRealPathFromURI(Uri,nickname);
                     call.enqueue(new Callback<Signup_model>() {
                         @Override
                         public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
@@ -213,7 +219,6 @@ public class Signup_prof extends AppCompatActivity {
         if (requestCode == REQUEST_Image) {
             if (resultCode == RESULT_OK) {
                 Uri = data.getData();
-                filepath = getRealPathFromURI(Uri);
                 Log.e("ㅇㅇ", filepath);
                 Log.e("onActivityResult: ", Uri.toString());
             }
@@ -257,23 +262,42 @@ public class Signup_prof extends AppCompatActivity {
             });
         }
     }
-    private String getRealPathFromURI(Uri contentUri) {
-        if (contentUri.getPath().startsWith("/storage")) {
-            return contentUri.getPath();
-        }
-        String id = DocumentsContract.getDocumentId(contentUri).split(":")[1];
-        String[] columns = { MediaStore.Files.FileColumns.DATA };
-        String selection = MediaStore.Files.FileColumns._ID + " = " + id;
-        Cursor cursor = getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
+    private String getRealPathFromURI(Uri contentUri,String nickname) {
+        ContentResolver resolver = getContentResolver();
+        InputStream instream = null;
+        Bitmap imgBitmap = null;
+        String path = null;
+        
+        
         try {
-            int columnIndex = cursor.getColumnIndex(columns[0]);
-            if (cursor.moveToFirst()) {
-                return cursor.getString(columnIndex);
-            }
-        } finally {
-            cursor.close();
+            instream = resolver.openInputStream(contentUri);
+            imgBitmap = BitmapFactory.decodeStream(instream);
+            path = saveBitmapToJpeg(imgBitmap,nickname);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        return null;
+        Log.e("테스트 로그", "진입");
+        try {
+            instream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return path;
     }
+    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
+        File tempFile = new File(getCacheDir(), imgName);    // 파일 경로와 이름 넣기
+        try {
+            tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
+            FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
+            out.close();    // 스트림 닫아주기
+            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
+            return getCacheDir()+"/"+imgName;
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "파일 저장 실패", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    } 
 
 }

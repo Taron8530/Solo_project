@@ -60,19 +60,18 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     {
         if(viewHolder instanceof Left_image_chat)
         {
-            ((Left_image_chat) viewHolder).name.setText(myDataList.get(position).getName());
+//            ((Left_image_chat) viewHolder).name.setText(myDataList.get(position).getName());
             Glide.with(context).load(myDataList.get(position).getUri()).into(((Left_image_chat) viewHolder).image);
             ((Left_image_chat) viewHolder).time.setText(myDataList.get(position).getTime());
-            Glide.with(((Left_image_chat) viewHolder).itemView).load("http://35.166.40.164/profile/"+myDataList.get(position).getName()+".png").override(100, 100).error(R.drawable.app_icon).circleCrop().into(((Left_image_chat) viewHolder).profile);
+//            Glide.with(((Left_image_chat) viewHolder).itemView).load("http://35.166.40.164/profile/"+myDataList.get(position).getName()+".png").override(100, 100).error(R.drawable.app_icon).circleCrop().into(((Left_image_chat) viewHolder).profile);
 
 //            ((Left_image_chat) viewHolder).content.setText(myDataList.get(position).getContent());
         }
         else if(viewHolder instanceof LeftViewHolder)
         {
-            ((LeftViewHolder) viewHolder).name.setText(myDataList.get(position).getName());
+//            ((LeftViewHolder) viewHolder).name.setText(myDataList.get(position).getName());
             ((LeftViewHolder) viewHolder).content.setText(myDataList.get(position).getContent());
             ((LeftViewHolder) viewHolder).time.setText(myDataList.get(position).getTime());
-            Glide.with(((LeftViewHolder) viewHolder).itemView).load("http://35.166.40.164/profile/"+myDataList.get(position).getName()+".png").override(100, 100).error(R.drawable.app_icon).circleCrop().into(((LeftViewHolder) viewHolder).image);
         }
         else if(viewHolder instanceof RightViewHolder)
         {
@@ -108,33 +107,29 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
     public class Left_image_chat extends RecyclerView.ViewHolder{
         TextView time;
-        TextView name;
+//        TextView name;
         ImageView image;
-        ImageView profile;
 
 
         Left_image_chat(View itemView)
         {
             super(itemView);
             time = itemView.findViewById(R.id.left_chat_time);
-            name = itemView.findViewById(R.id.left_chat_name);
+//            name = itemView.findViewById(R.id.left_chat_name);
             image = itemView.findViewById(R.id.left_chat_image);
-            profile = itemView.findViewById(R.id.left_chat_profile);
         }
     }
 
     public class LeftViewHolder extends RecyclerView.ViewHolder{
         TextView content;
-        TextView name;
+//        TextView name;
         TextView time;
-        ImageView image;
 
         LeftViewHolder(View itemView)
         {
             super(itemView);
-            image = itemView.findViewById(R.id.chating_image);
             content = itemView.findViewById(R.id.content);
-            name = itemView.findViewById(R.id.name);
+//            name = itemView.findViewById(R.id.name);
             time = itemView.findViewById(R.id.time);
         }
     }

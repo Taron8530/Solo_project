@@ -25,6 +25,10 @@ public class F_home extends Fragment {
     main_adapter adapter;
     ArrayList<item_model> list = new ArrayList<>();
     View root;
+    String nickname;
+    public F_home(String nickname){
+        this.nickname = nickname;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class F_home extends Fragment {
                 i.putExtra("price",list.get(position).getPrice());
                 i.putExtra("image_size",list.get(position).getImage_size());
                 i.putExtra("num",list.get(position).getNum());
+                i.putExtra("my_nickname",nickname);
                 getActivity().startActivity(i);
             }
         });

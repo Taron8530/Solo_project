@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Build;
@@ -33,6 +35,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.*;
 import com.bumptech.glide.Glide;
 
@@ -117,9 +122,10 @@ public class chating extends AppCompatActivity {
             public void onClick(View view) {
                 if(!message.getText().toString().trim().equals("")){
                     dataList.add(new chat_item(message.getText().toString(),nickname,"",null,2));
-                    recyclerView.scrollToPosition(dataList.size() - 1);
                     adapter.notifyDataSetChanged();
+                    recyclerView.scrollToPosition(dataList.size());
                     sendMsg(message.getText().toString(),sender);
+                    message.setText("");
                     Log.e(TAG,"눌림");
                 }else{
                     Toast.makeText(chating.this, "메세지를 입력해주세요", Toast.LENGTH_SHORT).show();             }
@@ -129,6 +135,7 @@ public class chating extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                socket_Disconnect();
             }
         });
         chat_plus.setOnClickListener(new View.OnClickListener() {
@@ -249,17 +256,32 @@ public class chating extends AppCompatActivity {
         }.start();
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        try {
-//            socket.close();
-//            sendWriter.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Log.e(TAG+"onstop",e.toString());
-//        }
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        socket_Disconnect();
+    }
+
+    public void socket_Disconnect() {
+        try {
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    try {
+                        sendWriter.println(nickname + "/" + "접속해제");
+                        sendWriter.flush();
+                        socket.close();
+                        sendWriter.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void Waiting_msg(){
         new Thread() {
@@ -279,7 +301,7 @@ public class chating extends AppCompatActivity {
                                 runOnUiThread(new Runnable(){
                                     @Override
                                     public void run() {
-                                        check_time(read);
+                                        check_time("전송됨");
                                     }
                                 });
                             }else{
@@ -294,8 +316,9 @@ public class chating extends AppCompatActivity {
     }
     private void check_time(String time){
         for(int i =0;i<dataList.size();i++){
-            if (dataList.get(i).getTime().equals("")&&dataList.get(i).getViewType() == 2) {
+            if (dataList.get(i).getTime().equals("")&&dataList.get(i).getViewType() >= 2) {
                 dataList.get(i).setTime(time);
+                recyclerView.scrollToPosition(dataList.size());
                 adapter.notifyDataSetChanged();
 
             }
@@ -322,9 +345,21 @@ public class chating extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Uri Uri = data.getData();
+                ContentResolver resolver = getContentResolver();
+                InputStream instream = null;
+                Bitmap imgBitmap = null;
+                try {
+                    instream = resolver.openInputStream(Uri);
+                    imgBitmap = BitmapFactory.decodeStream(instream);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 Log.e("테스트 로그","진입");
                 try {
-                    String path = getRealPathFromURI(Uri);
+                    instream.close();
+                    String filenum = get_file_number();
+                    String path = saveBitmapToJpeg(imgBitmap,filenum);
                     Log.e("ㅇㅇ", path);
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
                     File file = new File(path);
@@ -334,7 +369,6 @@ public class chating extends AppCompatActivity {
 //                        file.mkdirs();    // 하위폴더를 포함한 폴더를 전부 생성
 //                    }
                     RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    String filenum = get_file_number();
                     Log.e("테스트 로그",filenum);
                     MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("uploaded_file",filenum, requestBody);
                     Call<String> call = apiInterface.chat_file_upload(fileToUpload,filenum);
@@ -383,23 +417,19 @@ public class chating extends AppCompatActivity {
 
         return generatedString;
     }
-    private String getRealPathFromURI(Uri contentUri) {
-        if (contentUri.getPath().startsWith("/storage")) {
-            return contentUri.getPath();
-        }
-        String id = DocumentsContract.getDocumentId(contentUri).split(":")[1];
-        String[] columns = { MediaStore.Files.FileColumns.DATA };
-        String selection = MediaStore.Files.FileColumns._ID + " = " + id;
-        Cursor cursor = getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
+    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
+        File tempFile = new File(getCacheDir(), imgName);    // 파일 경로와 이름 넣기
         try {
-            int columnIndex = cursor.getColumnIndex(columns[0]);
-            if (cursor.moveToFirst()) {
-                return cursor.getString(columnIndex);
-            }
-        } finally {
-            cursor.close();
+            tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
+            FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
+            out.close();    // 스트림 닫아주기
+            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
+            return getCacheDir()+"/"+imgName;
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "파일 저장 실패", Toast.LENGTH_SHORT).show();
+            return null;
         }
-        return null;
     }
     class MsgUpdate implements Runnable{
         String str;
@@ -413,7 +443,7 @@ public class chating extends AppCompatActivity {
 
         @Override
         public void run() {
-            if(Msgs[2].contains(".png")){
+            if(Msgs[2].contains(".jpeg")){
                 dataList.add(new chat_item("",Msgs[1],Msgs[3],"http://35.166.40.164/file/"+Msgs[2],0));
             }else{
                 dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],null,1));

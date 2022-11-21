@@ -64,7 +64,7 @@ public class used_info extends AppCompatActivity {
         }
         for(int j =0;j<image_size;j++){
             Log.e("number check",i.getStringExtra("num")+j);
-            images.add("http://35.166.40.164//used_image/"+i.getStringExtra("num")+j+".png");
+            images.add("http://35.166.40.164//used_image/"+i.getStringExtra("num")+j+".jpeg");
         }
         sliderViewPager.setAdapter(new PagerAdapter(this, images));
         sliderViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -81,6 +81,23 @@ public class used_info extends AppCompatActivity {
                 Intent I = new Intent(used_info.this,chating.class);
                 I.putExtra("my_nickname",MyNickname);
                 I.putExtra("sender",i.getStringExtra("nickname"));
+                startActivity(I);
+            }
+        });
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),Profile_view.class);
+                intent.putExtra("nickname",i.getStringExtra("nickname"));
+                startActivity(intent);
+            }
+        });
+        nickname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),Profile_view.class);
+                intent.putExtra("nickname",i.getStringExtra("nickname"));
+                startActivity(intent);
             }
         });
     }

@@ -39,7 +39,7 @@ public interface ApiInterface {
     Call<String> check_email(
             @Query("email") String email
     );
-    //메인 리사이클러뷰로 뿌려주는 용동
+    //메인 리사이클러뷰로 뿌려주는 용도
     @GET("select_used.php")
     Call <ArrayList<item_model>> select_used();
     //인증코드로 프로필 불러오기
@@ -60,5 +60,7 @@ public interface ApiInterface {
     @Multipart
     @POST("chat_file_upload.php")
     Call<String> chat_file_upload(@Part MultipartBody.Part file,@Part("file_num") String file_num);
-
+    //token db에 저장하기
+    @GET("FCM_token_update.php")
+    Call<String> token_update(@Query("token") String token,@Query("nickname") String nickname);
 }

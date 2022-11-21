@@ -74,7 +74,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
             used_item.setText(item.getusedname());
             nickname.setText("판매자: "+item.getNickname());
             Log.e("adapter", String.valueOf(item.getImage_size()));
-            Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"0"+".png").override(100, 100).error(R.drawable.app_icon).into(image);
+            Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"0"+".jpeg").override(100, 100).error(R.drawable.app_icon).into(image);
         }
     }
 }

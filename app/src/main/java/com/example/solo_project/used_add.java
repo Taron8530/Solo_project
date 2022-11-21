@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
@@ -26,8 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -161,7 +165,8 @@ public class used_add extends AppCompatActivity {
                     Log.e(TAG, "multiple choice");
 
                     for (int i = 0; i < clipData.getItemCount(); i++){
-                        Uri imageUri = clipData.getItemAt(i).getUri();  // 선택한 이미지들의 uri를 가져온다.
+                        Uri imageUri = clipData.getItemAt(i).getUri();
+                        // 선택한 이미지들의 uri를 가져온다.
                         try {
                             uriList.add(imageUri);  //uri를 list에 담는다.
                             size = size + 1;
@@ -183,9 +188,36 @@ public class used_add extends AppCompatActivity {
         }
     }
     private void setFilepath(List<Uri> uri){
+        ContentResolver resolver = getContentResolver();
+        InputStream instream = null;
         for(int i = 0;i<uri.size();i++){
-            filepath.add(getRealPathFromURI(uri.get(i)));
+            Bitmap imgBitmap = null;
+            try {
+                instream = resolver.openInputStream(uri.get(i));
+                imgBitmap = BitmapFactory.decodeStream(instream);
+                instream.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            filepath.add(saveBitmapToJpeg(imgBitmap,String.valueOf(i)));
             Log.e(TAG, "setFilepath: "+filepath.get(i));
+        }
+    }
+    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
+        File tempFile = new File(getCacheDir(), imgName);    // 파일 경로와 이름 넣기
+        try {
+            tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
+            FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
+            out.close();    // 스트림 닫아주기
+//            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
+            return getCacheDir()+"/"+imgName;
+        } catch (Exception e) {
+//            Toast.makeText(getApplicationContext(), "파일 저장 실패", Toast.LENGTH_SHORT).show();
+            return null;
         }
     }
     private MultipartBody.Part getMultipart(String filepath,int i){

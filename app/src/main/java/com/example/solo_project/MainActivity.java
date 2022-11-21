@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,8 +30,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         select_nickname();
+//        test_token();
         Log.e("Main",nickname+"/"+email);
-        home_fregment = new F_home();
+        profile_fregment = new F_profile(nickname,email);
+        chating_fregment = new F_chating(nickname);
+        home_fregment = new F_home(nickname);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, home_fregment).commit();
         setTitle("홈");
         BottomNavigationView bottom = findViewById(R.id.bottom_menu);
@@ -66,26 +70,11 @@ public class MainActivity extends AppCompatActivity {
     public void select_nickname(){
         Log.e("MainActivity","select_nickname 호출");
         SharedPreferences pref = getSharedPreferences("user_verify", Context.MODE_PRIVATE);
-        String verify = pref.getString("user_verify", "");
+        nickname = pref.getString("user_nickname","");
+        email = pref.getString("user_email","");
         Log.e("onCreate","찍힘");
-        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-        Call<Signup_model> call = apiInterface.profile_sel(verify);
-        call.enqueue(new Callback<Signup_model>() {
-            @Override
-            public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
-                if (response.body() != null) {
-                    Log.e("MainActivity",response.body().getNickname()+"/"+response.body().getE_mail());
-                    email = response.body().getE_mail();
-                    nickname = response.body().getNickname();
-                    profile_fregment = new F_profile(nickname,email);
-                    chating_fregment = new F_chating(nickname);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Signup_model> call, Throwable t) {
-                Log.e("MainActivity",t.toString());
-            }
-        });
+    }
+    public void test_token(){
+        Log.e("FCM_token", FirebaseMessaging.getInstance().getToken().getResult());
     }
 }

@@ -189,6 +189,8 @@ public class Login extends AppCompatActivity {
                                     SharedPreferences sv = getSharedPreferences("user_verify",MODE_PRIVATE);
                                     SharedPreferences.Editor E = sv.edit();
                                     E.putString("user_verify",verify_c);
+                                    E.putString("user_nickname",getted_NK);
+                                    E.putString("user_email",getted_email);
                                     E.commit();
                                     Intent i = new Intent(Login.this,MainActivity.class);
                                     startActivity(i);
@@ -252,6 +254,8 @@ public class Login extends AppCompatActivity {
                         SharedPreferences sv = getSharedPreferences("user_verify",MODE_PRIVATE);
                         SharedPreferences.Editor E = sv.edit();
                         E.putString("user_verify",verify_c);
+                        E.putString("user_nickname",getted_NK);
+                        E.putString("user_email",getted_email);
                         E.commit();
                         Intent i = new Intent(Login.this,MainActivity.class);
                         startActivity(i);

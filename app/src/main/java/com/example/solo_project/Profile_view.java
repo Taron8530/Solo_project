@@ -6,6 +6,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ public class Profile_view extends AppCompatActivity {
         profile_view = findViewById(R.id.profile_image);
         Intent i = getIntent();
         nickname = i.getStringExtra("nickname");
+        Log.e("닉네임 확인",nickname);
         nickname_view.setText(nickname);
         Glide.with(getApplicationContext())
 
