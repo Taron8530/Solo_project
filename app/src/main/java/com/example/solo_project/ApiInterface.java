@@ -63,4 +63,6 @@ public interface ApiInterface {
     //token db에 저장하기
     @GET("FCM_token_update.php")
     Call<String> token_update(@Query("token") String token,@Query("nickname") String nickname);
+    @GET("chat_room_check.php")
+    Call<String> chat_room_check(@Query("user1") String user1,@Query("user2") String user2);
 }

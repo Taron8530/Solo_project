@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.os.Handler;
 import android.util.Log;
@@ -57,16 +56,17 @@ public class F_chating extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
+        DBHelper myDb = new DBHelper(getContext());
+        list = myDb.SelectAllKids();
         adapter.setLists(list);
-
         adapter.notifyDataSetChanged();
         adapter.setOnItemClickListener(new chat_room_adapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Log.e("itemcl",list.get(position).getNickname()+" 눌림");
+                Log.e("itemcl",list.get(position).getRoom_name()+" 눌림");
                 Intent i = new Intent(getActivity(),chating.class);
                 i.putExtra("my_nickname",nickname);
-                i.putExtra("sender",list.get(position).getNickname());
+                i.putExtra("sender",list.get(position).getRoom_name());
                 getActivity().startActivity(i);
             }
         });

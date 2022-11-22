@@ -15,10 +15,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class used_info extends AppCompatActivity {
     private ViewPager2 sliderViewPager;
@@ -81,7 +86,30 @@ public class used_info extends AppCompatActivity {
                 Intent I = new Intent(used_info.this,chating.class);
                 I.putExtra("my_nickname",MyNickname);
                 I.putExtra("sender",i.getStringExtra("nickname"));
-                startActivity(I);
+                ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+                Call<String> call = apiInterface.chat_room_check(MyNickname,i.getStringExtra("nickname"));
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if(response.body() != null){
+                            DBHelper myDb = new DBHelper(used_info.this);
+                            try{
+                                myDb.insert_data(Integer.parseInt(response.body()),i.getStringExtra("nickname"),i.getStringExtra("nickname"),MyNickname);
+                            }
+                            catch (NumberFormatException ex){
+                                Toast.makeText(used_info.this, "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                            startActivity(I);
+                        }else{
+                            Toast.makeText(used_info.this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
             }
         });
         profile.setOnClickListener(new View.OnClickListener() {
