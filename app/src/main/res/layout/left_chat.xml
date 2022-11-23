@@ -24,7 +24,8 @@
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/layout_background"
         android:paddingLeft="16dp"
         android:paddingTop="4dp"
         android:paddingRight="16dp"
@@ -32,10 +33,10 @@
         android:text="상대방이 보낸 메세지"
         android:textColor="@color/white"
         android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/layout_background"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/time"

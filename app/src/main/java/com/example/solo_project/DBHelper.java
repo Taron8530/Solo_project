@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "chat_db";
-    public static final String TABLE_NAME = "chat_room";
+    public static final String TABLE_NAME_chat_room = "chat_room";
     private static final String COLUMN_ROOM_NUM = "room_num";
     private static final String COLUMN_ROOM_NAME = "room_name";
     private static final String COLUMN_USER_1 = "user1";
@@ -27,13 +27,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table "+TABLE_NAME+ "(room_num interger primary key ,room_name text,last_msg text,user1 text,user2 text)");
+        sqLiteDatabase.execSQL("create table "+TABLE_NAME_chat_room+ "(room_num int primary key ,room_name text,last_msg text,user1 text,user2 text)");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("drop table if exists "+TABLE_NAME);
+        sqLiteDatabase.execSQL("drop table if exists "+TABLE_NAME_chat_room);
         onCreate(sqLiteDatabase);
     }
     public void insert_data(int room_num,String room_name,String user1,String user2){
@@ -45,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_USER_1, user1);
         cv.put(COLUMN_USER_2, user2);
 
-        long result = db.insert(TABLE_NAME, null, cv);
+        long result = db.insert(TABLE_NAME_chat_room, null, cv);
         if (result == -1)
         {
             Log.e("db 저장","성공");
@@ -59,7 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public ArrayList<chat_room_item> SelectAllKids() {
         ArrayList<chat_room_item> list = new ArrayList<>();
-        String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME;
+        String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME_chat_room;
 
         Cursor cur = getWritableDatabase().rawQuery(SELECT_QUERY, null);
 
@@ -67,7 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             do {
                 Log.e("테스트",cur.getString(0) + " , " + cur.getString(1) + " , " + cur.getString(3)+" , " + cur.getString(4));
-                list.add(new chat_room_item(Integer.parseInt(cur.getString(0)),cur.getString(1),""));
+                list.add(new chat_room_item(cur.getString(0),cur.getString(1),""));
             } while (cur.moveToNext());
 
         }

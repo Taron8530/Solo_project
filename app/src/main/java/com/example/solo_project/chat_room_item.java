@@ -1,10 +1,10 @@
 package com.example.solo_project;
 
 public class chat_room_item {
-    private int room_num;
+    private String room_num;
     private String last_msg;
     private String room_name;
-    public chat_room_item(int room_num,String room_name,String last_msg){
+    public chat_room_item(String room_num,String room_name,String last_msg){
         this.room_num = room_num;
         this.room_name = room_name;
         this.last_msg = last_msg;
@@ -17,6 +17,6 @@ public class chat_room_item {
     public String getRoom_name() {
         return room_name;
     }
-    public int getRoom_num(){return room_num;}
+    public String getRoom_num(){return room_num;}
 
 }

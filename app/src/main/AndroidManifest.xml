@@ -68,7 +68,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".chat_FCM"
+            android:name="com.example.solo_project.chat_FCM"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

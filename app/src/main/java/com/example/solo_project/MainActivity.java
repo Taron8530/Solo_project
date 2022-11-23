@@ -10,8 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,7 +34,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseApp.initializeApp(this);
         select_nickname();
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<String> task) {
+                                               if (!task.isSuccessful()) {
+                                                   Log.w("Token", "Fetching FCM registration token failed", task.getException());
+                                                   return;
+                                               }
+                                               token_update(nickname,task.getResult());
+                                               Log.e("Token", String.valueOf(task.getResult()));
+                                           }
+
+                                       });
 //        test_token();
         Log.e("Main",nickname+"/"+email);
         profile_fregment = new F_profile(nickname,email);
@@ -76,5 +95,22 @@ public class MainActivity extends AppCompatActivity {
     }
     public void test_token(){
         Log.e("FCM_token", FirebaseMessaging.getInstance().getToken().getResult());
+    }
+    public void token_update(String nickname,String token){
+        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+        Call<String> call = apiInterface.token_update(token,nickname);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.body() != null){
+                    Log.e("토큰 저장 성공",response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("토큰 저장",t.toString());
+            }
+        });
     }
 }

@@ -92,6 +92,7 @@ public class used_info extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         if(response.body() != null){
+                            Log.e("리스폰스 확인",response.body());
                             DBHelper myDb = new DBHelper(used_info.this);
                             try{
                                 myDb.insert_data(Integer.parseInt(response.body()),i.getStringExtra("nickname"),i.getStringExtra("nickname"),MyNickname);
@@ -99,6 +100,7 @@ public class used_info extends AppCompatActivity {
                             catch (NumberFormatException ex){
                                 Toast.makeText(used_info.this, "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();
                             }
+                            I.putExtra("room_num",response.body());
                             startActivity(I);
                         }else{
                             Toast.makeText(used_info.this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show();

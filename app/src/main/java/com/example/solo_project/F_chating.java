@@ -67,6 +67,7 @@ public class F_chating extends Fragment {
                 Intent i = new Intent(getActivity(),chating.class);
                 i.putExtra("my_nickname",nickname);
                 i.putExtra("sender",list.get(position).getRoom_name());
+                i.putExtra("room_num",list.get(position).getRoom_num());
                 getActivity().startActivity(i);
             }
         });

@@ -83,6 +83,7 @@ public class chating extends AppCompatActivity {
     private Button chat_plus;
     private LinearLayout top_bar;
     private String sender;
+    private String room_num;
     //시간
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,10 @@ public class chating extends AppCompatActivity {
         Intent i = getIntent();
         nickname = i.getStringExtra("my_nickname");
         sender = i.getStringExtra("sender");
+        room_num = i.getStringExtra("room_num");
+        chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
+        db.SelectAllKids(Integer.parseInt(room_num));
+        Log.e("chat_room_num",String.valueOf(room_num));
         back = findViewById(R.id.chat_exit);
         sender_nickname = findViewById(R.id.sender_nickname);
         sender_nickname.setText(sender);
@@ -121,10 +126,12 @@ public class chating extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!message.getText().toString().trim().equals("")){
-                    dataList.add(new chat_item(message.getText().toString(),nickname,"",null,2));
+                    dataList.add(new chat_item(message.getText().toString(),nickname,"",2));
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
-                    sendMsg(message.getText().toString(),sender);
+                    sendMsg(message.getText().toString(),sender,room_num);
+                    chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
+                    db.insert_data(room_num,nickname,message.getText().toString(),"",2);
                     message.setText("");
                     Log.e(TAG,"눌림");
                 }else{
@@ -153,27 +160,6 @@ public class chating extends AppCompatActivity {
             }
         });
         //버튼 활성화 비 활성화 로직 구현하기!!
-        message.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //공부 해야댐
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(message.getText().toString().trim()!=null){
-                    chat_btn.setClickable(true);
-                }else{
-                    chat_btn.setClickable(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                //공부해야댐
-
-            }
-        });
     }
 //    private void setStringArrayPref(Context context, String key, ArrayList<chat_item> values) {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -216,13 +202,13 @@ public class chating extends AppCompatActivity {
 //        }
 //        return chat_datas;
 //    }
-    public void send_nickname(String nickname){
+    public void send_nickname(String nickname,String room_num){
         new Thread() {
             @Override
             public void run() {
                 super.run();
                 try {
-                    sendWriter.println(nickname);
+                    sendWriter.println(room_num+"/"+nickname);
                     sendWriter.flush();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -230,7 +216,7 @@ public class chating extends AppCompatActivity {
             }
         }.start();
     }
-    public void sendMsg(String msg,String sender){
+    public void sendMsg(String msg,String sender,String room_num){
         new Thread() {
             @Override
             public void run() {
@@ -246,7 +232,7 @@ public class chating extends AppCompatActivity {
 //                    wrapObject.put("messege",jsonArray);
 //                    Log.e("JSON",wrapObject.toString());
 
-                    sendWriter.println(sender+"/"+nickname +"/"+msg);
+                    sendWriter.println(room_num+"/"+sender+"/"+nickname +"/"+msg);
                     sendWriter.flush();
                     message.setText("");
                 } catch (Exception e) {
@@ -292,7 +278,7 @@ public class chating extends AppCompatActivity {
                     socket = new Socket(serverAddr, port);
                     sendWriter = new PrintWriter(socket.getOutputStream());
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    send_nickname(nickname);
+                    send_nickname(nickname,room_num);
                     while(true){
                         read = input.readLine();
                         if(read!=null){
@@ -380,7 +366,7 @@ public class chating extends AppCompatActivity {
                                     Toast.makeText(chating.this, "이미지 업로드에 실패했습니다", Toast.LENGTH_SHORT).show();
                                 }else{
                                     Log.e("테스트 로그 확인!","http://35.166.40.164/file/"+response.body());
-                                    sendMsg(response.body(),sender);
+                                    sendMsg(response.body(),sender,room_num);
                                 }
                             }
                         }
@@ -391,7 +377,7 @@ public class chating extends AppCompatActivity {
                             Log.e("테스트 로그",t.toString());
                         }
                     });
-                    dataList.add(new chat_item("",nickname,"",Uri.toString(),3));
+                    dataList.add(new chat_item(Uri.toString(),nickname,"",3));
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
                 }catch (Exception e){
@@ -424,10 +410,10 @@ public class chating extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
             bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
             out.close();    // 스트림 닫아주기
-            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
+            Log.e("파일 저장",tempFile.getPath());
             return getCacheDir()+"/"+imgName;
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "파일 저장 실패", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             return null;
         }
     }
@@ -443,10 +429,13 @@ public class chating extends AppCompatActivity {
 
         @Override
         public void run() {
+            chat_data_db_Helper myDb = new chat_data_db_Helper(chating.this);
             if(Msgs[2].contains(".jpeg")){
-                dataList.add(new chat_item("",Msgs[1],Msgs[3],"http://35.166.40.164/file/"+Msgs[2],0));
+                dataList.add(new chat_item("http://35.166.40.164/file/"+Msgs[2],Msgs[1],Msgs[3],0));
+                myDb.insert_data(room_num,Msgs[1],"http://35.166.40.164/file/"+Msgs[2],Msgs[3],0);
             }else{
-                dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],null,1));
+                dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],1));
+                myDb.insert_data(room_num,Msgs[1],Msgs[2],Msgs[3],0);
             }
             adapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(dataList.size() - 1);

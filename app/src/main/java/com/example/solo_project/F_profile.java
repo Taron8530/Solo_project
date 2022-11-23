@@ -37,7 +37,6 @@ public class F_profile extends Fragment {
         this.nickname = nickname;
         this.email = email;
     }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
