@@ -1,5 +1,6 @@
 package com.example.solo_project;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -41,6 +43,10 @@ public class chat_FCM extends FirebaseMessagingService{
 
         if (remoteMessage.getNotification() != null)
         {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE );
+            @SuppressLint("InvalidWakeLockTag")
+            PowerManager.WakeLock wakeLock = pm.newWakeLock( PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG" );
+            wakeLock.acquire(3000);
             showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
         //수신한 메시지를 처리
@@ -76,7 +82,7 @@ public class chat_FCM extends FirebaseMessagingService{
         {
             builder = builder.setContentTitle(title)
                     .setContentText(message)
-                    .setSmallIcon(R.mipmap.ic_launcher);
+                    .setSmallIcon(R.drawable.app_icon);
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

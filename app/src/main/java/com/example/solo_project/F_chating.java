@@ -54,7 +54,7 @@ public class F_chating extends Fragment {
         Log.e("로그 확인!","어뎁터 할당됨");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), 1));
         recyclerView.setAdapter(adapter);
         DBHelper myDb = new DBHelper(getContext());
         list = myDb.SelectAllKids();

@@ -37,7 +37,8 @@ public class F_home extends Fragment {
         recyclerView = root.findViewById(R.id.home_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), 1));
+
         adapter = new main_adapter();
         recyclerView.setAdapter(adapter);
         adapter.setlist(list);
