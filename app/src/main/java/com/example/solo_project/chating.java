@@ -94,8 +94,10 @@ public class chating extends AppCompatActivity {
         nickname = i.getStringExtra("my_nickname");
         sender = i.getStringExtra("sender");
         room_num = i.getStringExtra("room_num");
+        dataList = new ArrayList<>();
         chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
-        db.SelectAllKids(Integer.parseInt(room_num));
+        dataList = db.SelectAllKids(Integer.parseInt(room_num));
+
         Log.e("chat_room_num",String.valueOf(room_num));
         back = findViewById(R.id.chat_exit);
         sender_nickname = findViewById(R.id.sender_nickname);
@@ -118,9 +120,9 @@ public class chating extends AppCompatActivity {
         LinearLayoutManager manager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false);//리사이클러뷰 매니저
         recyclerView.setLayoutManager(manager); // LayoutManager 등록
-        dataList = new ArrayList<>();
         adapter = new MyAdapter(dataList);
         recyclerView.setAdapter(adapter); //리사이클러뷰에 어뎁터 장착
+        recyclerView.scrollToPosition(dataList.size());
         Waiting_msg(); //서버에서 보내는 메세지 받을 준비
         chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,6 +318,19 @@ public class chating extends AppCompatActivity {
         i.setAction(i.ACTION_GET_CONTENT);
         startActivityForResult(i, 1);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        socket_Disconnect();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Waiting_msg();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -435,7 +450,7 @@ public class chating extends AppCompatActivity {
                 myDb.insert_data(room_num,Msgs[1],"http://35.166.40.164/file/"+Msgs[2],Msgs[3],0);
             }else{
                 dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],1));
-                myDb.insert_data(room_num,Msgs[1],Msgs[2],Msgs[3],0);
+                myDb.insert_data(room_num,Msgs[1],Msgs[2],Msgs[3],1);
             }
             adapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(dataList.size() - 1);

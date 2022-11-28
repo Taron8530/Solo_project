@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -18,8 +19,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import retrofit2.Call;
 
 public class chat_FCM extends FirebaseMessagingService{
     @Override
@@ -37,17 +36,27 @@ public class chat_FCM extends FirebaseMessagingService{
         Log.e("노티피케이션",remoteMessage.getNotification().getTitle()+remoteMessage.getNotification().getBody());
         if (remoteMessage.getData().size() > 0)
         {
-            showNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("message"));
+//            showNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("message"));
             Log.e("노티피케이션",remoteMessage.getData().get("title")+remoteMessage.getData().get("message"));
         }
 
         if (remoteMessage.getNotification() != null)
         {
+            Log.e("body",remoteMessage.getNotification().getBody());
+            String[] bodys = remoteMessage.getNotification().getBody().split("/");
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE );
             @SuppressLint("InvalidWakeLockTag")
             PowerManager.WakeLock wakeLock = pm.newWakeLock( PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG" );
             wakeLock.acquire(3000);
-            showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+            Log.e("title",remoteMessage.getNotification().getTitle());
+            chat_data_db_Helper myDb = new chat_data_db_Helper(chat_FCM.this);
+            if(bodys[0].contains(".jpeg")){
+                showNotification(remoteMessage.getNotification().getTitle(), "사진을 보냄",bodys[1]);
+                myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),"http://35.166.40.164/file/"+bodys[0],bodys[2],0);
+            }else{
+                showNotification(remoteMessage.getNotification().getTitle(), bodys[0],bodys[1]);
+                myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),bodys[0],bodys[2],1);
+            }
         }
         //수신한 메시지를 처리
     }
@@ -59,12 +68,19 @@ public class chat_FCM extends FirebaseMessagingService{
         remoteViews.setImageViewResource(R.id.noti_icon, R.drawable.app_icon);
         return remoteViews;
     }
-    public void showNotification(String title, String message)
+    public void showNotification(String title, String message,String room_num)
     {
-        Intent intent = new Intent(this, MainActivity.class);
+        SharedPreferences pref = getSharedPreferences("user_verify", Context.MODE_PRIVATE);
+        String nickname = pref.getString("user_nickname","");
+        Intent intent = new Intent(this, chating.class);
+        intent.putExtra("my_nickname",nickname);
+        intent.putExtra("sender",title);
+        intent.putExtra("room_num",room_num);
+
         String channel_id = "";
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channel_id)
                 .setSmallIcon(R.drawable.app_icon)
