@@ -56,9 +56,7 @@ public class F_chating extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), 1));
         recyclerView.setAdapter(adapter);
-        DBHelper myDb = new DBHelper(getContext());
-        list = myDb.SelectAllKids();
-        adapter.setLists(list);
+        list_select();
         adapter.notifyDataSetChanged();
         adapter.setOnItemClickListener(new chat_room_adapter.OnItemClickListener() {
             @Override
@@ -72,5 +70,17 @@ public class F_chating extends Fragment {
             }
         });
         return root;
+    }
+    private void list_select(){
+        DBHelper myDb = new DBHelper(getContext());
+        list = myDb.SelectAllKids();
+        adapter.setLists(list);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        list_select();
     }
 }

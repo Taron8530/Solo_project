@@ -84,6 +84,7 @@ public class chating extends AppCompatActivity {
     private LinearLayout top_bar;
     private String sender;
     private String room_num;
+    private DBHelper myDb;
     //시간
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,7 @@ public class chating extends AppCompatActivity {
         sender = i.getStringExtra("sender");
         room_num = i.getStringExtra("room_num");
         dataList = new ArrayList<>();
+        myDb = new DBHelper(chating.this);
         chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
         dataList = db.SelectAllKids(Integer.parseInt(room_num));
 
@@ -131,9 +133,10 @@ public class chating extends AppCompatActivity {
                     dataList.add(new chat_item(message.getText().toString(),nickname,"",2));
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
+                    myDb.last_msg_update(Integer.parseInt(room_num),message.getText().toString());
                     sendMsg(message.getText().toString(),sender,room_num);
-                    chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
-                    db.insert_data(room_num,nickname,message.getText().toString(),"",2);
+//                    chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
+//                    db.insert_data(room_num,nickname,message.getText().toString(),"",2);
                     message.setText("");
                     Log.e(TAG,"눌림");
                 }else{
@@ -284,12 +287,13 @@ public class chating extends AppCompatActivity {
                     while(true){
                         read = input.readLine();
                         if(read!=null){
+                            String[] str = read.split("/");
                             Log.e("chat",read);
-                            if(read.equals("보내짐")){
+                            if(str[0].equals("보내짐")){
                                 runOnUiThread(new Runnable(){
                                     @Override
                                     public void run() {
-                                        check_time("전송됨");
+                                        check_time(str[1]);
                                     }
                                 });
                             }else{
@@ -308,6 +312,8 @@ public class chating extends AppCompatActivity {
                 dataList.get(i).setTime(time);
                 recyclerView.scrollToPosition(dataList.size());
                 adapter.notifyDataSetChanged();
+                chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
+                db.insert_data(room_num,nickname,dataList.get(i).getContent(),dataList.get(i).getTime(),dataList.get(i).getViewType());
 
             }
         }
@@ -393,6 +399,7 @@ public class chating extends AppCompatActivity {
                         }
                     });
                     dataList.add(new chat_item(Uri.toString(),nickname,"",3));
+                    myDb.last_msg_update(Integer.parseInt(room_num),"사진");
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
                 }catch (Exception e){
@@ -445,12 +452,15 @@ public class chating extends AppCompatActivity {
         @Override
         public void run() {
             chat_data_db_Helper myDb = new chat_data_db_Helper(chating.this);
+            DBHelper myDbs = new DBHelper(chating.this);
             if(Msgs[2].contains(".jpeg")){
                 dataList.add(new chat_item("http://35.166.40.164/file/"+Msgs[2],Msgs[1],Msgs[3],0));
                 myDb.insert_data(room_num,Msgs[1],"http://35.166.40.164/file/"+Msgs[2],Msgs[3],0);
+                myDbs.last_msg_update(Integer.parseInt(room_num),"사진");
             }else{
                 dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],1));
                 myDb.insert_data(room_num,Msgs[1],Msgs[2],Msgs[3],1);
+                myDbs.last_msg_update(Integer.parseInt(room_num),Msgs[2]);
             }
             adapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(dataList.size() - 1);
