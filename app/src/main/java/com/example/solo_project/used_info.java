@@ -95,7 +95,7 @@ public class used_info extends AppCompatActivity {
                             Log.e("리스폰스 확인",response.body());
                             DBHelper myDb = new DBHelper(used_info.this);
                             try{
-                                myDb.insert_data(Integer.parseInt(response.body()),i.getStringExtra("nickname"),i.getStringExtra("nickname"),MyNickname);
+                                myDb.insert_data(Integer.parseInt(response.body()),i.getStringExtra("nickname"),i.getStringExtra("nickname"),MyNickname,0);
                             }
                             catch (NumberFormatException ex){
                                 Toast.makeText(used_info.this, "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();

@@ -25,6 +25,9 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +43,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.*;
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +65,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class chating extends AppCompatActivity {
     String nickname; //닉네임
@@ -100,6 +105,8 @@ public class chating extends AppCompatActivity {
         chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
         dataList = db.SelectAllKids(Integer.parseInt(room_num));
 
+        myDb.msg_count_reset(Integer.parseInt(room_num));
+
         Log.e("chat_room_num",String.valueOf(room_num));
         back = findViewById(R.id.chat_exit);
         sender_nickname = findViewById(R.id.sender_nickname);
@@ -133,7 +140,7 @@ public class chating extends AppCompatActivity {
                     dataList.add(new chat_item(message.getText().toString(),nickname,"",2));
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
-                    myDb.last_msg_update(Integer.parseInt(room_num),message.getText().toString());
+//                    myDb.last_msg_update(Integer.parseInt(room_num),message.getText().toString());
                     sendMsg(message.getText().toString(),sender,room_num);
 //                    chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
 //                    db.insert_data(room_num,nickname,message.getText().toString(),"",2);
@@ -207,6 +214,36 @@ public class chating extends AppCompatActivity {
 //        }
 //        return chat_datas;
 //    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.chating_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item)
+    {
+
+        switch(item.getItemId())
+        {
+            case R.id.promise:
+                //약속잡기 구현 호출
+                break;
+            case R.id.chating_exit:
+                //채팅방 데이터 모두 지우기
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public void promise(){
+
+    }
     public void send_nickname(String nickname,String room_num){
         new Thread() {
             @Override
@@ -425,6 +462,7 @@ public class chating extends AppCompatActivity {
 
         return generatedString;
     }
+    
     public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
         File tempFile = new File(getCacheDir(), imgName);    // 파일 경로와 이름 넣기
         try {

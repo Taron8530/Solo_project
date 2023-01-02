@@ -83,4 +83,7 @@ public class F_chating extends Fragment {
         super.onResume();
         list_select();
     }
+    public void room_update(){
+        list_select();
+    }
 }

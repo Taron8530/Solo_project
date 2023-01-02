@@ -49,12 +49,14 @@ public class chat_room_adapter extends RecyclerView.Adapter<chat_room_adapter.Vi
         private TextView nickname;
         private ImageView profile;
         private TextView last_msg;
+        private TextView msg_count;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Log.e(TAG, "ViewHolder: 호출됨" );
             nickname = itemView.findViewById(R.id.chat_room_nickname);
             profile = itemView.findViewById(R.id.chat_room_profile);
             last_msg = itemView.findViewById(R.id.chat_room_last_msg);
+            msg_count = itemView.findViewById(R.id.msg_count);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -70,6 +72,11 @@ public class chat_room_adapter extends RecyclerView.Adapter<chat_room_adapter.Vi
             Log.e(TAG, "onbind: 호출됨"+item.getRoom_name());
             last_msg.setText(item.getLast_msg());
             nickname.setText(item.getRoom_name());;
+            if(item.getMsg_count() <= 0){
+                msg_count.setVisibility(View.GONE);
+            }else{
+                msg_count.setText(String.valueOf(item.getMsg_count()));
+            }
             Log.e("이미지",item.getRoom_name());
             Glide.with(itemView).load("http://35.166.40.164/profile/"+item.getRoom_name()+".png").override(100, 100).circleCrop().error(R.drawable.app_icon).into(profile);
         }
