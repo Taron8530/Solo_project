@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table "+TABLE_NAME_chat_room+ "(room_num int primary key ,room_name text,last_msg text,user1 text,user2 text,msg_count int)");
+        sqLiteDatabase.execSQL("create table "+TABLE_NAME_chat_room+ "(room_num int primary key ,room_name text,last_msg text,user1 text,user2 text,msg_count int,last_msg_time text)");
         Log.e("dbHelper","onCreate 들어옴");
     }
 
@@ -65,10 +65,10 @@ public class DBHelper extends SQLiteOpenHelper {
 //            Toast.makeText(context, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
         }
     }
-    public void last_msg_update(int room_num,String last_msg){
+    public void last_msg_update(int room_num,String last_msg,String time){
 //        DBHelper db = new DBHelper(context.getApplicationContext());
 //        SQLiteDatabase dbs = db.getWritableDatabase() ;
-        String UPDATE_QUERY = "UPDATE "+TABLE_NAME_chat_room+" SET last_msg ='"+last_msg+"' WHERE room_num ="+room_num;
+        String UPDATE_QUERY = "UPDATE "+TABLE_NAME_chat_room+" SET last_msg ='"+last_msg+"', last_msg_time =" + "'"+time+"' WHERE room_num ="+room_num;
         getWritableDatabase().execSQL(UPDATE_QUERY);
     }
     public void msg_count_update(int room_num){
@@ -95,7 +95,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ArrayList<chat_room_item> SelectAllKids() {
         ArrayList<chat_room_item> list = new ArrayList<>();
-        String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME_chat_room;
+        String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME_chat_room + " ORDER BY last_msg_time DESC";
 
         Cursor cur = getWritableDatabase().rawQuery(SELECT_QUERY, null);
 
@@ -109,4 +109,5 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return list;
     }
+
 }

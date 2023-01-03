@@ -65,11 +65,11 @@ public class chat_FCM extends FirebaseMessagingService{
             if(bodys[0].contains(".jpeg")){ //보내온 메세지가 사진일때
                 showNotification(remoteMessage.getNotification().getTitle(), "사진을 보냄",bodys[1],bodys[2]);
                 myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),"http://35.166.40.164/file/"+bodys[0],bodys[2],0);
-                dbHelper.last_msg_update(Integer.parseInt(bodys[1]),"사진");
+                dbHelper.last_msg_update(Integer.parseInt(bodys[1]),"사진",bodys[2]);
             }else{ //보내온 메세지가 문자일때
                 showNotification(remoteMessage.getNotification().getTitle(), bodys[0],bodys[1],bodys[2]);
                 myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),bodys[0],bodys[2],1);
-                dbHelper.last_msg_update(Integer.parseInt(bodys[1]),bodys[0]);
+                dbHelper.last_msg_update(Integer.parseInt(bodys[1]),bodys[0],bodys[2]);
             }
         }
         //수신한 메시지를 처리

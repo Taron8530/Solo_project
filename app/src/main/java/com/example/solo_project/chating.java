@@ -351,6 +351,11 @@ public class chating extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
                 db.insert_data(room_num,nickname,dataList.get(i).getContent(),dataList.get(i).getTime(),dataList.get(i).getViewType());
+                if(dataList.get(i).getContent().contains("image") || dataList.get(i).getContent().contains(".jpeg")){
+                    myDb.last_msg_update(Integer.parseInt(room_num),"사진",dataList.get(i).getTime());
+                }else{
+                    myDb.last_msg_update(Integer.parseInt(room_num),dataList.get(i).getContent(),dataList.get(i).getTime());
+                }
 
             }
         }
@@ -436,7 +441,7 @@ public class chating extends AppCompatActivity {
                         }
                     });
                     dataList.add(new chat_item(Uri.toString(),nickname,"",3));
-                    myDb.last_msg_update(Integer.parseInt(room_num),"사진");
+//                    myDb.last_msg_update(Integer.parseInt(room_num),"사진");
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
                 }catch (Exception e){
@@ -494,11 +499,11 @@ public class chating extends AppCompatActivity {
             if(Msgs[2].contains(".jpeg")){
                 dataList.add(new chat_item("http://35.166.40.164/file/"+Msgs[2],Msgs[1],Msgs[3],0));
                 myDb.insert_data(room_num,Msgs[1],"http://35.166.40.164/file/"+Msgs[2],Msgs[3],0);
-                myDbs.last_msg_update(Integer.parseInt(room_num),"사진");
+                myDbs.last_msg_update(Integer.parseInt(room_num),"사진",Msgs[3]);
             }else{
                 dataList.add(new chat_item(Msgs[2],Msgs[1],Msgs[3],1));
                 myDb.insert_data(room_num,Msgs[1],Msgs[2],Msgs[3],1);
-                myDbs.last_msg_update(Integer.parseInt(room_num),Msgs[2]);
+                myDbs.last_msg_update(Integer.parseInt(room_num),Msgs[2],Msgs[3]);
             }
             adapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(dataList.size() - 1);
