@@ -20,6 +20,10 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class chat_FCM extends FirebaseMessagingService{
     private SharedPreferences pref;
     private String nickname;
@@ -60,19 +64,27 @@ public class chat_FCM extends FirebaseMessagingService{
             if(dbHelper.check_room(Integer.parseInt(bodys[1]))) { //채팅방이 없을시 채팅방 생성 하는 로직
                 dbHelper.insert_data(Integer.parseInt(bodys[1]),remoteMessage.getNotification().getTitle(),bodys[3],remoteMessage.getNotification().getTitle(),1);
             }
-
-
+            try {
             if(bodys[0].contains(".jpeg")){ //보내온 메세지가 사진일때
-                showNotification(remoteMessage.getNotification().getTitle(), "사진을 보냄",bodys[1],bodys[2]);
+                    showNotification(remoteMessage.getNotification().getTitle(), "사진을 보냄",bodys[1],String_extract_time(bodys[2]));
+
                 myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),"http://35.166.40.164/file/"+bodys[0],bodys[2],0);
                 dbHelper.last_msg_update(Integer.parseInt(bodys[1]),"사진",bodys[2]);
             }else{ //보내온 메세지가 문자일때
-                showNotification(remoteMessage.getNotification().getTitle(), bodys[0],bodys[1],bodys[2]);
+                showNotification(remoteMessage.getNotification().getTitle(), bodys[0],bodys[1],String_extract_time(bodys[2]));
                 myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),bodys[0],bodys[2],1);
                 dbHelper.last_msg_update(Integer.parseInt(bodys[1]),bodys[0],bodys[2]);
             }
+            } catch (ParseException e) {
+            e.printStackTrace();
+        }
         }
         //수신한 메시지를 처리
+    }
+    public String String_extract_time(String time) throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        String new_time = new SimpleDateFormat("HH:mm").format(date);
+        return new_time;
     }
     private RemoteViews getCustomDesign(String title, String message,String time)
     {

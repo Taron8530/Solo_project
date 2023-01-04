@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table "+TABLE_NAME_chat_room+ "(room_num int primary key ,room_name text,last_msg text,user1 text,user2 text,msg_count int,last_msg_time text)");
+        sqLiteDatabase.execSQL("create table "+TABLE_NAME_chat_room+ "(room_num int primary key ,room_name text,last_msg text,user1 text,user2 text,msg_count int,last_msg_time timestamp)");
         Log.e("dbHelper","onCreate 들어옴");
     }
 
@@ -81,7 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
         getWritableDatabase().execSQL(UPDATE_QUERY);
     }
     public boolean check_room(int room_num){
-        String SELECT_QUERY = "SELECT COUNT(*) FROM "+TABLE_NAME_chat_room+" WHERE room_num ="+room_num;
+        String SELECT_QUERY = "SELECT * FROM "+TABLE_NAME_chat_room+" WHERE room_num ="+room_num;
         Cursor cur = getReadableDatabase().rawQuery(SELECT_QUERY,null);
         Log.e("check_room",String.valueOf(cur.getCount()));
         if(cur.getCount() > 0){
@@ -102,7 +102,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cur != null && cur.moveToFirst()) {
 
             do {
-                Log.e("테스트",cur.getString(0) + " , " + cur.getString(1) + " , " + cur.getString(3)+" , " + cur.getString(4)+" , " + cur.getString(2)+" , " + cur.getString(5));
+                Log.e("테스트",cur.getString(0) + " , " + cur.getString(1) + " , " + cur.getString(3)+" , " + cur.getString(4)+" , " + cur.getString(2)+" , " + cur.getString(5)+" 시간: , " + cur.getString(6));
                 list.add(new chat_room_item(cur.getString(0),cur.getString(1),cur.getString(2),Integer.parseInt(cur.getString(5))));
             } while (cur.moveToNext());
 
