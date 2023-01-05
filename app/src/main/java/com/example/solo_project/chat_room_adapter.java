@@ -75,6 +75,7 @@ public class chat_room_adapter extends RecyclerView.Adapter<chat_room_adapter.Vi
             if(item.getMsg_count() <= 0){
                 msg_count.setVisibility(View.GONE);
             }else{
+                msg_count.setVisibility(View.VISIBLE);
                 msg_count.setText(String.valueOf(item.getMsg_count()));
             }
             Log.e("이미지",item.getRoom_name());

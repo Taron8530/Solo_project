@@ -19,6 +19,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,6 +37,7 @@ public class F_chating extends Fragment {
     private ArrayList<chat_room_item> list;
     private RecyclerView recyclerView;
     private chat_room_adapter adapter;
+    private DBHelper myDb;
     public F_chating(String nickname){
         this.nickname = nickname;
     }
@@ -40,6 +46,7 @@ public class F_chating extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         list = new ArrayList<>();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -56,6 +63,7 @@ public class F_chating extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), 1));
         recyclerView.setAdapter(adapter);
+        myDb = new DBHelper(getContext());
         list_select();
         adapter.notifyDataSetChanged();
         adapter.setOnItemClickListener(new chat_room_adapter.OnItemClickListener() {
@@ -72,10 +80,14 @@ public class F_chating extends Fragment {
         return root;
     }
     private void list_select(){
-        DBHelper myDb = new DBHelper(getContext());
         list = myDb.SelectAllKids();
         adapter.setLists(list);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -84,6 +96,23 @@ public class F_chating extends Fragment {
         list_select();
     }
     public void room_update(){
+        list_select();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void FinishLoad(msg_box msg){
+        Log.e("FinishLoad",msg.getMsg());
         list_select();
     }
 }

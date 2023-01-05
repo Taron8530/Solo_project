@@ -112,7 +112,11 @@ public class chating extends AppCompatActivity {
         dataList = new ArrayList<>();
         myDb = new DBHelper(chating.this);
         chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
-        dataList = db.SelectAllKids(Integer.parseInt(room_num));
+        try {
+            dataList = db.SelectAllKids(Integer.parseInt(room_num));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         myDb.msg_count_reset(Integer.parseInt(room_num));
 
@@ -363,7 +367,7 @@ public class chating extends AppCompatActivity {
                 recyclerView.scrollToPosition(dataList.size());
                 adapter.notifyDataSetChanged();
                 chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
-                db.insert_data(room_num,nickname,dataList.get(i).getContent(),dataList.get(i).getTime(),dataList.get(i).getViewType());
+                db.insert_data(room_num,nickname,dataList.get(i).getContent(),time,dataList.get(i).getViewType());
                 if(dataList.get(i).getContent().contains("image") || dataList.get(i).getContent().contains(".jpeg")){
                     myDb.last_msg_update(Integer.parseInt(room_num),"사진",time);
                 }else{
@@ -510,7 +514,7 @@ public class chating extends AppCompatActivity {
             Msgs = str.split("/");
         }
         public String String_extract_time(String time) throws ParseException {
-            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(time);
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
             String new_time = new SimpleDateFormat("HH:mm").format(date);
             return new_time;
         }
@@ -521,11 +525,11 @@ public class chating extends AppCompatActivity {
             try {
             if(Msgs[2].contains(".jpeg")){
                 dataList.add(new chat_item("http://35.166.40.164/file/"+Msgs[2],Msgs[1],String_extract_time(Msgs[3]),0));
-                myDb.insert_data(room_num,Msgs[1],"http://35.166.40.164/file/"+Msgs[2],String_extract_time(Msgs[3]),0);
+                myDb.insert_data(room_num,Msgs[1],"http://35.166.40.164/file/"+Msgs[2],Msgs[3],0);
                     myDbs.last_msg_update(Integer.parseInt(room_num),"사진",Msgs[3]);
             }else{
                 dataList.add(new chat_item(Msgs[2],Msgs[1],String_extract_time(Msgs[3]),1));
-                myDb.insert_data(room_num,Msgs[1],Msgs[2],String_extract_time(Msgs[3]),1);
+                myDb.insert_data(room_num,Msgs[1],Msgs[2],Msgs[3],1);
                 myDbs.last_msg_update(Integer.parseInt(room_num),Msgs[2],Msgs[3]);
             }
             } catch (ParseException e) {

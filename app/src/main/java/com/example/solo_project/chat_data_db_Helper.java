@@ -11,7 +11,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class chat_data_db_Helper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "chat_dbs";
@@ -59,7 +62,12 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
 //            Toast.makeText(context, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
         }
     }
-    public ArrayList<chat_item> SelectAllKids(int room_num) {
+    public String String_extract_time(String time) throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        String new_time = new SimpleDateFormat("HH:mm").format(date);
+        return new_time;
+    }
+    public ArrayList<chat_item> SelectAllKids(int room_num) throws ParseException {
         ArrayList<chat_item> list = new ArrayList<>();
         String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME_chat_data + " WHERE room_num = " + room_num;
 //        WHERE room_num = " + room_num
@@ -71,7 +79,7 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
             do {
                 Log.e("테스트",cur.getString(1)+ " , " + cur.getString(3)+" , " + cur.getString(4)+" , " + cur.getString(5)+" , " + cur.getString(6));
 
-                list.add(new chat_item(cur.getString(4),cur.getString(3),cur.getString(5),Integer.parseInt(cur.getString(6))));
+                list.add(new chat_item(cur.getString(4),cur.getString(3),String_extract_time(cur.getString(5)),Integer.parseInt(cur.getString(6))));
 //                list.add(new chat_item(Integer.parseInt(cur.getString(0)),cur.getString(1),""));
             } while (cur.moveToNext());
 

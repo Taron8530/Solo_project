@@ -20,6 +20,8 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,6 +81,7 @@ public class chat_FCM extends FirebaseMessagingService{
             e.printStackTrace();
         }
         }
+        EventBus.getDefault().post(new msg_box("보내짐"));
         //수신한 메시지를 처리
     }
     public String String_extract_time(String time) throws ParseException {
