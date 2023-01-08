@@ -64,7 +64,7 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
     }
     public String String_extract_time(String time) throws ParseException {
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
-        String new_time = new SimpleDateFormat("HH:mm").format(date);
+        String new_time = new SimpleDateFormat("H시 mm분").format(date);
         return new_time;
     }
     public ArrayList<chat_item> SelectAllKids(int room_num) throws ParseException {
@@ -83,6 +83,10 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
                 if(i!=0) {
                     Log.e("chat_data_db_Helper", "첫번째 시간: " + list.get(i).getTime() + " 두번째 시간: " + list.get(i - 1).getTime());
                     if (list.get(i).getTime().equals(list.get(i - 1).getTime()) && list.get(i).getViewType() >= 2 && list.get(i-1).getViewType() >=2) {
+                        Log.e("chat_data_db_Helper", "여기 들어오나?");
+                        list.get(i-1).setTime("");
+                    }
+                    if (list.get(i).getTime().equals(list.get(i - 1).getTime()) && list.get(i).getViewType() < 2 && list.get(i-1).getViewType() < 2) {
                         Log.e("chat_data_db_Helper", "여기 들어오나?");
                         list.get(i-1).setTime("");
                     }

@@ -345,6 +345,8 @@ public class chating extends AppCompatActivity {
                                     public void run() {
                                         try {
                                             check_time(str[1]);
+                                            Same_time();
+
                                         } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
@@ -377,9 +379,14 @@ public class chating extends AppCompatActivity {
             }
         }
     }
+    public void Same_time(){
+        if(dataList.get(dataList.size()-1).getTime().equals(dataList.get(dataList.size()-2).getTime())){
+            dataList.get(dataList.size()-2).setTime("");
+        }
+    }
     public String String_extract_time(String time) throws ParseException {
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
-        String new_time = new SimpleDateFormat("HH:mm").format(date);
+        String new_time = new SimpleDateFormat("H시 mm분").format(date);
         return new_time;
     }
     public void getG() {
