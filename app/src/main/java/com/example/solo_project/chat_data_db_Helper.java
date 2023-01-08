@@ -68,6 +68,7 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
         return new_time;
     }
     public ArrayList<chat_item> SelectAllKids(int room_num) throws ParseException {
+        int i = 0;
         ArrayList<chat_item> list = new ArrayList<>();
         String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME_chat_data + " WHERE room_num = " + room_num;
 //        WHERE room_num = " + room_num
@@ -75,11 +76,18 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
         Cursor cur = getWritableDatabase().rawQuery(SELECT_QUERY, null);
         Log.e("테스트","db_select 진입");
         if (cur != null && cur.moveToFirst()) {
-
             do {
-                Log.e("테스트",cur.getString(1)+ " , " + cur.getString(3)+" , " + cur.getString(4)+" , " + cur.getString(5)+" , " + cur.getString(6));
+                Log.e("테스트","Index"+ i + cur.getString(1)+ " , " + cur.getString(3)+" , " + cur.getString(4)+" , " + cur.getString(5)+" , " + cur.getString(6));
 
                 list.add(new chat_item(cur.getString(4),cur.getString(3),String_extract_time(cur.getString(5)),Integer.parseInt(cur.getString(6))));
+                if(i!=0) {
+                    Log.e("chat_data_db_Helper", "첫번째 시간: " + list.get(i).getTime() + " 두번째 시간: " + list.get(i - 1).getTime());
+                    if (list.get(i).getTime().equals(list.get(i - 1).getTime()) && list.get(i).getViewType() >= 2 && list.get(i-1).getViewType() >=2) {
+                        Log.e("chat_data_db_Helper", "여기 들어오나?");
+                        list.get(i-1).setTime("");
+                    }
+                }
+                i++;
 //                list.add(new chat_item(Integer.parseInt(cur.getString(0)),cur.getString(1),""));
             } while (cur.moveToNext());
 
