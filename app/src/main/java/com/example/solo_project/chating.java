@@ -150,7 +150,7 @@ public class chating extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!message.getText().toString().trim().equals("")){
-                    dataList.add(new chat_item(message.getText().toString(),nickname,"",2));
+                    dataList.add(new chat_item(message.getText().toString(),nickname,"전송중...",2));
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
 //                    myDb.last_msg_update(Integer.parseInt(room_num),message.getText().toString());
@@ -362,7 +362,7 @@ public class chating extends AppCompatActivity {
     }
     private void check_time(String time) throws ParseException {
         for(int i =0;i<dataList.size();i++){
-            if (dataList.get(i).getTime().equals("")&&dataList.get(i).getViewType() >= 2) {
+            if (dataList.get(i).getTime().equals("전송중...")&&dataList.get(i).getViewType() >= 2) {
                 dataList.get(i).setTime(String_extract_time(time));
                 recyclerView.scrollToPosition(dataList.size());
                 adapter.notifyDataSetChanged();
