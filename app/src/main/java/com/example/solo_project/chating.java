@@ -1,5 +1,7 @@
 package com.example.solo_project;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,11 +94,27 @@ public class chating extends AppCompatActivity {
     private String sender;
     private String room_num;
     private DBHelper myDb;
+    private ActivityResultLauncher<Intent> mStartForResult;
 
     @Override
     protected void onPause() {
         super.onPause();
         socket_Disconnect();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mStartForResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == RESULT_OK) {
+                        Intent intent = result.getData();
+                        Log.d("Chating_activity", intent.getStringExtra("time"));
+                        Log.d("Chating_activity", intent.getStringExtra("date"));
+                    }
+                }
+        );
     }
 
     //시간
@@ -246,6 +264,7 @@ public class chating extends AppCompatActivity {
         {
             case R.id.promise:
                 //약속잡기 구현 호출
+                promise();
                 break;
             case R.id.chating_exit:
                 //채팅방 데이터 모두 지우기
@@ -255,6 +274,8 @@ public class chating extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void promise(){
+        Intent intent = new Intent(this,chat_promise.class);
+        mStartForResult.launch(intent);
 
     }
     public void send_nickname(String nickname,String room_num){
