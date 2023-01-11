@@ -65,4 +65,10 @@ public interface ApiInterface {
     Call<String> token_update(@Query("token") String token,@Query("nickname") String nickname);
     @GET("chat_room_check.php")
     Call<String> chat_room_check(@Query("user1") String user1,@Query("user2") String user2);
+    //약속 잡기
+    @GET("chat_promise_insert.php")
+    Call<String> chat_promise_insert(@Query("room_num") String room_num,@Query("promise_date") String date,@Query("promise_time") String time,@Query("nickname") String nickname);
+
+    @GET("chat_promise_select.php")
+    Call<chat_promise_model> chat_promise_select(@Query("room_num") String room_num);
 }

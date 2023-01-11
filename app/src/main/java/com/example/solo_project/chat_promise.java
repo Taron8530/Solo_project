@@ -64,8 +64,6 @@ public class chat_promise extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tx1.setText(et_Date.getText().toString());
-                tx2.setText(et_time.getText().toString());
                 if(et_Date.getText().toString().trim().equals("") && et_time.getText().toString().trim().equals("")){
                     Toast.makeText(chat_promise.this,"시간과 날짜를 입력해주세요!",Toast.LENGTH_SHORT).show();
                 }else if (et_Date.getText().toString().trim().equals("")){
@@ -123,7 +121,7 @@ public class chat_promise extends AppCompatActivity {
         });
     }
     private void updateLabel() {
-        String myFormat = "yyyy/MM/dd";    // 출력형식   2018/11/28
+        String myFormat = "yyyy년 MM월 dd일 E요일";    // 출력형식   2018/11/28
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
 
         EditText et_date = (EditText) findViewById(R.id.promise_date);

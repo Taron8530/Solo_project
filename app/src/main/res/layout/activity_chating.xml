@@ -47,12 +47,12 @@
         android:id="@+id/chating_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_top_bar"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/chating_container" />
 
     <LinearLayout
         android:id="@+id/chat_top_bar"
@@ -85,6 +85,37 @@
           android:layout_height="match_parent"
           android:text="닉네임"
           android:textSize="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chating_container"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chat_top_bar">
+
+      <TextView
+          android:id="@+id/noti_icon"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_weight="1"
+          android:layout_marginEnd="30dp"
+          android:layout_marginStart="10dp"
+          android:background="@drawable/ic_noti" />
+
+      <TextView
+          android:id="@+id/promise_date"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:text="TextView"
+          android:textSize="18dp" />
 
     </LinearLayout>
 

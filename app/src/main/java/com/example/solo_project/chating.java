@@ -4,28 +4,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,8 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,12 +37,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;   //json
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -95,6 +79,7 @@ public class chating extends AppCompatActivity {
     private String room_num;
     private DBHelper myDb;
     private ActivityResultLauncher<Intent> mStartForResult;
+    private LinearLayout container;
 
     @Override
     protected void onPause() {
@@ -112,6 +97,27 @@ public class chating extends AppCompatActivity {
                         Intent intent = result.getData();
                         Log.d("Chating_activity", intent.getStringExtra("time"));
                         Log.d("Chating_activity", intent.getStringExtra("date"));
+                        Log.d("Chating_activity",nickname);
+                        Log.d("Chating_activity",room_num);
+                        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+                        Call<String> call = apiInterface.chat_promise_insert(room_num,intent.getStringExtra("date"),intent.getStringExtra("time"),nickname);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response != null){
+                                    Log.d("chating",response.body());
+                                    //여기서 소켓으로 메세지 던질거임
+                                    sendMsg("약____속",sender,room_num);
+                                    Promise_select(room_num);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(chating.this,"오류가 발생했습니다",Toast.LENGTH_SHORT).show();
+                                Log.d("chating",t.toString());
+                            }
+                        });
                     }
                 }
         );
@@ -123,10 +129,13 @@ public class chating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chating);
         chat_btn = findViewById(R.id.send_chating);
+        container = findViewById(R.id.chating_container);
         Intent i = getIntent();
         nickname = i.getStringExtra("my_nickname");
         sender = i.getStringExtra("sender");
         room_num = i.getStringExtra("room_num");
+        container.setVisibility(View.GONE);
+        Promise_select(room_num);
         dataList = new ArrayList<>();
         myDb = new DBHelper(chating.this);
         chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
@@ -373,6 +382,9 @@ public class chating extends AppCompatActivity {
                                         }
                                     }
                                 });
+                            }else if(str[3].equals("약속잡기")){
+                                //함수로 하기
+                                Promise_select(room_num);
                             }else{
                                 mHandler.post(new MsgUpdate(read));
                             }
@@ -382,6 +394,50 @@ public class chating extends AppCompatActivity {
                     e.printStackTrace();
                     Log.e(TAG+"Wait_msg",e.toString());
                 } }}.start();
+    }
+    private void Promise_select(String room_num){
+        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+        Call<chat_promise_model> call = apiInterface.chat_promise_select(room_num);
+        call.enqueue(new Callback<chat_promise_model>() {
+            @Override
+            public void onResponse(Call<chat_promise_model> call, Response<chat_promise_model> response) {
+                if(response.body() != null){
+                    if(response.body().getResponse().equals("성공")){
+                        Log.d("chating",response.body().getPromise_date());
+                        Log.d("chating",response.body().getPromise_time());
+                        Log.d("chating",response.body().getNickname());
+                        Log.d("chating",response.body().getTime());
+                        container.setVisibility(View.VISIBLE);
+                        TextView promise_date = findViewById(R.id.promise_date);
+                        promise_date.setText(response.body().getPromise_date());
+                        container.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(chating.this);
+                                builder.setTitle("상세 정보").setMessage("\n"+response.body().getPromise_time());
+                                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(getApplicationContext(), "Yeah!!", Toast.LENGTH_LONG).show();
+
+                                    }
+                                });
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+                            }
+                        });
+//                        Log.d("chating",String.valueOf(response.body().getRoom_num()));
+                    }else{
+                        Log.e("chating",response.body().getResponse());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<chat_promise_model> call, Throwable t) {
+                Log.e("chating",t.toString());
+            }
+        });
     }
     private void check_time(String time) throws ParseException {
         for(int i =0;i<dataList.size();i++){
