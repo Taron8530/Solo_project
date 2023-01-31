@@ -14,6 +14,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -382,7 +384,7 @@ public class chating extends AppCompatActivity {
                                         }
                                     }
                                 });
-                            }else if(str[3].equals("약속잡기")){
+                            }else if(str[3].equals("약____속")){
                                 //함수로 하기
                                 Promise_select(room_num);
                             }else{
@@ -546,7 +548,7 @@ public class chating extends AppCompatActivity {
                             Log.e("테스트 로그",t.toString());
                         }
                     });
-                    dataList.add(new chat_item(Uri.toString(),nickname,"",3));
+                    dataList.add(new chat_item(Uri.toString(),nickname,"전송중...",3));
 //                    myDb.last_msg_update(Integer.parseInt(room_num),"사진");
                     adapter.notifyDataSetChanged();
                     recyclerView.scrollToPosition(dataList.size());
@@ -574,12 +576,17 @@ public class chating extends AppCompatActivity {
         return generatedString;
     }
     
-    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
-        File tempFile = new File(getCacheDir(), imgName);    // 파일 경로와 이름 넣기
+    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) throws IOException {   // 선택한 이미지 내부 저장소에 저장
+        File tempFile = new File(getCacheDir(), imgName);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);    //회전시킬 각도
+        Bitmap newBmp = Bitmap.createBitmap(bitmap, 0, 0, //bmp를 matrix로 회전하여 newBmp에
+                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        // 파일 경로와 이름 넣기
         try {
             tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
             FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
+            newBmp.compress(Bitmap.CompressFormat.JPEG, 90, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
             out.close();    // 스트림 닫아주기
             Log.e("파일 저장",tempFile.getPath());
             return getCacheDir()+"/"+imgName;
