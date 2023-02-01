@@ -2,6 +2,7 @@ package com.example.solo_project;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +22,20 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private ArrayList<chat_item> myDataList = null;
     private Context context;
-
+    private OnItemClickListener mListener = null ;
     MyAdapter(ArrayList<chat_item> dataList)
     {
         myDataList = dataList;
     }
+
+    // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener ;
+    }
+    public interface OnItemClickListener {
+        void onImageClick(View v, int position) ;
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -117,6 +127,18 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             time = itemView.findViewById(R.id.left_chat_time);
 //            name = itemView.findViewById(R.id.left_chat_name);
             image = itemView.findViewById(R.id.left_chat_image);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition() ;
+                    if (pos != RecyclerView.NO_POSITION) {
+                        // 리스너 객체의 메서드 호출.
+                        if (mListener != null) {
+                            mListener.onImageClick(view, pos) ;
+                        }
+                    }
+                }
+            });
         }
     }
 

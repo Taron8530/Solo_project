@@ -175,6 +175,14 @@ public class chating extends AppCompatActivity {
         recyclerView.setAdapter(adapter); //리사이클러뷰에 어뎁터 장착
         recyclerView.scrollToPosition(dataList.size()-1);
         Waiting_msg(); //서버에서 보내는 메세지 받을 준비
+        adapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void onImageClick(View v, int position) {
+                Intent i = new Intent(chating.this,Chatting_Image_View.class);
+                i.putExtra("image_url",dataList.get(position).getContent());
+                startActivity(i);
+            }
+        });
         chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -586,7 +594,7 @@ public class chating extends AppCompatActivity {
         try {
             tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
             FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
-            newBmp.compress(Bitmap.CompressFormat.JPEG, 90, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
+            newBmp.compress(Bitmap.CompressFormat.JPEG, 30, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
             out.close();    // 스트림 닫아주기
             Log.e("파일 저장",tempFile.getPath());
             return getCacheDir()+"/"+imgName;
