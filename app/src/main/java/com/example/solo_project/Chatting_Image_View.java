@@ -1,5 +1,6 @@
 package com.example.solo_project;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -21,15 +24,19 @@ import java.util.function.LongFunction;
 public class Chatting_Image_View extends AppCompatActivity {
     Bitmap bitmap;
     PhotoView photoView;
+    TextView exit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         setContentView(R.layout.activity_chatting_image_view);
         Intent i = getIntent();
         String Image_Url = i.getStringExtra("image_url");
         photoView = findViewById(R.id.chating_image_View);
+        exit = findViewById(R.id.image_view_exit);
         getImageFromURL(Image_Url);
-
+        Setting_Listener();
         Log.e("image_view",Image_Url);
         photoView.setImageBitmap(bitmap);
     }
@@ -70,5 +77,19 @@ public class Chatting_Image_View extends AppCompatActivity {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
+    }
+    public void Setting_Listener(){
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

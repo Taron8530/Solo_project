@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -207,11 +208,15 @@ public class used_add extends AppCompatActivity {
         }
     }
     public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
-        File tempFile = new File(getCacheDir(), imgName);    // 파일 경로와 이름 넣기
+        File tempFile = new File(getCacheDir(), imgName);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);    //회전시킬 각도
+        Bitmap newBmp = Bitmap.createBitmap(bitmap, 0, 0, //bmp를 matrix로 회전하여 newBmp에
+                bitmap.getWidth(), bitmap.getHeight(), matrix, true);// 파일 경로와 이름 넣기
         try {
             tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
             FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
+            newBmp.compress(Bitmap.CompressFormat.JPEG, 60, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
             out.close();    // 스트림 닫아주기
 //            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
             return getCacheDir()+"/"+imgName;

@@ -36,6 +36,7 @@ public class used_info extends AppCompatActivity {
     private ImageView profile;
     private int image_size;
     private String MyNickname;
+    private PagerAdapter adapter;
 
     private ArrayList<String> images;
     @Override
@@ -71,7 +72,8 @@ public class used_info extends AppCompatActivity {
             Log.e("number check",i.getStringExtra("num")+j);
             images.add("http://35.166.40.164//used_image/"+i.getStringExtra("num")+j+".jpeg");
         }
-        sliderViewPager.setAdapter(new PagerAdapter(this, images));
+        adapter = new PagerAdapter(this, images);
+        sliderViewPager.setAdapter(adapter);
         sliderViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -80,6 +82,14 @@ public class used_info extends AppCompatActivity {
             }
         });
         setupIndicators(images.size());
+        adapter.setOnItemClickListener(new main_adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Intent i = new Intent(used_info.this,Chatting_Image_View.class);
+                i.putExtra("image_url",images.get(position));
+                startActivity(i);
+            }
+        });
         chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

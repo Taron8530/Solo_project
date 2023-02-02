@@ -91,8 +91,7 @@
     <LinearLayout
         android:id="@+id/chating_container"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,9 +103,9 @@
           android:id="@+id/noti_icon"
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:layout_weight="1"
-          android:layout_marginEnd="30dp"
           android:layout_marginStart="10dp"
+          android:layout_marginEnd="30dp"
+          android:layout_weight="1"
           android:background="@drawable/ic_noti" />
 
       <TextView

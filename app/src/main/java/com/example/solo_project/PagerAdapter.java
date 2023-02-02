@@ -18,11 +18,18 @@ public class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.MyViewHolder
     private Context context;
     private ArrayList<String> sliderImage;
 
+    private main_adapter.OnItemClickListener mListener = null ;
+
     public PagerAdapter(Context context, ArrayList<String> sliderImage) {
         this.context = context;
         this.sliderImage = sliderImage;
     }
-
+    public void setOnItemClickListener(main_adapter.OnItemClickListener listener) {
+        mListener = listener ;
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position) ;
+    }
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,6 +55,12 @@ public class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.MyViewHolder
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageSlider);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onItemClick(view,getAdapterPosition());
+                }
+            });
         }
 
         public void bindSliderImage(String imageURL) {
