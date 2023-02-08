@@ -167,7 +167,17 @@ public class chating extends AppCompatActivity {
         mHandler = new Handler();//핸들러 변수
         recyclerView = findViewById(R.id.chating_recyclerview); //리사이클러뷰 할당
         message = findViewById(R.id.chating_text);
-
+        message.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    Log.e(TAG, "onFocusChange: 포커스 온");
+                    recyclerView.scrollToPosition(dataList.size());
+                }else{
+                    Log.e(TAG, "onFocusChange: 포커스 해제");
+                }
+            }
+        });
         LinearLayoutManager manager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false);//리사이클러뷰 매니저
         recyclerView.setLayoutManager(manager); // LayoutManager 등록
@@ -424,7 +434,7 @@ public class chating extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(chating.this);
-                                builder.setTitle("상세 정보").setMessage("\n"+response.body().getPromise_time());
+                                builder.setTitle("약속 시간").setMessage("\n"+response.body().getPromise_time());
                                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

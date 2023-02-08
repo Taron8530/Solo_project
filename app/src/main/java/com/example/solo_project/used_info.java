@@ -37,6 +37,7 @@ public class used_info extends AppCompatActivity {
     private int image_size;
     private String MyNickname;
     private PagerAdapter adapter;
+    private TextView exit;
 
     private ArrayList<String> images;
     @Override
@@ -50,7 +51,14 @@ public class used_info extends AppCompatActivity {
         used_name = findViewById(R.id.used_info_name);
         profile = findViewById(R.id.user_profile);
         chat_btn = findViewById(R.id.go_chating);
+        exit = findViewById(R.id.used_info_exit);
         images = new ArrayList<>();
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         MyNickname = i.getStringExtra("my_nickname");
         nickname.setText("판매자:   " +i.getStringExtra("nickname"));
         detail.setText("설명글 \n\n\n"+i.getStringExtra("detail"));

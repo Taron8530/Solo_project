@@ -120,14 +120,6 @@ public class Login extends AppCompatActivity {
                 }
             });
         }
-        ImageButton Google_btn = findViewById(R.id.naver_login_btn);
-        Google_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("HashKey",getKeyHash(Login.this));
-
-            }
-        });
     }
     public static String getKeyHash(final Context context) {
         PackageManager pm = context.getPackageManager();

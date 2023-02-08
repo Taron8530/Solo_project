@@ -12,8 +12,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="414dp"
-        android:layout_height="68dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,16 +30,26 @@
           android:id="@+id/chating_text"
           android:singleLine="true"
           android:maxLines="1"
-          android:layout_width="250dp"
+          android:layout_width="305dp"
+          android:layout_marginRight="10dp"
+          android:background="@drawable/edit_textbox"
           android:layout_height="wrap_content"
+          android:paddingLeft="10dp"
+          android:paddingBottom="10dp"
+          android:paddingTop="10dp"
+          android:layout_marginBottom="5dp"
+          android:layout_marginTop="5dp"
           android:hint="입력해주세요" />
 
       <Button
           android:id="@+id/send_chating"
-          android:layout_width="150dp"
+          android:layout_width="match_parent"
+          android:layout_gravity="center"
           android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="전송" />
+          android:drawableStart="@drawable/ic_chat"
+          android:paddingLeft="15dp"
+          android:layout_marginRight="5dp"
+          android:background="@drawable/send_chat"/>
 
     </LinearLayout>
 
@@ -57,7 +67,7 @@
     <LinearLayout
         android:id="@+id/chat_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:layout_marginTop="4dp"
         android:orientation="horizontal"
         app:layout_constrainedWidth="true"

@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import org.w3c.dom.Text;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -48,6 +50,9 @@ import retrofit2.Response;
 public class Signup extends AppCompatActivity {
     FirebaseAuth mauth;
     private String verficationID;
+    private EditText verifycode;
+    private Button varify_Btn;
+    private LinearLayout Linear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +63,15 @@ public class Signup extends AppCompatActivity {
         Button verify = findViewById(R.id.verify);
         Button next = findViewById(R.id.next0);
         Button Verification = findViewById(R.id.sendveritication);
-        Button varify_Btn = findViewById(R.id.verify_btn);
+        varify_Btn = findViewById(R.id.verify_btn);
         EditText e_mail_signup = findViewById(R.id.e_mail_signup);
-        EditText verifycode = findViewById(R.id.verifycode);
+        verifycode = findViewById(R.id.verifycode);
         EditText Password = findViewById(R.id.password2);
-        TextView Timer = findViewById(R.id.Timer);
+        Linear = findViewById(R.id.Linear);
 
         verifycode.setVisibility(View.GONE); // 인증번호 입력칸 숨기기
         varify_Btn.setVisibility(View.GONE); //인증번호 확인버튼 숨기기
-        Timer.setVisibility(View.GONE);//타이머 숨기기
+        Linear.setVisibility(View.GONE);
         Password.addTextChangedListener(new TextWatcher() {
             EditText Pass = findViewById(R.id.password);
             TextView checkPass = findViewById(R.id.checkpassword);
@@ -241,6 +246,7 @@ public class Signup extends AppCompatActivity {
         Button btn = findViewById(R.id.verify_btn);
         E.setVisibility(View.VISIBLE);
         btn.setVisibility(View.VISIBLE);
+        Linear.setVisibility(View.VISIBLE);
         num.setInputType(InputType.TYPE_NULL);
         PhoneAuthOptions options;
         options = PhoneAuthOptions.newBuilder(mauth)
@@ -255,6 +261,7 @@ public class Signup extends AppCompatActivity {
 
     public void verifycode(String code){
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verficationID,code);
+        Log.e("code",code);
         IDcredential(credential);
     }
 
@@ -267,6 +274,9 @@ public class Signup extends AppCompatActivity {
                     EditText num = findViewById(R.id.verifycode);
                     num.setInputType(InputType.TYPE_NULL);
                     Toast.makeText(Signup.this,"완료",Toast.LENGTH_SHORT).show();
+                    verifycode.setVisibility(View.GONE); // 인증번호 입력칸 숨기기
+                    varify_Btn.setVisibility(View.GONE); //인증번호 확인버튼 숨기기
+                    Linear.setVisibility(View.GONE); //리니어 숨기기
                 }else{
                     Toast.makeText(Signup.this,"인증번호를 다시 확인해주세요",Toast.LENGTH_SHORT).show();
 

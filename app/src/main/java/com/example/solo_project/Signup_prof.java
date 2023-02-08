@@ -167,8 +167,8 @@ public class Signup_prof extends AppCompatActivity {
                     Log.e("insert", email + "/" + PW);
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
                     Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname);
-                    UpdatePhoto(nickname);
                     filepath = getRealPathFromURI(Uri,nickname);
+                    UpdatePhoto(nickname);
                     call.enqueue(new Callback<Signup_model>() {
                         @Override
                         public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
@@ -219,8 +219,8 @@ public class Signup_prof extends AppCompatActivity {
         if (requestCode == REQUEST_Image) {
             if (resultCode == RESULT_OK) {
                 Uri = data.getData();
-                Log.e("ㅇㅇ", filepath);
                 Log.e("onActivityResult: ", Uri.toString());
+                Glide.with(getApplicationContext()).load(Uri).into((ImageView) findViewById(R.id.profilebtn));
             }
 
         }
@@ -248,7 +248,7 @@ public class Signup_prof extends AppCompatActivity {
                 file.mkdirs();    // 하위폴더를 포함한 폴더를 전부 생성
             }
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("uploaded_file",nickname, requestBody);
+            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("uploaded_file", nickname.trim(), requestBody);
             Call<Signup_model> call = apiInterface.uploadImage(fileToUpload);
             call.enqueue(new Callback<Signup_model>() {
                 @Override

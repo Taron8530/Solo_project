@@ -10,12 +10,14 @@
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/e_mail"
 
-        android:layout_width="250dp"
+        android:layout_width="270dp"
         android:layout_height="55dp"
         android:layout_marginTop="20dp"
         android:hint="이메일 주소"
         android:textSize="10dp"
+        android:background="@drawable/edit_textbox"
         android:maxLines="1"
+        android:paddingLeft="10dp"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -26,6 +28,8 @@
         android:id="@+id/title"
         android:height="150px"
         android:width="300px"
+        android:textSize="20dp"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="로그인 하기"
@@ -40,13 +44,16 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password_login"
-        android:layout_width="250dp"
+        android:layout_width="270dp"
         android:layout_height="55dp"
         android:layout_marginTop="16dp"
         android:hint="패스워드"
+        android:paddingLeft="10dp"
         android:inputType="textPassword"
         android:maxLines="1"
+        android:background="@drawable/edit_textbox"
         android:textSize="10dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,9 +65,11 @@
         android:layout_height="55dp"
         android:layout_marginTop="40dp"
         android:text="로그인"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/login_btn"
         app:layout_constraintTop_toBottomOf="@+id/password_login" />
 
     <TextView
@@ -69,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:text="회원가입"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submit" />
 
@@ -77,6 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
         android:text="이메일 및 비밀번호 찾기"
         app:layout_constraintStart_toEndOf="@+id/Signup"
         app:layout_constraintTop_toBottomOf="@+id/submit" />
@@ -91,18 +102,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submit"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <ImageButton
-        android:id="@+id/naver_login_btn"
-        android:layout_width="280dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/naver_login_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kakao_login_btn"
         tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

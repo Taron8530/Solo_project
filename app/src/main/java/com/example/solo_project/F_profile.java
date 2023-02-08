@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +32,8 @@ public class F_profile extends Fragment {
     TextView nickname_view;
     String email;
     String nickname;
-    ImageView imagebtn;
+    Button imagebtn;
+    Button logout;
     final String TAG = "F_Profile";
     public F_profile(String nickname,String email){
         this.nickname = nickname;
@@ -60,6 +62,7 @@ public class F_profile extends Fragment {
         email_view = root.findViewById(R.id.f_email);
         nickname_view = root.findViewById(R.id.f_nickname);
         imagebtn = root.findViewById(R.id.Sales_history);
+        logout = root.findViewById(R.id.logout);
         ImageView profile = root.findViewById(R.id.f_profile);
         Log.e("onCreateView",email + " " +nickname);
         Glide.with(F_profile.this)
@@ -76,6 +79,18 @@ public class F_profile extends Fragment {
                 Intent I = new Intent(getActivity(),sale_history.class);
                 I.putExtra("nickname",nickname);
                 startActivity(I);
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(),Login.class);
+                SharedPreferences sv = getActivity().getSharedPreferences("user_verify",Context.MODE_PRIVATE);
+                SharedPreferences.Editor E = sv.edit();
+                E.clear();
+                E.commit();
+                startActivity(i);
+                getActivity().finish();
             }
         });
         return root;

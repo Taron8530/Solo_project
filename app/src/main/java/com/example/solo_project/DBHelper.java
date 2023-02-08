@@ -85,7 +85,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String SELECT_QUERY = "SELECT * FROM "+TABLE_NAME_chat_room+" WHERE room_num ="+room_num;
         Cursor cur = getReadableDatabase().rawQuery(SELECT_QUERY,null);
         Log.e("check_room",String.valueOf(cur.getCount()));
-        if(cur.moveToFirst()){
+        Log.e("check_room",String.valueOf(cur.getCount()));
+        if(cur.getCount() > 0){
             Log.e("check_room","false");
             return false;
         }else{

@@ -12,102 +12,111 @@
 
         <ImageView
             android:id="@+id/f_profile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="40dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="24dp"
             android:adjustViewBounds="true"
             android:src="@drawable/defualtprofile"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.135"
+            app:layout_constraintHorizontal_bias="0.482"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/f_email"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_marginTop="60dp"
-            android:text=""
+            android:layout_marginTop="8dp"
+            android:text="이메일 적히는 곳"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.094"
-            app:layout_constraintStart_toEndOf="@+id/f_profile"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.082"
+            app:layout_constraintStart_toEndOf="@id/massege"
+            app:layout_constraintTop_toBottomOf="@+id/f_nickname" />
 
         <TextView
             android:id="@+id/f_nickname"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_marginTop="24dp"
-            android:text=""
+            android:layout_marginTop="12dp"
+            android:text="닉네임 적히는 곳"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.029"
-            app:layout_constraintStart_toEndOf="@+id/f_profile"
-            app:layout_constraintTop_toBottomOf="@+id/f_email" />
+            app:layout_constraintHorizontal_bias="0.082"
+            app:layout_constraintStart_toEndOf="@id/massege2"
+            app:layout_constraintTop_toBottomOf="@+id/f_profile" />
 
         <TextView
             android:id="@+id/massege"
-            android:layout_width="92dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
+            android:layout_marginTop="8dp"
             android:text="이메일"
-            app:layout_constraintBottom_toTopOf="@+id/f_email"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.037"
-            app:layout_constraintStart_toEndOf="@+id/f_profile"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.975" />
+            app:layout_constraintHorizontal_bias="0.279"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/massege2" />
 
         <TextView
             android:id="@+id/massege2"
-            android:layout_width="92dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="168dp"
             android:text="닉네임"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintHorizontal_bias="0.279"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/Sales_history"
-            android:layout_width="70dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="170dp"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/history" />
-
-        <ImageView
-            android:id="@+id/sales_history"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="170dp"
-            app:layout_constraintStart_toEndOf="@+id/Sales_history"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageView
-            android:id="@+id/like"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="170dp"
-            app:layout_constraintStart_toEndOf="@+id/sales_history"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/sales_history_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:text="판매내역"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintTop_toBottomOf="@id/f_email"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.198"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Sales_history" />
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/change_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_change"
+                    android:textColor="@color/black"
+                    android:text="  프로필 사진 변경하기"
+                    android:background="@color/btn_color"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/Sales_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:drawableStart="@drawable/ic_history"
+                    android:text="  판매내역"
+                    android:background="@color/btn_color"
+                    android:textAlignment="textStart" />
+
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_logout"
+                    android:textColor="@color/black"
+                    android:background="@color/btn_color"
+                    android:text="  로그아웃"
+                    android:textAlignment="textStart" />
+            </LinearLayout>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
