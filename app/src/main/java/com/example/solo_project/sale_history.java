@@ -64,7 +64,7 @@ public class sale_history extends AppCompatActivity {
 
         frag_salehistory_ing = new frag_salehistory_ing(nickname);
 
-        frag_salehistory_suc = new frag_salehistory_suc();
+        frag_salehistory_suc = new frag_salehistory_suc(nickname);
 
 
     }

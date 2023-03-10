@@ -59,6 +59,7 @@ public class frag_salehistory_ing extends Fragment {
                 i.putExtra("price",list.get(position).getPrice());
                 i.putExtra("image_size",list.get(position).getImage_size());
                 i.putExtra("num",list.get(position).getNum());
+                i.putExtra("my_nickname",nickname);
                 getActivity().startActivity(i);
             }
         });

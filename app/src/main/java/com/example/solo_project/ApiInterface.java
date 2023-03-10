@@ -58,17 +58,23 @@ public interface ApiInterface {
     Call<ArrayList<item_model>> select_sale_history(@Query("nickname") String nickname);
     //채팅에서 파일 보내기
     @Multipart
-    @POST("chat_file_upload.php")
+    @POST("chat_file_upload.php") //채팅 이미지 업로드
     Call<String> chat_file_upload(@Part MultipartBody.Part file,@Part("file_num") String file_num);
     //token db에 저장하기
-    @GET("FCM_token_update.php")
+    @GET("FCM_token_update.php") // 토큰 업테이트
     Call<String> token_update(@Query("token") String token,@Query("nickname") String nickname);
-    @GET("chat_room_check.php")
+    @GET("chat_room_check.php") //룸 체크
     Call<String> chat_room_check(@Query("user1") String user1,@Query("user2") String user2);
     //약속 잡기
-    @GET("chat_promise_insert.php")
+    @GET("chat_promise_insert.php") // 약속 잡기
     Call<String> chat_promise_insert(@Query("room_num") String room_num,@Query("promise_date") String date,@Query("promise_time") String time,@Query("nickname") String nickname);
 
-    @GET("chat_promise_select.php")
+    @GET("chat_promise_select.php") // 약속 셀렉트
     Call<chat_promise_model> chat_promise_select(@Query("room_num") String room_num);
+    @GET("sold_out.php") // 판매완료
+    Call<String> used_sold_out(@Query("num") String num,@Query("sold_out_status") String sold_out_status);
+    @GET("sold_out_select.php") // 거래 완료한 아이템 불러오기
+    Call<ArrayList<item_model>> used_sold_out_select(@Query("nickname") String nickname);
+    @GET("used_delete.php")
+    Call<String> used_delete(@Query("num") String num);
 }

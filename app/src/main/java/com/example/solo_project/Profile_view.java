@@ -66,7 +66,7 @@ public class Profile_view extends AppCompatActivity {
     private void createFragment() {
         frag_salehistory_ing = new frag_salehistory_ing(nickname);
 
-        frag_salehistory_suc = new frag_salehistory_suc();
+        frag_salehistory_suc = new frag_salehistory_suc(nickname);
 
 
     }

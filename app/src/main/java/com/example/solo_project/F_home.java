@@ -1,8 +1,10 @@
 package com.example.solo_project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +31,13 @@ public class F_home extends Fragment {
     public F_home(String nickname){
         this.nickname = nickname;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        select_used();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,12 +47,10 @@ public class F_home extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), 1));
-
+        Log.e("onCreateView", "닉네임은:"+nickname);
         adapter = new main_adapter();
         recyclerView.setAdapter(adapter);
         adapter.setlist(list);
-        select_used();
-        adapter.notifyDataSetChanged();
         adapter.setOnItemClickListener(new main_adapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {

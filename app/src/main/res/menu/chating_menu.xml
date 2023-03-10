@@ -5,6 +5,9 @@
         android:id="@+id/promise"
         android:title="약속 잡기" />
     <item
+        android:id="@+id/location_share"
+        android:title="위치 공유하기" />
+    <item
         android:id="@+id/chating_exit"
         android:title="채팅방 나가기" />
 </menu>

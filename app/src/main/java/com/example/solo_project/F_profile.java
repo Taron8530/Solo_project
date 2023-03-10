@@ -34,6 +34,7 @@ public class F_profile extends Fragment {
     String nickname;
     Button imagebtn;
     Button logout;
+    Button change_profile;
     final String TAG = "F_Profile";
     public F_profile(String nickname,String email){
         this.nickname = nickname;
@@ -63,6 +64,7 @@ public class F_profile extends Fragment {
         nickname_view = root.findViewById(R.id.f_nickname);
         imagebtn = root.findViewById(R.id.Sales_history);
         logout = root.findViewById(R.id.logout);
+        change_profile = root.findViewById(R.id.change_profile);
         ImageView profile = root.findViewById(R.id.f_profile);
         Log.e("onCreateView",email + " " +nickname);
         Glide.with(F_profile.this)
@@ -91,6 +93,13 @@ public class F_profile extends Fragment {
                 E.commit();
                 startActivity(i);
                 getActivity().finish();
+            }
+        });
+        change_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i =new Intent(getActivity(),Map_View.class);
+                getActivity().startActivity(i);
             }
         });
         return root;

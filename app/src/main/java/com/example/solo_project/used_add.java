@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -95,6 +96,7 @@ public class used_add extends AppCompatActivity {
                 if (e_used_name.getText().toString().equals("") || e_detail.getText().toString().equals("") || e_price.getText().toString().equals("")) {
                     Toast.makeText(used_add.this, "게시글을 모두 채워주세요", Toast.LENGTH_SHORT).show();
                 } else {
+                    ProgressDialog loagindDialog = ProgressDialog.show(used_add.this, "물건 올리는중","잠시만 기다려주세요", true, false);
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
 //                    builder.setTitle("게시물").setMessage("올리는중...");
 //                    AlertDialog alertDialog = builder.create();
@@ -116,11 +118,13 @@ public class used_add extends AppCompatActivity {
                                 Log.e(TAG, "onResponsen: " + response.body().getNickname());
                                 if (response.body().getResponse().trim().equals("success")&&response.body().getNickname().equals("성공")) {
 //                                    alertDialog.dismiss();
+                                    loagindDialog.dismiss();
                                     Intent i = new Intent(used_add.this,MainActivity.class);
                                     startActivity(i);
                                     finish();
                                 } else {
                                     multi.clear();
+                                    loagindDialog.dismiss();
                                     Toast.makeText(used_add.this, "잠시후 다시 시도해주세요", Toast.LENGTH_SHORT).show();
                                     submit.setClickable(true);
                                 }

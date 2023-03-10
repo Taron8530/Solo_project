@@ -35,16 +35,40 @@
                 android:layout_marginBottom="5dp"
                 android:text="물건이름" />
 
-            <TextView
-                android:id="@+id/price"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:maxLines="1"
-                android:text="가격"
-                android:textColor="#444"
-                android:textSize="12sp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="1in"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="가격"
+                    android:layout_marginRight="10dp"
+                    android:textColor="#444"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/sold_out"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="10dp"
+                    android:background="@drawable/sold_out_textview"
+                    android:textColor="@color/white"
+                    android:text="거래 완료" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/r_nickname"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:maxLines="1"

@@ -90,6 +90,7 @@
                     android:id="@+id/change_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
                     android:drawableStart="@drawable/ic_change"
                     android:textColor="@color/black"
                     android:text="  프로필 사진 변경하기"
@@ -98,6 +99,7 @@
 
                 <Button
                     android:id="@+id/Sales_history"
+                    android:paddingLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -112,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_logout"
                     android:textColor="@color/black"
+                    android:paddingLeft="10dp"
                     android:background="@color/btn_color"
                     android:text="  로그아웃"
                     android:textAlignment="textStart" />

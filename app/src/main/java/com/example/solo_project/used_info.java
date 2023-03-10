@@ -8,6 +8,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Api;
 
 import java.util.ArrayList;
 
@@ -36,8 +40,10 @@ public class used_info extends AppCompatActivity {
     private ImageView profile;
     private int image_size;
     private String MyNickname;
+    private String receiver;
     private PagerAdapter adapter;
     private TextView exit;
+    private String num;
 
     private ArrayList<String> images;
     @Override
@@ -52,6 +58,8 @@ public class used_info extends AppCompatActivity {
         profile = findViewById(R.id.user_profile);
         chat_btn = findViewById(R.id.go_chating);
         exit = findViewById(R.id.used_info_exit);
+        num = i.getStringExtra("num");
+        Log.e("sold_out",num);
         images = new ArrayList<>();
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,13 +68,15 @@ public class used_info extends AppCompatActivity {
             }
         });
         MyNickname = i.getStringExtra("my_nickname");
-        nickname.setText("판매자:   " +i.getStringExtra("nickname"));
+        receiver = i.getStringExtra("nickname");
+        nickname.setText("판매자:   " +receiver);
         detail.setText("설명글 \n\n\n"+i.getStringExtra("detail"));
         price.setText(i.getStringExtra("price")+" 원");
         used_name.setText(i.getStringExtra("used_name"));
         Glide.with(this)
                 .load("http://35.166.40.164/profile/"+i.getStringExtra("nickname")+".png")
                 .circleCrop()
+                .error(R.drawable.app_icon)
                 .into(profile);
         image_size = i.getIntExtra("image_size",0);
         sliderViewPager = findViewById(R.id.viewpager);
@@ -78,7 +88,7 @@ public class used_info extends AppCompatActivity {
         }
         for(int j =0;j<image_size;j++){
             Log.e("number check",i.getStringExtra("num")+j);
-            images.add("http://35.166.40.164//used_image/"+i.getStringExtra("num")+j+".jpeg");
+            images.add("http://35.166.40.164//used_image/"+num+j+".jpeg");
         }
         adapter = new PagerAdapter(this, images);
         sliderViewPager.setAdapter(adapter);
@@ -182,6 +192,74 @@ public class used_info extends AppCompatActivity {
                 ));
             }
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        if(MyNickname.equals(receiver)){
+            MenuInflater inflater = getMenuInflater();
+
+            inflater.inflate(R.menu.used_info_menu, menu);
+            chat_btn.setVisibility(View.GONE);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public void sold_out(){
+        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+        Call<String> call = apiInterface.used_sold_out(num,"1");
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.e("sold_out",response.body().toString());
+                if(response.body().equals("성공")){
+                    Toast.makeText(used_info.this,"성공.",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("sold_out",t.toString());
+            }
+        });
+    }
+    public void used_delete(){
+        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+        Call<String> call = apiInterface.used_delete(num);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.e("used_delete",response.body().toString());
+                if(response.body().equals("성공")){
+                    Toast.makeText(used_info.this,"성공.",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("used_delete",t.toString());
+            }
+        });
+    }
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item)
+    {
+
+        switch(item.getItemId())
+        {
+            case R.id.used_sold_out:
+                sold_out();
+                break;
+            case R.id.used_delete:
+                used_delete();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

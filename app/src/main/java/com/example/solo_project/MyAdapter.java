@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
     public interface OnItemClickListener {
         void onImageClick(View v, int position) ;
+        void onMapIVew(View v,int position);
     }
 
 
@@ -57,18 +59,27 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             view = inflater.inflate(R.layout.right_chat, parent, false);
             return new RightViewHolder(view);
         }
-        else //내가 이미지 보낼때
+        else if(viewType == 3)//내가 이미지 보낼때
         {
             Log.e("Myadapter","여기 들어옴");
             view = inflater.inflate(R.layout.right_image_chat,parent,false);
             return new Right_image_chat(view);
+        }
+        else if(viewType == 4){ //상대가 위치를 공유했을때
+            Log.e("Myadapter","여기 들어옴");
+            view = inflater.inflate(R.layout.left_location_share,parent,false);
+            return new Leftlocation_Share(view);
+        }else{ // 내가 위치를 공유했을때
+            Log.e("Myadapter","여기 들어옴");
+            view = inflater.inflate(R.layout.right_location_share,parent,false);
+            return new Rightlocation_Share(view);
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position)
     {
-        if(viewHolder instanceof Left_image_chat)
+        if(viewHolder instanceof Left_image_chat) //상대가 이미지 보냈을때
         {
 //            ((Left_image_chat) viewHolder).name.setText(myDataList.get(position).getName());
             Glide.with(context).load(myDataList.get(position).getContent()).into(((Left_image_chat) viewHolder).image);
@@ -77,19 +88,21 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
 //            ((Left_image_chat) viewHolder).content.setText(myDataList.get(position).getContent());
         }
-        else if(viewHolder instanceof LeftViewHolder)
+        else if(viewHolder instanceof LeftViewHolder) //상대가 채팅 보냈을때
         {
 //            ((LeftViewHolder) viewHolder).name.setText(myDataList.get(position).getName());
             ((LeftViewHolder) viewHolder).content.setText(myDataList.get(position).getContent());
             ((LeftViewHolder) viewHolder).time.setText(myDataList.get(position).getTime());
         }
-        else if(viewHolder instanceof RightViewHolder)
+        else if(viewHolder instanceof RightViewHolder) // 내가 채팅 보냈을때
         {
             ((RightViewHolder) viewHolder).content.setText(myDataList.get(position).getContent());
             ((RightViewHolder) viewHolder).time.setText(myDataList.get(position).getTime());
-        }else if(viewHolder instanceof Right_image_chat){
+        }else if(viewHolder instanceof Right_image_chat) { //내가 이미지 보냈을때
             Glide.with(context).load(myDataList.get(position).getContent()).into(((Right_image_chat) viewHolder).image);
             ((Right_image_chat) viewHolder).time.setText(myDataList.get(position).getTime());
+        }else if(viewHolder instanceof Rightlocation_Share){
+            ((Rightlocation_Share) viewHolder).time.setText(myDataList.get(position).getTime());
         }
     }
 
@@ -161,6 +174,41 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         TextView time;
 
         RightViewHolder(View itemView)
+        {
+            super(itemView);
+
+            content = itemView.findViewById(R.id.content);
+            time = itemView.findViewById(R.id.time);
+        }
+    }
+    public class Rightlocation_Share extends RecyclerView.ViewHolder{
+        Button btn;
+        TextView time;
+
+        Rightlocation_Share(View itemView)
+        {
+            super(itemView);
+
+            btn = itemView.findViewById(R.id.location_share_goto_map_view);
+            time = itemView.findViewById(R.id.time);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition() ;
+                    if (pos != RecyclerView.NO_POSITION) {
+                        if (mListener != null) {
+                            mListener.onMapIVew(view, pos); ;
+                        }
+                    }
+                }
+            });
+        }
+    }
+    public class Leftlocation_Share extends RecyclerView.ViewHolder{
+        TextView content;
+        TextView time;
+
+        Leftlocation_Share(View itemView)
         {
             super(itemView);
 

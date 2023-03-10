@@ -1,5 +1,7 @@
 package com.example.solo_project;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +42,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import com.bumptech.glide.Glide;
+
+import net.daum.android.map.MapController;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -81,6 +86,7 @@ public class chating extends AppCompatActivity {
     private String room_num;
     private DBHelper myDb;
     private ActivityResultLauncher<Intent> mStartForResult;
+    private ActivityResultLauncher<Intent> location_start_for_result;
     private LinearLayout container;
 
     @Override
@@ -92,6 +98,24 @@ public class chating extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        location_start_for_result = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            long mNow = System.currentTimeMillis();
+                            Date mDate = new Date(mNow);
+                            SimpleDateFormat mFormat = new SimpleDateFormat("hh시mm분");
+                            Intent i = result.getData();
+                            double lati = i.getDoubleExtra("lati",0);
+                            double longs = i.getDoubleExtra("long",0);
+                            Log.d(TAG,i.getStringExtra("location") + lati + longs);
+                            dataList.add(new chat_item(i.getStringExtra("location") +"/"+ lati +"/"+ longs,nickname,mFormat.format(mDate),5));
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
         mStartForResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -134,6 +158,7 @@ public class chating extends AppCompatActivity {
         container = findViewById(R.id.chating_container);
         Intent i = getIntent();
         nickname = i.getStringExtra("my_nickname");
+        Log.e(TAG, "onCreate: 닉네임 들어옴" );
         sender = i.getStringExtra("sender");
         room_num = i.getStringExtra("room_num");
         container.setVisibility(View.GONE);
@@ -190,6 +215,13 @@ public class chating extends AppCompatActivity {
             public void onImageClick(View v, int position) {
                 Intent i = new Intent(chating.this,Chatting_Image_View.class);
                 i.putExtra("image_url",dataList.get(position).getContent());
+                startActivity(i);
+            }
+
+            @Override
+            public void onMapIVew(View v, int position) {
+                Intent i = new Intent(chating.this,Map_view_1.class);
+                i.putExtra("location",dataList.get(position).getContent());
                 startActivity(i);
             }
         });
@@ -281,7 +313,6 @@ public class chating extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
 
         inflater.inflate(R.menu.chating_menu, menu);
-
         return true;
     }
 
@@ -295,12 +326,19 @@ public class chating extends AppCompatActivity {
                 //약속잡기 구현 호출
                 promise();
                 break;
+            case R.id.location_share:
+                Location_Share();
+                break;
             case R.id.chating_exit:
                 //채팅방 데이터 모두 지우기
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void Location_Share(){
+        Intent i = new Intent(chating.this,Map_View.class);
+        location_start_for_result.launch(i);
     }
     public void promise(){
         Intent intent = new Intent(this,chat_promise.class);

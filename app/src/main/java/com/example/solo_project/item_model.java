@@ -18,15 +18,17 @@ public class item_model {
     @SerializedName("num") private  String num;
     @Expose
     @SerializedName("image_size") private  int image_size;
+    @Expose
+    @SerializedName("sold_out") private String sold_out;
 
-
-    item_model(String nickname,String price,String usedname,String detail,String num,int image_size){
+    item_model(String nickname,String price,String usedname,String detail,String num,int image_size,String sold_out){
         this.nickname = nickname;
         this.price = price;
         this.usedname = usedname;
         this.detail = detail;
         this.num = num;
         this.image_size = image_size;
+        this.sold_out = sold_out;
     }
     public String getNickname(){
         return nickname;
@@ -43,6 +45,7 @@ public class item_model {
     public String getDetail(){return detail;}
     public String getNum(){return num;}
     public int getImage_size(){return image_size;}
+    public String getSold_out(){return sold_out;}
     public void setNickname(String nickname){
         this.nickname = nickname;
     }

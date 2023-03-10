@@ -18,6 +18,13 @@ import java.util.ArrayList;
 public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> {
     String TAG = "main_adapter";
     ArrayList<item_model> lists;
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     private OnItemClickListener mListener = null ;
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener ;
@@ -49,6 +56,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
         TextView used_item;
         TextView nickname;
         ImageView image;
+        TextView sold_out;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +65,8 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
             used_item = itemView.findViewById(R.id.used_name);
             nickname = itemView.findViewById(R.id.r_nickname);
             image = itemView.findViewById(R.id.used_image);
+            sold_out = itemView.findViewById(R.id.sold_out);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -70,11 +80,15 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
 
         public void onbind(item_model item) {
             Log.e(TAG, "onbind: 호출됨");
+            Log.e("sold_out",item.getSold_out());
             price.setText(item.getPrice()+"원");
             used_item.setText(item.getusedname());
             nickname.setText("판매자: "+item.getNickname());
             Log.e("adapter", String.valueOf(item.getImage_size()));
             Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"0"+".jpeg").override(100, 100).error(R.drawable.app_icon).into(image);
+            if(item.getSold_out().equals("1")){
+                sold_out.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

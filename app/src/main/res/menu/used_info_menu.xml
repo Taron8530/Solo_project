@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/used_delete"
+        android:title="물건 삭제하기" />
+    <item
+        android:id="@+id/used_sold_out"
+        android:title="판매 완료" />
+</menu>
