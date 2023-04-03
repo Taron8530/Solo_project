@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -103,6 +102,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((Right_image_chat) viewHolder).time.setText(myDataList.get(position).getTime());
         }else if(viewHolder instanceof Rightlocation_Share){
             ((Rightlocation_Share) viewHolder).time.setText(myDataList.get(position).getTime());
+        }else if(viewHolder instanceof Leftlocation_Share){
+            ((Leftlocation_Share) viewHolder).time.setText(myDataList.get(position).getTime());
         }
     }
 
@@ -205,15 +206,26 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
     public class Leftlocation_Share extends RecyclerView.ViewHolder{
-        TextView content;
+        Button btn;
         TextView time;
 
         Leftlocation_Share(View itemView)
         {
             super(itemView);
 
-            content = itemView.findViewById(R.id.content);
+            btn = itemView.findViewById(R.id.location_share_goto_map_view);
             time = itemView.findViewById(R.id.time);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition() ;
+                    if (pos != RecyclerView.NO_POSITION) {
+                        if (mListener != null) {
+                            mListener.onMapIVew(view, pos); ;
+                        }
+                    }
+                }
+            });
         }
     }
 

@@ -44,12 +44,15 @@
         android:id="@+id/location_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:autoSizeMaxTextSize="10sp"
         android:paddingLeft="5dp"
+        android:paddingTop="5dp"
         android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:text="주소"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.434"
         app:layout_constraintStart_toEndOf="@+id/map_view_exit"
         app:layout_constraintTop_toTopOf="parent" />
 

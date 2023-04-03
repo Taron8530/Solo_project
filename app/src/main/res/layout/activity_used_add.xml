@@ -27,8 +27,8 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/add_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="174dp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -39,13 +39,14 @@
 
                     <Button
                         android:id="@+id/multi_imagebtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="이미지 선택" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_add_a_photo" />
 
                     <TextView
                         android:id="@+id/image_size"
-                        android:layout_width="80dp"
+                        android:layout_width="50dp"
                         android:textAlignment="center"
                         android:gravity="center"
                         android:layout_height="match_parent"
@@ -71,7 +72,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/add_used_detail"
                     android:layout_width="match_parent"
-                    android:layout_height="288dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="10dp"
                     android:layout_marginTop="20dp"
                     android:gravity="top"
                     android:hint="게시글에 대한 정보를 자세히 적어주세요"

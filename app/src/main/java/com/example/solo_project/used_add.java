@@ -1,12 +1,6 @@
 package com.example.solo_project;
 
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
@@ -15,10 +9,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -28,6 +20,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -188,6 +185,8 @@ public class used_add extends AppCompatActivity {
                     adapter = new MultiImageAdapter(uriList, getApplicationContext());
                     recyclerView.setAdapter(adapter);   // 리사이클러뷰에 어댑터 세팅
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, true));     // 리사이클러뷰 수평 스크롤 적용
+                    recyclerView.scrollToPosition(uriList.size() - 1);
+                    adapter.notifyDataSetChanged();
                 }
             }
         }

@@ -21,6 +21,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +45,10 @@ public class chat_FCM extends FirebaseMessagingService{
         super.onMessageReceived(remoteMessage);
         pref = getSharedPreferences("user_verify", Context.MODE_PRIVATE);
         nickname = pref.getString("user_nickname","");
+        String message = null;
+        String time=null;
+        String room_num = null;
+        String receiver = null;
         Log.e("노티피케이션",remoteMessage.getNotification().getTitle()+remoteMessage.getNotification().getBody());
         if (remoteMessage.getData().size() > 0)
         {
@@ -53,7 +59,16 @@ public class chat_FCM extends FirebaseMessagingService{
         if (remoteMessage.getNotification() != null)
         {
             Log.e("body",remoteMessage.getNotification().getBody());
-            String[] bodys = remoteMessage.getNotification().getBody().split("/"); //노티피케이션 body를 구분자 / 기준으로 자른것
+//            String[] bodys = remoteMessage.getNotification().getBody().split("/"); //노티피케이션 body를 구분자 / 기준으로 자른것
+            try {
+                JSONObject jsonObject = new JSONObject(remoteMessage.getNotification().getBody());
+                receiver = jsonObject.getString("receiver");
+                message = jsonObject.getString("message");
+                time = jsonObject.getString("time");
+                room_num = jsonObject.getString("room_num");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE ); //fcm이 날라왔는데 look 상태일때
             @SuppressLint("InvalidWakeLockTag")
             PowerManager.WakeLock wakeLock = pm.newWakeLock( PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG" );
@@ -62,20 +77,20 @@ public class chat_FCM extends FirebaseMessagingService{
             chat_data_db_Helper myDb = new chat_data_db_Helper(chat_FCM.this); //채팅 데이터 객체화
             DBHelper dbHelper = new DBHelper(chat_FCM.this);//채팅 룸 객체화
 
-            dbHelper.msg_count_update(Integer.parseInt(bodys[1]));
-            if(dbHelper.check_room(Integer.parseInt(bodys[1]))) { //채팅방이 없을시 채팅방 생성 하는 로직
-                dbHelper.insert_data(Integer.parseInt(bodys[1]),remoteMessage.getNotification().getTitle(),bodys[3],remoteMessage.getNotification().getTitle(),1);
+            dbHelper.msg_count_update(Integer.parseInt(room_num));
+            if(dbHelper.check_room(Integer.parseInt(room_num))) { //채팅방이 없을시 채팅방 생성 하는 로직
+                dbHelper.insert_data(Integer.parseInt(room_num),remoteMessage.getNotification().getTitle(),receiver,remoteMessage.getNotification().getTitle(),1);
             }
             try {
-            if(bodys[0].contains(".jpeg")){ //보내온 메세지가 사진일때
-                    showNotification(remoteMessage.getNotification().getTitle(), "사진을 보냄",bodys[1],String_extract_time(bodys[2]));
+            if(message.contains(".jpeg")){ //보내온 메세지가 사진일때
+                    showNotification(remoteMessage.getNotification().getTitle(), "사진을 보냄",room_num,String_extract_time(time));
 
-                myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),"http://35.166.40.164/file/"+bodys[0],bodys[2],0);
-                dbHelper.last_msg_update(Integer.parseInt(bodys[1]),"사진",bodys[2]);
+                myDb.insert_data(room_num,remoteMessage.getNotification().getTitle(),"http://35.166.40.164/file/"+message,time,0);
+                dbHelper.last_msg_update(Integer.parseInt(room_num),"사진",time);
             }else{ //보내온 메세지가 문자일때
-                showNotification(remoteMessage.getNotification().getTitle(), bodys[0],bodys[1],String_extract_time(bodys[2]));
-                myDb.insert_data(bodys[1],remoteMessage.getNotification().getTitle(),bodys[0],bodys[2],1);
-                dbHelper.last_msg_update(Integer.parseInt(bodys[1]),bodys[0],bodys[2]);
+                showNotification(remoteMessage.getNotification().getTitle(), message,room_num,String_extract_time(time));
+                myDb.insert_data(room_num,remoteMessage.getNotification().getTitle(),message,time,1);
+                dbHelper.last_msg_update(Integer.parseInt(room_num),message,time);
             }
             } catch (ParseException e) {
             e.printStackTrace();

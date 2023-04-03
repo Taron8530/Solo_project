@@ -32,7 +32,7 @@ public class Map_view_1 extends AppCompatActivity implements MapView.CurrentLoca
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view1);
         Intent i = getIntent();
-        data = i.getStringExtra("location").split("/");
+        data = i.getStringExtra("location").split(">");
         location_address = findViewById(R.id.location_address);
         if(data.length > 2){
             location_add = data[0];

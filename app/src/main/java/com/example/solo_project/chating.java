@@ -1,16 +1,5 @@
 package com.example.solo_project;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -18,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,24 +23,37 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 
-import net.daum.android.map.MapController;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -85,6 +86,7 @@ public class chating extends AppCompatActivity {
     private String sender;
     private String room_num;
     private DBHelper myDb;
+
     private ActivityResultLauncher<Intent> mStartForResult;
     private ActivityResultLauncher<Intent> location_start_for_result;
     private LinearLayout container;
@@ -92,12 +94,13 @@ public class chating extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        socket_Disconnect();
+//        socket_Disconnect();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+//        dataList = new ArrayList<>();
         location_start_for_result = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -111,7 +114,10 @@ public class chating extends AppCompatActivity {
                             double lati = i.getDoubleExtra("lati",0);
                             double longs = i.getDoubleExtra("long",0);
                             Log.d(TAG,i.getStringExtra("location") + lati + longs);
-                            dataList.add(new chat_item(i.getStringExtra("location") +"/"+ lati +"/"+ longs,nickname,mFormat.format(mDate),5));
+                            dataList.add(new chat_item(i.getStringExtra("location") +">"+ lati +">"+ longs,nickname,"전송중...",5));
+                            sendMsg(i.getStringExtra("location") +">"+ lati +">"+ longs,sender,room_num,"Location_share");
+                            Log.e("위치공유","위치____공유"+i.getStringExtra("location") +"/"+ lati +"/"+ longs);
+//                            myDb.insert_data(room_num,"",Msgs[2].replaceAll("위치____공유",""),Msgs[3],4);
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -133,7 +139,7 @@ public class chating extends AppCompatActivity {
                                 if(response != null){
                                     Log.d("chating",response.body());
                                     //여기서 소켓으로 메세지 던질거임
-                                    sendMsg("약____속",sender,room_num);
+                                    sendMsg("약____속",sender,room_num,"Promise");
                                     Promise_select(room_num);
                                 }
                             }
@@ -192,17 +198,14 @@ public class chating extends AppCompatActivity {
         mHandler = new Handler();//핸들러 변수
         recyclerView = findViewById(R.id.chating_recyclerview); //리사이클러뷰 할당
         message = findViewById(R.id.chating_text);
-        message.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        recyclerView.post(new Runnable() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if(b){
-                    Log.e(TAG, "onFocusChange: 포커스 온");
-                    recyclerView.scrollToPosition(dataList.size());
-                }else{
-                    Log.e(TAG, "onFocusChange: 포커스 해제");
+            public void run() {
+                if(dataList.size() > 0) {
+                    recyclerView.smoothScrollToPosition(dataList.size() - 1);
                 }
             }
-        });
+        }); // auto Scroll 코드
         LinearLayoutManager manager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false);//리사이클러뷰 매니저
         recyclerView.setLayoutManager(manager); // LayoutManager 등록
@@ -231,9 +234,8 @@ public class chating extends AppCompatActivity {
                 if(!message.getText().toString().trim().equals("")){
                     dataList.add(new chat_item(message.getText().toString(),nickname,"전송중...",2));
                     adapter.notifyDataSetChanged();
-                    recyclerView.scrollToPosition(dataList.size());
 //                    myDb.last_msg_update(Integer.parseInt(room_num),message.getText().toString());
-                    sendMsg(message.getText().toString(),sender,room_num);
+                    sendMsg(message.getText().toString(),sender,room_num,"General");
 //                    chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
 //                    db.insert_data(room_num,nickname,message.getText().toString(),"",2);
                     message.setText("");
@@ -359,13 +361,20 @@ public class chating extends AppCompatActivity {
             }
         }.start();
     }
-    public void sendMsg(String msg,String sender,String room_num){
+    public void sendMsg(String msg,String sender,String room_num,String type){
         new Thread() {
             @Override
             public void run() {
                 super.run();
                 try {
-//                    JSONObject jsonObject = new JSONObject();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("room_num",room_num);
+                    jsonObject.put("message",msg);
+                    jsonObject.put("sender",nickname);
+                    jsonObject.put("receiver",sender);
+                    jsonObject.put("type",type);
+                    Log.e("채팅 액티비티", String.valueOf(jsonObject));
+                    Log.e("채팅 엑티비티",sendWriter.toString());
 //                    JSONArray jsonArray = new JSONArray();
 //                    JSONObject wrapObject = new JSONObject();
 //                    jsonObject.put("sender",sender);
@@ -375,7 +384,8 @@ public class chating extends AppCompatActivity {
 //                    wrapObject.put("messege",jsonArray);
 //                    Log.e("JSON",wrapObject.toString());
 
-                    sendWriter.println(room_num+"/"+sender+"/"+nickname +"/"+msg);
+                    sendWriter.println(jsonObject);
+//                    sendWriter.println(jsonObject);
                     sendWriter.flush();
                     message.setText("");
                 } catch (Exception e) {
@@ -398,7 +408,10 @@ public class chating extends AppCompatActivity {
                 public void run() {
                     super.run();
                     try {
-                        sendWriter.println(nickname + "/" + "접속해제");
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("nickname",nickname);
+                        jsonObject.put("type","disconnect");
+                        sendWriter.println(jsonObject);
                         sendWriter.flush();
                         socket.close();
                         sendWriter.close();
@@ -440,16 +453,18 @@ public class chating extends AppCompatActivity {
                                         }
                                     }
                                 });
-                            }else if(str[3].equals("약____속")){
+                            }else if(str[0].equals("약____속")){
                                 //함수로 하기
                                 Promise_select(room_num);
                             }else{
                                 mHandler.post(new MsgUpdate(read));
+                                Same_time();
                             }
                         }
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    socket_Disconnect();
                     Log.e(TAG+"Wait_msg",e.toString());
                 } }}.start();
     }
@@ -486,7 +501,7 @@ public class chating extends AppCompatActivity {
                         });
 //                        Log.d("chating",String.valueOf(response.body().getRoom_num()));
                     }else{
-                        Log.e("chating",response.body().getResponse());
+                        Log.e("ChattingActivity",response.body().getResponse());
                     }
                 }
             }
@@ -501,12 +516,13 @@ public class chating extends AppCompatActivity {
         for(int i =0;i<dataList.size();i++){
             if (dataList.get(i).getTime().equals("전송중...")&&dataList.get(i).getViewType() >= 2) {
                 dataList.get(i).setTime(String_extract_time(time));
-                recyclerView.scrollToPosition(dataList.size());
                 adapter.notifyDataSetChanged();
                 chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
                 db.insert_data(room_num,nickname,dataList.get(i).getContent(),time,dataList.get(i).getViewType());
                 if(dataList.get(i).getContent().contains("image") || dataList.get(i).getContent().contains(".jpeg")){
                     myDb.last_msg_update(Integer.parseInt(room_num),"사진",time);
+                }else if(dataList.get(i).getViewType() == 5){
+                    myDb.last_msg_update(Integer.parseInt(room_num),"위치를 공유했어요!",time);
                 }else{
                     myDb.last_msg_update(Integer.parseInt(room_num),dataList.get(i).getContent(),time);
                 }
@@ -515,8 +531,10 @@ public class chating extends AppCompatActivity {
         }
     }
     public void Same_time(){
-        if(dataList.get(dataList.size()-1).getTime().equals(dataList.get(dataList.size()-2).getTime())){
-            dataList.get(dataList.size()-2).setTime("");
+        if(dataList.size() >= 3) {
+            if (dataList.get(dataList.size() - 1).getTime().equals(dataList.get(dataList.size() - 2).getTime()) &&dataList.get(dataList.size() - 1).getViewType()== dataList.get(dataList.size() - 2).getViewType()) {
+                dataList.get(dataList.size() - 2).setTime("");
+            }
         }
     }
     public String String_extract_time(String time) throws ParseException {
@@ -534,7 +552,7 @@ public class chating extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        socket_Disconnect();
+//        socket_Disconnect();
     }
 
     @Override
@@ -593,7 +611,7 @@ public class chating extends AppCompatActivity {
                                     Toast.makeText(chating.this, "이미지 업로드에 실패했습니다", Toast.LENGTH_SHORT).show();
                                 }else{
                                     Log.e("테스트 로그 확인!","http://35.166.40.164/file/"+response.body());
-                                    sendMsg(response.body(),sender,room_num);
+                                    sendMsg(response.body(),sender,room_num,"General");
                                 }
                             }
                         }
@@ -607,7 +625,6 @@ public class chating extends AppCompatActivity {
                     dataList.add(new chat_item(Uri.toString(),nickname,"전송중...",3));
 //                    myDb.last_msg_update(Integer.parseInt(room_num),"사진");
                     adapter.notifyDataSetChanged();
-                    recyclerView.scrollToPosition(dataList.size());
                 }catch (Exception e){
                     Log.e("dd",e.toString());
 
@@ -653,31 +670,60 @@ public class chating extends AppCompatActivity {
     }
     class MsgUpdate implements Runnable{
         String str;
-        String[] Msgs;
+        JSONObject jsonObject;
 
         public MsgUpdate(String str){
             this.str = str;
             Log.e("chat",str);
-            Msgs = str.split("/");
+            try {
+                jsonObject = new JSONObject(str);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         public String String_extract_time(String time) throws ParseException {
-            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
-            String new_time = new SimpleDateFormat("HH:mm").format(date);
-            return new_time;
+            if(time != null){
+                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+                String new_time = new SimpleDateFormat("HH:mm").format(date);
+                return new_time;
+            }
+            else{
+                return null;
+            }
         }
         @Override
         public void run() {
             chat_data_db_Helper myDb = new chat_data_db_Helper(chating.this);
             DBHelper myDbs = new DBHelper(chating.this);
+            String message = null;
+            String receiver = null;
+            String type = null;
+            String sender= null;
+            String time = null;
             try {
-            if(Msgs[2].contains(".jpeg")){
-                dataList.add(new chat_item("http://35.166.40.164/file/"+Msgs[2],Msgs[1],String_extract_time(Msgs[3]),0));
-                myDb.insert_data(room_num,Msgs[1],"http://35.166.40.164/file/"+Msgs[2],Msgs[3],0);
-                    myDbs.last_msg_update(Integer.parseInt(room_num),"사진",Msgs[3]);
+                 message = jsonObject.getString("message");
+//                 receiver = jsonObject.getString("receiver");
+                 type = jsonObject.getString("type");
+                 sender = jsonObject.getString("sender");
+                 time = jsonObject.getString("time");
+                 Log.e(TAG,"type: "+type);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+            if(message.contains(".jpeg")){
+                dataList.add(new chat_item("http://35.166.40.164/file/"+message,sender,String_extract_time(time),0));
+                myDb.insert_data(room_num,sender,"http://35.166.40.164/file/"+message,time,0);
+                myDbs.last_msg_update(Integer.parseInt(room_num),"사진",time);
+            }else if(type.equals("Location_share")){
+                dataList.add(new chat_item(message,sender,String_extract_time(time),4)); //end point
+                myDb.insert_data(room_num,sender,message,time,4);
+                myDbs.last_msg_update(Integer.parseInt(room_num),"위치를 공유했어요!",time);
             }else{
-                dataList.add(new chat_item(Msgs[2],Msgs[1],String_extract_time(Msgs[3]),1));
-                myDb.insert_data(room_num,Msgs[1],Msgs[2],Msgs[3],1);
-                myDbs.last_msg_update(Integer.parseInt(room_num),Msgs[2],Msgs[3]);
+                    dataList.add(new chat_item(message,sender,String_extract_time(time),1));
+                    myDb.insert_data(room_num,sender,message,time,1);
+                    myDbs.last_msg_update(Integer.parseInt(room_num),message,time);
             }
             } catch (ParseException e) {
                 e.printStackTrace();
