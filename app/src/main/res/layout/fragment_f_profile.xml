@@ -109,6 +109,17 @@
                     android:textAlignment="textStart" />
 
                 <Button
+                    android:id="@+id/credit_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/btn_color"
+                    android:drawableStart="@drawable/ic_credit"
+                    android:paddingLeft="10dp"
+                    android:text="  크래딧 충전"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black" />
+
+                <Button
                     android:id="@+id/logout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,6 +131,17 @@
                     android:textAlignment="textStart" />
             </LinearLayout>
         </ScrollView>
+
+        <TextView
+            android:id="@+id/credit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/f_profile"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

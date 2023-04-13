@@ -116,7 +116,7 @@ public class chating extends AppCompatActivity {
                             Log.d(TAG,i.getStringExtra("location") + lati + longs);
                             dataList.add(new chat_item(i.getStringExtra("location") +">"+ lati +">"+ longs,nickname,"전송중...",5));
                             sendMsg(i.getStringExtra("location") +">"+ lati +">"+ longs,sender,room_num,"Location_share");
-                            Log.e("위치공유","위치____공유"+i.getStringExtra("location") +"/"+ lati +"/"+ longs);
+                            Log.e("위치공유","위치공유"+i.getStringExtra("location") +"/"+ lati +"/"+ longs);
 //                            myDb.insert_data(room_num,"",Msgs[2].replaceAll("위치____공유",""),Msgs[3],4);
                             adapter.notifyDataSetChanged();
                         }
@@ -375,17 +375,8 @@ public class chating extends AppCompatActivity {
                     jsonObject.put("type",type);
                     Log.e("채팅 액티비티", String.valueOf(jsonObject));
                     Log.e("채팅 엑티비티",sendWriter.toString());
-//                    JSONArray jsonArray = new JSONArray();
-//                    JSONObject wrapObject = new JSONObject();
-//                    jsonObject.put("sender",sender);
-//                    jsonObject.put("messege",msg);
-//                    jsonObject.put("nickname",nickname);
-//                    jsonArray.put(jsonObject);
-//                    wrapObject.put("messege",jsonArray);
-//                    Log.e("JSON",wrapObject.toString());
 
                     sendWriter.println(jsonObject);
-//                    sendWriter.println(jsonObject);
                     sendWriter.flush();
                     message.setText("");
                 } catch (Exception e) {

@@ -25,22 +25,25 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
     private static final String COLUMN_time = "time";
     private static final String COLUMN_view_type = "view_type";
     private Context context;
+
     public chat_data_db_Helper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
         this.context = context;
     }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table "+TABLE_NAME_chat_data+ "(id interger primary key,room_num int ,sender text,receiver text,massage text,time text,view_type int)");
+        sqLiteDatabase.execSQL("create table " + TABLE_NAME_chat_data + "(id interger primary key,room_num int ,sender text,receiver text,massage text,time text,view_type int)");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("drop table if exists "+TABLE_NAME_chat_data);
+        sqLiteDatabase.execSQL("drop table if exists " + TABLE_NAME_chat_data);
         onCreate(sqLiteDatabase);
     }
-    public void insert_data(String room_num,String nickname,String massage,String time,int view_type){
+
+    public void insert_data(String room_num, String nickname, String massage, String time, int view_type) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -51,44 +54,43 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
         cv.put(COLUMN_view_type, view_type);
 
         long result = db.insert(TABLE_NAME_chat_data, null, cv);
-        if (result == -1)
-        {
-            Log.e("db 저장","실패");
+        if (result == -1) {
+            Log.e("db 저장", "실패");
 //            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Log.e("db 저장","성공");
+        } else {
+            Log.e("db 저장", "성공");
 //            Toast.makeText(context, "데이터 추가 성공", Toast.LENGTH_SHORT).show();
         }
     }
+
     public String String_extract_time(String time) throws ParseException {
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
         String new_time = new SimpleDateFormat("H시 mm분").format(date);
         return new_time;
     }
+
     public ArrayList<chat_item> SelectAllKids(int room_num) throws ParseException {
         int i = 0;
         ArrayList<chat_item> list = new ArrayList<>();
         String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME_chat_data + " WHERE room_num = " + room_num;
 //        WHERE room_num = " + room_num
-        Log.e("테스트","db_select 진입");
+        Log.e("테스트", "db_select 진입");
         Cursor cur = getWritableDatabase().rawQuery(SELECT_QUERY, null);
-        Log.e("테스트","db_select 진입");
+        Log.e("테스트", "db_select 진입");
         if (cur != null && cur.moveToFirst()) {
             do {
-                Log.e("테스트","Index"+ i + cur.getString(1)+ " , " + cur.getString(3)+" , " + cur.getString(4)+" , " + cur.getString(5)+" , " + cur.getString(6));
+                Log.e("테스트", "Index" + i + cur.getString(1) + " , " + cur.getString(3) + " , " + cur.getString(4) + " , " + cur.getString(5) + " , " + cur.getString(6));
 
-                list.add(new chat_item(cur.getString(4),cur.getString(3),String_extract_time(cur.getString(5)),Integer.parseInt(cur.getString(6))));
-                if(i!=0) {
+                list.add(new chat_item(cur.getString(4), cur.getString(3), String_extract_time(cur.getString(5)), Integer.parseInt(cur.getString(6))));
+                if (i != 0) {
                     Log.e("chat_data_db_Helper", "첫번째 시간: " + list.get(i).getTime() + " 두번째 시간: " + list.get(i - 1).getTime());
-                    if (list.get(i).getTime().equals(list.get(i - 1).getTime()) && list.get(i).getViewType() >= 2 && list.get(i-1).getViewType() >=2) {
+                    if (list.get(i).getTime().equals(list.get(i - 1).getTime()) && list.get(i).getViewType() >= 2 && list.get(i - 1).getViewType() >= 2) {
                         Log.e("chat_data_db_Helper", "여기 들어오나?");
-                        list.get(i-1).setTime("");
+                        list.get(i - 1).setTime("");
                     }
-                    if (list.get(i).getTime().equals(list.get(i - 1).getTime()) && list.get(i).getViewType() < 2 && list.get(i-1).getViewType() < 2) {
+                    if (list.get(i).getTime().equals(list.get(i - 1).getTime()) && list.get(i).getViewType() < 2 && list.get(i - 1).getViewType() < 2) {
                         Log.e("chat_data_db_Helper", "여기 들어오나?");
-                        list.get(i-1).setTime("");
+                        list.get(i - 1).setTime("");
                     }
                 }
                 i++;

@@ -14,6 +14,8 @@ public class Signup_model {
     @SerializedName("response") private  String response;
     @Expose
     @SerializedName("verify") private  String verify;
+    @Expose
+    @SerializedName("credit") private String credit;
     public String getNickname(){
         return nickname;
     }
@@ -22,6 +24,9 @@ public class Signup_model {
     }
     public String getE_mail(){
         return email;
+    }
+    public String getCredit(){
+        return credit;
     }
     public String getResponse(){return response;}
     public String getVerify(){return verify;}

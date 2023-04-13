@@ -23,11 +23,13 @@
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/drawable/sold_out_textview.xml" value="0.1435" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_chating.xml" value="0.36363636363636365" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_chatting_image_view.xml" value="0.2585034013605442" />
+        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_credit.xml" value="0.4" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_kakao_payment.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_map_view.xml" value="0.264" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_map_view1.xml" value="0.2" />
+        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_payment.xml" value="0.264" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_profile_view.xml" value="0.25" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_sale_history.xml" value="0.176" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_signup.xml" value="0.4" />
@@ -41,7 +43,7 @@
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/chat_roon_item.xml" value="0.5031315240083507" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/fragment_f_chating.xml" value="0.2641509433962264" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/fragment_f_home.xml" value="0.264" />
-        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/fragment_f_profile.xml" value="0.41695501730103807" />
+        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/fragment_f_profile.xml" value="0.3643835616438356" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/fragment_frag_salehistory_ing.xml" value="0.4" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/fragment_frag_salehistory_suc.xml" value="0.2" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/image_slider.xml" value="0.1" />

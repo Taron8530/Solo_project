@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Api;
 
 import org.w3c.dom.Text;
 
@@ -30,11 +31,14 @@ import retrofit2.Response;
 public class F_profile extends Fragment {
     TextView email_view;
     TextView nickname_view;
+    TextView credit_View;
     String email;
     String nickname;
+    String credit;
     Button imagebtn;
     Button logout;
     Button change_profile;
+    Button creditActivity;
     final String TAG = "F_Profile";
     public F_profile(String nickname,String email){
         this.nickname = nickname;
@@ -55,7 +59,6 @@ public class F_profile extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,8 +68,11 @@ public class F_profile extends Fragment {
         imagebtn = root.findViewById(R.id.Sales_history);
         logout = root.findViewById(R.id.logout);
         change_profile = root.findViewById(R.id.change_profile);
+        creditActivity =root.findViewById(R.id.credit_pay);
         ImageView profile = root.findViewById(R.id.f_profile);
         Log.e("onCreateView",email + " " +nickname);
+        credit_View = root.findViewById(R.id.credit);
+        getCredit();
         Glide.with(F_profile.this)
                 .load("http://35.166.40.164/profile/"+nickname+".png")
                 .circleCrop()
@@ -98,11 +104,41 @@ public class F_profile extends Fragment {
         change_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(getActivity(),Map_View.class);
+                Intent i =new Intent(getActivity(),PaymentActivity.class);
+                getActivity().startActivity(i);
+            }
+        });
+        creditActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(),CreditActivity.class);
+                i.putExtra("nickname",nickname);
                 getActivity().startActivity(i);
             }
         });
         return root;
+
+    }
+    private void getCredit(){
+        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+        Call<Signup_model> call = apiInterface.getCredit(nickname);
+        call.enqueue(new Callback<Signup_model>() {
+            @Override
+            public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
+                Log.e("프로필 프래그먼트 Credit","요청함" +response);
+
+                if(response.isSuccessful()){
+                    Log.e("프로필프래그먼트 Credit", String.valueOf(response.body()));
+                    credit = response.body().getCredit();
+                    credit_View.setText("보유 크래딧: "+credit);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Signup_model> call, Throwable t) {
+                Log.e("프로필프래그먼트 Credit",t.toString());
+            }
+        });
 
     }
 }

@@ -42,13 +42,13 @@ public class chat_promise extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart 호출");
+        Log.d(TAG, "onStart 호출");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume 호출");
+        Log.d(TAG, "onResume 호출");
     }
 
     @Override
@@ -64,16 +64,16 @@ public class chat_promise extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(et_Date.getText().toString().trim().equals("") && et_time.getText().toString().trim().equals("")){
-                    Toast.makeText(chat_promise.this,"시간과 날짜를 입력해주세요!",Toast.LENGTH_SHORT).show();
-                }else if (et_Date.getText().toString().trim().equals("")){
-                    Toast.makeText(chat_promise.this,"날짜를 입력하지 않으셧습니다.",Toast.LENGTH_SHORT).show();
-                }else if(et_time.getText().toString().trim().equals("")){
-                    Toast.makeText(chat_promise.this,"시간을 입력하지 않으셧습니다.",Toast.LENGTH_SHORT).show();
-                }else{
+                if (et_Date.getText().toString().trim().equals("") && et_time.getText().toString().trim().equals("")) {
+                    Toast.makeText(chat_promise.this, "시간과 날짜를 입력해주세요!", Toast.LENGTH_SHORT).show();
+                } else if (et_Date.getText().toString().trim().equals("")) {
+                    Toast.makeText(chat_promise.this, "날짜를 입력하지 않으셧습니다.", Toast.LENGTH_SHORT).show();
+                } else if (et_time.getText().toString().trim().equals("")) {
+                    Toast.makeText(chat_promise.this, "시간을 입력하지 않으셧습니다.", Toast.LENGTH_SHORT).show();
+                } else {
                     Intent intent = new Intent(chat_promise.this, chating.class);
-                    intent.putExtra("time",et_time.getText().toString());
-                    intent.putExtra("date",et_Date.getText().toString());
+                    intent.putExtra("time", et_time.getText().toString());
+                    intent.putExtra("date", et_Date.getText().toString());
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -120,6 +120,7 @@ public class chat_promise extends AppCompatActivity {
             }
         });
     }
+
     private void updateLabel() {
         String myFormat = "yyyy년 MM월 dd일 E요일";    // 출력형식   2018/11/28
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);

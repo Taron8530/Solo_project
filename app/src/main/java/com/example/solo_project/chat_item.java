@@ -8,12 +8,13 @@ public class chat_item {
     private String time;
     private int viewType;
 
-    public chat_item(String content, String name , String time,int viewType) {
+    public chat_item(String content, String name, String time, int viewType) {
         this.content = content;
         this.name = name;
         this.time = time;
         this.viewType = viewType;
     }
+
     public String getContent() {
         return content;
     }
@@ -30,7 +31,7 @@ public class chat_item {
         return viewType;
     }
 
-    public void setTime(String time){
+    public void setTime(String time) {
         this.time = time;
     }
 }

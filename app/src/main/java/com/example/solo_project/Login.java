@@ -169,6 +169,7 @@ public class Login extends AppCompatActivity {
                                 String getted_NK = response.body().getNickname();
                                 String massage = response.body().getResponse();
                                 String verify_c = response.body().getVerify();
+                                String getCredit = response.body().getCredit();
                                 Log.e("selectTest()", "서버에서 이메일 : " + getted_email + ", 서버에서 받아온 닉네임 : " + getted_NK+"메세지: "+massage+"/인증코드:"+verify_c);
                                 if(massage.equals("failed")){
                                     Intent I = new Intent(Login.this,Signup_prof.class);
@@ -183,6 +184,7 @@ public class Login extends AppCompatActivity {
                                     E.putString("user_verify",verify_c);
                                     E.putString("user_nickname",getted_NK);
                                     E.putString("user_email",getted_email);
+                                    E.putString("user_credit", String.valueOf(getCredit));
                                     E.commit();
                                     Intent i = new Intent(Login.this,MainActivity.class);
                                     startActivity(i);
