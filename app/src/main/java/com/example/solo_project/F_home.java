@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,8 @@ public class F_home extends Fragment {
     ArrayList<item_model> list = new ArrayList<>();
     View root;
     String nickname;
+    int page = 1;
+    ProgressBar progressBar;
     public F_home(String nickname){
         this.nickname = nickname;
     }
@@ -35,7 +40,8 @@ public class F_home extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        select_used();
+        select_used(page);
+        page++;
     }
 
     @Override
@@ -44,6 +50,7 @@ public class F_home extends Fragment {
         root = inflater.inflate(R.layout.fragment_f_home, container, false);
         // Inflate the layout for this fragment
         recyclerView = root.findViewById(R.id.home_recyclerview);
+        progressBar = root.findViewById(R.id.progressbar);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), 1));
@@ -51,6 +58,24 @@ public class F_home extends Fragment {
         adapter = new main_adapter();
         recyclerView.setAdapter(adapter);
         adapter.setlist(list);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+
+                if (lastVisibleItem == totalItemCount - 1) {
+                    page++;
+                    progressBar.setVisibility(View.VISIBLE);
+                    select_used(page);
+                }
+            }
+        });
+
+
         adapter.setOnItemClickListener(new main_adapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -68,10 +93,10 @@ public class F_home extends Fragment {
         });
         return root;
     }
-    private void select_used()
+    private void select_used(int page)
     {
         ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-        Call<ArrayList<item_model>> call = apiInterface.select_used();
+        Call<ArrayList<item_model>> call = apiInterface.select_used(page);
         call.enqueue(new Callback<ArrayList<item_model>>() {
             @Override
             public void onResponse(Call<ArrayList<item_model>> call, Response<ArrayList<item_model>> response) {
@@ -88,8 +113,11 @@ public class F_home extends Fragment {
     }
     private void onGetResult(ArrayList<item_model> lists)
     {
-        list = lists;
+        for(int i = 0;i<lists.size();i++){
+            list.add(lists.get(i));
+        }
         adapter.setlist(list);
+        progressBar.setVisibility(View.GONE);
         Log.e("접근 완료",list.toString());
         Log.e("접근 완료",lists.toString());
         adapter.notifyDataSetChanged();

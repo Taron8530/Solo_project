@@ -53,7 +53,7 @@ public interface ApiInterface {
 
     //메인 리사이클러뷰로 뿌려주는 용도
     @GET("select_used.php")
-    Call<ArrayList<item_model>> select_used();
+    Call<ArrayList<item_model>> select_used(@Query("page") int page);
 
     //인증코드로 프로필 불러오기
     @GET("select_profile.php")
