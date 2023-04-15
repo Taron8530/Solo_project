@@ -67,7 +67,7 @@ public class F_home extends Fragment {
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
-                if (lastVisibleItem == totalItemCount - 1) {
+                if (lastVisibleItem == totalItemCount - 1  && dy > 0) {
                     page++;
                     progressBar.setVisibility(View.VISIBLE);
                     select_used(page);
