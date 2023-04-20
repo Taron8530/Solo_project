@@ -110,7 +110,7 @@ public class used_add extends AppCompatActivity {
                     call.enqueue(new Callback<Signup_model>() {
                         @Override
                         public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
-                            if (response.body() != null) {
+                            if (response.isSuccessful()) {
                                 Log.e(TAG, "onResponse: " + response.body().getResponse());
                                 Log.e(TAG, "onResponsen: " + response.body().getNickname());
                                 if (response.body().getResponse().trim().equals("success")&&response.body().getNickname().equals("성공")) {
@@ -235,81 +235,10 @@ public class used_add extends AppCompatActivity {
         Log.e(TAG, "getMultipart: "+fileToUpload);
         return fileToUpload;
     }
-    private String getRealPathFromURI(Uri contentUri) {
-        if (contentUri.getPath().startsWith("/storage")) {
-            return contentUri.getPath();
-        }
-        String id = DocumentsContract.getDocumentId(contentUri).split(":")[1];
-        String[] columns = {MediaStore.Files.FileColumns.DATA};
-        String selection = MediaStore.Files.FileColumns._ID + " = " + id;
-        Cursor cursor = getContentResolver().query(MediaStore.Files.getContentUri("external"), columns, selection, null, null);
-        try {
-            int columnIndex = cursor.getColumnIndex(columns[0]);
-            if (cursor.moveToFirst()) {
-                return cursor.getString(columnIndex);
-            }
-        } finally {
-            cursor.close();
-        }
-        return null;
-    }
     private String getTime(){
         long mNow = System.currentTimeMillis();
         Date mDate = new Date(mNow);
         SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");;
         return mFormat.format(mDate);
-    }
-    //    private Bitmap UritoBitmap(String uri){
-//        Bitmap bit = null;
-//        try {
-//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-//                bit = ImageDecoder.decodeBitmap(ImageDecoder.createSource());
-//            }
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
-//        return bit;
-//    }
-    private String getImageViewToFileResizing(Bitmap bitmap,String dirFile){
-
-        String mUri = "";
-
-
-        if(bitmap != null) {
-            FileOutputStream fout = null;
-            try {
-                int MAX_IMAGE_SIZE = 150 * 1024; // max final file size
-                int compressQuality = 100; // quality decreasing by 5 every loop. (start from 99)
-                int streamLength = MAX_IMAGE_SIZE;
-                String fname = System.currentTimeMillis() + "_pic.jpg";
-
-                File file = new File(dirFile,fname);
-                while(streamLength >= MAX_IMAGE_SIZE){
-                    fout = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, fout);
-                    streamLength = (int) file.length();
-                    compressQuality -= 5;
-                }
-
-                fout.flush();
-                mUri = file.getPath();
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally{
-                if(fout!=null){
-                    try{
-                        fout.close();
-                    }catch(Exception e){
-                    }
-                }else{
-                }
-            }
-
-        }
-
-        return mUri;
     }
 }

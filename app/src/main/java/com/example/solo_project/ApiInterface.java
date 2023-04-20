@@ -122,6 +122,11 @@ public interface ApiInterface {
     @GET("account_getCredit.php")
     Call<Signup_model> getCredit(@Query("nickname") String nickname);
     @GET("update_Credit.php")
-    Call<Signup_model> update_Credit(@Query("nickname") String nickname,@Query("Credit") String Credit);
-
+    Call<Signup_model> update_Credit(@Query("nickname") String nickname,@Query("Credit") String Credit,@Query("pg_token") String pg_token);
+    @Multipart
+    @POST("used_update.php")
+    Call<Signup_model> used_update(@Part("used_name") String used_name, @Part("detail") String detail, @Part("price") int price, @Part List<MultipartBody.Part> add_file_list,@Part("del_file_list[]") List<String> del_file_list,@Part("image_size") int add_image_size);
+    @Multipart
+    @POST("test.php")
+    Call<String> test_php(@Part("del_file_list[]") List<String> del_file_list);
 }

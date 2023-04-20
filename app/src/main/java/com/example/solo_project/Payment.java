@@ -1,68 +1,71 @@
 package com.example.solo_project;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDateTime;
 
 public class Payment {
+    @Expose
     @SerializedName("aid")
     private String aid;
-
+    @Expose
     @SerializedName("tid")
     private String tid;
-
+    @Expose
     @SerializedName("cid")
     private String cid;
-
+    @Expose
     @SerializedName("sid")
     private String sid;
-
+    @Expose
     @SerializedName("partner_order_id")
     private String partnerOrderId;
-
+    @Expose
     @SerializedName("partner_user_id")
     private String partnerUserId;
-
+    @Expose
     @SerializedName("payment_method_type")
     private String paymentMethodType;
-
+    @Expose
     @SerializedName("amount")
     private Amount amount;
-
+    @Expose
     @SerializedName("card_info")
     private CardInfo cardInfo;
-
+    @Expose
     @SerializedName("item_name")
     private String itemName;
-
+    @Expose
     @SerializedName("item_code")
     private String itemCode;
-
+    @Expose
     @SerializedName("quantity")
     private int quantity;
-
+    @Expose
     @SerializedName("created_at")
     private LocalDateTime createdAt;
-
+    @Expose
     @SerializedName("approved_at")
     private LocalDateTime approvedAt;
-
+    @Expose
     @SerializedName("payload")
     private String payload;
 
     public class Amount {
         @SerializedName("total")
+        @Expose
         private int total;
-
+        @Expose
         @SerializedName("tax_free")
         private int taxFree;
-
+        @Expose
         @SerializedName("vat")
         private int vat;
-
+        @Expose
         @SerializedName("point")
         private int point;
-
+        @Expose
         @SerializedName("discount")
         private int discount;
 
@@ -116,36 +119,37 @@ public class Payment {
     }
 
     public class CardInfo {
+        @Expose
         @SerializedName("purchase_corp")
         private String purchaseCorp;
-
+        @Expose
         @SerializedName("purchase_corp_code")
         private String purchaseCorpCode;
-
+        @Expose
         @SerializedName("issuer_corp")
         private String issuerCorp;
-
+        @Expose
         @SerializedName("issuer_corp_code")
         private String issuerCorpCode;
-
+        @Expose
         @SerializedName("bin")
         private String bin;
-
+        @Expose
         @SerializedName("card_type")
         private String cardType;
-
+        @Expose
         @SerializedName("install_month")
         private String installMonth;
-
+        @Expose
         @SerializedName("approved_id")
         private String approvedId;
-
+        @Expose
         @SerializedName("card_mid")
         private String cardMid;
-
+        @Expose
         @SerializedName("interest_free_install")
         private String interestFreeInstall;
-
+        @Expose
         @SerializedName("card_item_code")
         private String cardItemCode;
 

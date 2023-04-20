@@ -3,6 +3,8 @@ package com.example.solo_project;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class item_model {
     @Expose
     @SerializedName("nickname")private String nickname;
@@ -20,8 +22,10 @@ public class item_model {
     @SerializedName("image_size") private  int image_size;
     @Expose
     @SerializedName("sold_out") private String sold_out;
+    @Expose
+    @SerializedName("image_names") private ArrayList<String> image_names;
 
-    item_model(String nickname,String price,String usedname,String detail,String num,int image_size,String sold_out){
+    item_model(String nickname,String price,String usedname,String detail,String num,int image_size,String sold_out,ArrayList<String> image_names){
         this.nickname = nickname;
         this.price = price;
         this.usedname = usedname;
@@ -29,7 +33,13 @@ public class item_model {
         this.num = num;
         this.image_size = image_size;
         this.sold_out = sold_out;
+        this.image_names = image_names;
     }
+
+    public ArrayList<String> getImage_names() {
+        return image_names;
+    }
+
     public String getNickname(){
         return nickname;
     }

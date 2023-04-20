@@ -43,7 +43,7 @@ public class PaymentActivity extends AppCompatActivity {
     String item_name;
     String total_Amount;
     String free_Amount = "0";
-    String approval_url = "http://www.taron.duckdns.org/sucsec";
+    String approval_url = "http://www.taron.duckdns.org/sucsec.php";
     String cancel = "http://www.taron.duckdns.org/cancel";
     String fail = "http://www.taron.duckdns.org/fail";
     WebView webView;
@@ -76,8 +76,9 @@ public class PaymentActivity extends AppCompatActivity {
             if (url != null && url.contains("pg_token=")) {
                 String pg_Token = url.substring(url.indexOf("pg_token=") + 9);
                 pgToken = pg_Token;
-
-                approveRequest(); // 결제요청
+                update_token(pg_Token);
+//                approveRequest(); // 결제요청
+//                finish();
                 return false;
 
             } else if (url != null && url.startsWith("intent://")) {
@@ -92,12 +93,33 @@ public class PaymentActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if(url.contains("cancel")){
+            } else if(url.contains("taron.duckdns.org")){
                 finish();
             }
             view.loadUrl(url);
             return false;
 //            return super.shouldOverrideUrlLoading(view, url);
+        }
+        public void update_token(String token){
+            ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+            Call<Signup_model> call = apiInterface.update_Credit(user_Id,total_Amount,token);
+            call.enqueue(new Callback<Signup_model>() {
+                @Override
+                public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
+                    Log.e("카카오페이 서버", String.valueOf(response));
+                    if(response.isSuccessful()){
+                        Log.e("카카오페이 서버",response.body().getResponse());
+                        if(response.body().getResponse().equals("ok")){
+                            finish();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Signup_model> call, Throwable t) {
+                    Log.e("카카오페이",t.toString());
+                }
+            });
         }
         public void approveRequest(){
             if(retrofit == null){

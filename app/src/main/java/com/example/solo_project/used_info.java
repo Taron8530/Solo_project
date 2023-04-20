@@ -22,14 +22,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Api;
+import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class used_info extends AppCompatActivity {
+public class used_info extends AppCompatActivity implements Serializable {
     private ViewPager2 sliderViewPager;
     private LinearLayout layoutIndicator;
     private TextView nickname;
@@ -44,8 +46,10 @@ public class used_info extends AppCompatActivity {
     private PagerAdapter adapter;
     private TextView exit;
     private String num;
-
+    private String str_price;
+    private String str_detail;
     private ArrayList<String> images;
+    private ArrayList<String> image_names;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,7 @@ public class used_info extends AppCompatActivity {
         chat_btn = findViewById(R.id.go_chating);
         exit = findViewById(R.id.used_info_exit);
         num = i.getStringExtra("num");
+        image_names = (ArrayList<String>) i.getSerializableExtra("image_names");
         Log.e("sold_out",num);
         images = new ArrayList<>();
         exit.setOnClickListener(new View.OnClickListener() {
@@ -69,16 +74,20 @@ public class used_info extends AppCompatActivity {
         });
         MyNickname = i.getStringExtra("my_nickname");
         receiver = i.getStringExtra("nickname");
+        str_price = i.getStringExtra("price");
+        str_detail = i.getStringExtra("detail");
         nickname.setText("판매자:   " +receiver);
-        detail.setText("설명글 \n\n\n"+i.getStringExtra("detail"));
-        price.setText(i.getStringExtra("price")+" 원");
+
+        detail.setText("설명글 \n\n\n"+str_detail);
+        price.setText(str_price+" 원");
         used_name.setText(i.getStringExtra("used_name"));
         Glide.with(this)
                 .load("http://35.166.40.164/profile/"+i.getStringExtra("nickname")+".png")
                 .circleCrop()
                 .error(R.drawable.app_icon)
                 .into(profile);
-        image_size = i.getIntExtra("image_size",0);
+//        image_size = i.getIntExtra("image_size",0);
+        image_size = image_names.size();
         sliderViewPager = findViewById(R.id.viewpager);
         layoutIndicator = findViewById(R.id.layoutIndicators);
         sliderViewPager.setOffscreenPageLimit(1);
@@ -86,9 +95,9 @@ public class used_info extends AppCompatActivity {
             FrameLayout F = findViewById(R.id.viewpager_frame);
             F.setVisibility(View.GONE);
         }
-        for(int j =0;j<image_size;j++){
-            Log.e("number check",i.getStringExtra("num")+j);
-            images.add("http://35.166.40.164//used_image/"+num+j+".jpeg");
+        for(String image_name:image_names){
+            Log.e("number check",image_name);
+            images.add("http://35.166.40.164//used_image/"+num+"/"+image_name);
         }
         adapter = new PagerAdapter(this, images);
         sliderViewPager.setAdapter(adapter);
@@ -198,7 +207,6 @@ public class used_info extends AppCompatActivity {
     {
         if(MyNickname.equals(receiver)){
             MenuInflater inflater = getMenuInflater();
-
             inflater.inflate(R.menu.used_info_menu, menu);
             chat_btn.setVisibility(View.GONE);
             return true;
@@ -225,6 +233,16 @@ public class used_info extends AppCompatActivity {
                 Log.e("sold_out",t.toString());
             }
         });
+    }
+    public void used_update(){
+        Intent i = new Intent(this,Edit_UseditemActivity.class);
+        i.putExtra("images",image_names);
+        i.putExtra("used_name",used_name.getText().toString());
+        i.putExtra("detail",str_detail);
+        i.putExtra("price",str_price);
+//        i.putExtra("nickname",nickname)
+        i.putExtra("num",num);
+        startActivity(i);
     }
     public void used_delete(){
         ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
@@ -256,6 +274,9 @@ public class used_info extends AppCompatActivity {
                 break;
             case R.id.used_delete:
                 used_delete();
+                break;
+            case R.id.used_edit:
+                used_update();
                 break;
         }
 

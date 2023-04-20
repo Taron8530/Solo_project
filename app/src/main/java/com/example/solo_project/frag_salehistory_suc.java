@@ -51,6 +51,7 @@ public class frag_salehistory_suc extends Fragment {
                 i.putExtra("detail",list.get(position).getDetail());
                 i.putExtra("nickname",list.get(position).getNickname());
                 i.putExtra("price",list.get(position).getPrice());
+                i.putExtra("image_names",list.get(position).getImage_names());
                 i.putExtra("image_size",list.get(position).getImage_size());
                 i.putExtra("num",list.get(position).getNum());
                 i.putExtra("my_nickname",nickname);

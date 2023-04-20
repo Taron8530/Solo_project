@@ -26,9 +26,10 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/add_recyclerview"
+                    android:id="@+id/update_recyclerview"
                     android:layout_width="wrap_content"
-                    android:layout_height="150dp">
+                    android:layout_height="150dp"
+                    android:layout_marginBottom="15dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -38,14 +39,14 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/multi_imagebtn"
+                        android:id="@+id/update_add_imagebtn"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/ic_add_a_photo" />
 
                     <TextView
-                        android:id="@+id/image_size"
+                        android:id="@+id/update_image_size"
                         android:layout_width="50dp"
                         android:textAlignment="center"
                         android:gravity="center"
@@ -55,14 +56,14 @@
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/add_used_name"
+                    android:id="@+id/update_used_name"
                     android:layout_width="325dp"
                     android:layout_height="59dp"
                     android:layout_marginTop="20dp"
                     android:hint="글 제목" />
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/add_used_price"
+                    android:id="@+id/update_used_price"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
@@ -70,7 +71,7 @@
                     android:hint="가격(₩)" />
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/add_used_detail"
+                    android:id="@+id/update_used_detail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingTop="15dp"
@@ -85,7 +86,7 @@
         </ScrollView>
 
         <Button
-            android:id="@+id/used_add_submit"
+            android:id="@+id/used_update_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="완료"

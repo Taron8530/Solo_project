@@ -24,6 +24,9 @@ import com.google.android.gms.common.api.Api;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,8 +107,21 @@ public class F_profile extends Fragment {
         change_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(getActivity(),PaymentActivity.class);
-                getActivity().startActivity(i);
+                List<String> del_file_list = new ArrayList<>();
+                del_file_list.add("비어있음");
+                ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+                Call<String> call = apiInterface.test_php(del_file_list);
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Log.e(TAG, "onResponse: "+response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.e(TAG, "onFailure: "+t);
+                    }
+                });
             }
         });
         creditActivity.setOnClickListener(new View.OnClickListener() {

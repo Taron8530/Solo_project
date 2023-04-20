@@ -80,12 +80,17 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
 
         public void onbind(item_model item) {
             Log.e(TAG, "onbind: 호출됨");
+            Log.e(TAG,"이미지 이름 확인"+item.getImage_names());
             Log.e("sold_out",item.getSold_out());
             price.setText(item.getPrice()+"원");
             used_item.setText(item.getusedname());
             nickname.setText("판매자: "+item.getNickname());
             Log.e("adapter", String.valueOf(item.getImage_size()));
-            Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"0"+".jpeg").override(100, 100).error(R.drawable.app_icon).into(image);
+            String image_name = "";
+            if(item.getImage_names().size() > 0){
+                image_name = item.getImage_names().get(0);
+            }
+            Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"/"+image_name).override(100, 100).error(R.drawable.app_icon).into(image);
             if(item.getSold_out().equals("1")){
                 sold_out.setVisibility(View.VISIBLE);
             }

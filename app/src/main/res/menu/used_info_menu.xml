@@ -6,4 +6,7 @@
     <item
         android:id="@+id/used_sold_out"
         android:title="판매 완료" />
+    <item
+        android:id="@+id/used_edit"
+        android:title="수정하기" />
 </menu>

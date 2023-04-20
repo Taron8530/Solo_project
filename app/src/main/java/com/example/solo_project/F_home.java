@@ -41,7 +41,6 @@ public class F_home extends Fragment {
     public void onStart() {
         super.onStart();
         select_used(page);
-        page++;
     }
 
     @Override
@@ -60,17 +59,26 @@ public class F_home extends Fragment {
         adapter.setlist(list);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(recyclerView.canScrollVertically(-1)){
+                }
+            }
+
+            @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int totalItemCount = layoutManager.getItemCount();
+//                int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
-                if (lastVisibleItem == totalItemCount - 1  && dy > 0) {
-                    page++;
-                    progressBar.setVisibility(View.VISIBLE);
-                    select_used(page);
+                if (lastVisibleItem == list.size()   && dy > 0) {
+                    if(recyclerView.canScrollVertically(-1)){
+                        Log.e("F_home", String.valueOf(page));
+                        progressBar.setVisibility(View.VISIBLE);
+                        select_used(page);
+                    }
                 }
             }
         });
@@ -88,6 +96,7 @@ public class F_home extends Fragment {
                 i.putExtra("image_size",list.get(position).getImage_size());
                 i.putExtra("num",list.get(position).getNum());
                 i.putExtra("my_nickname",nickname);
+                i.putExtra("image_names",list.get(position).getImage_names());
                 getActivity().startActivity(i);
             }
         });
@@ -95,6 +104,7 @@ public class F_home extends Fragment {
     }
     private void select_used(int page)
     {
+        Log.e("F_home", "select_used_page: "+page );
         ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
         Call<ArrayList<item_model>> call = apiInterface.select_used(page);
         call.enqueue(new Callback<ArrayList<item_model>>() {
@@ -116,6 +126,7 @@ public class F_home extends Fragment {
         for(int i = 0;i<lists.size();i++){
             list.add(lists.get(i));
         }
+        page += 1;
         adapter.setlist(list);
         progressBar.setVisibility(View.GONE);
         Log.e("접근 완료",list.toString());
