@@ -21,8 +21,8 @@ public class Apiclient {
         {
             retrofit = new Retrofit.Builder()
                     .baseUrl("http://35.166.40.164/")
-                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
 

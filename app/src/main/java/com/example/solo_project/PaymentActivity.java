@@ -76,7 +76,8 @@ public class PaymentActivity extends AppCompatActivity {
             if (url != null && url.contains("pg_token=")) {
                 String pg_Token = url.substring(url.indexOf("pg_token=") + 9);
                 pgToken = pg_Token;
-                update_token(pg_Token);
+                approveRequest();
+//                update_token(pg_Token);
 //                approveRequest(); // 결제요청
 //                finish();
                 return false;
@@ -194,6 +195,7 @@ public class PaymentActivity extends AppCompatActivity {
                         Log.e("카카오페이", response.body().getUrl());
                         webView.loadUrl(response.body().getUrl());
                         tidPin = response.body().getTid();
+
                     }
                 }
 

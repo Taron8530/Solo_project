@@ -108,7 +108,8 @@ public class F_profile extends Fragment {
             @Override
             public void onClick(View view) {
                 List<String> del_file_list = new ArrayList<>();
-                del_file_list.add("비어있음");
+                del_file_list.add("ㅎㅇ");
+                del_file_list.add("t.jpeg");
                 ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
                 Call<String> call = apiInterface.test_php(del_file_list);
                 call.enqueue(new Callback<String>() {

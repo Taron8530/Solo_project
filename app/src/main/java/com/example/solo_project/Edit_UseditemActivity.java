@@ -72,21 +72,31 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         price = i.getStringExtra("price");
         images = (ArrayList<String>) i.getSerializableExtra("images");
         num = i.getStringExtra("num");
-        Log.e(TAG, "onCreate: " +images);
-        adapter = new Edit_Used_Adapter(images,Edit_UseditemActivity.this,num);
+        Log.e(TAG, "onCreate: " + images);
+        adapter = new Edit_Used_Adapter(images, Edit_UseditemActivity.this, num);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Edit_UseditemActivity.this, LinearLayoutManager.HORIZONTAL, true));
         adapter.notifyDataSetChanged();
         used_Name_EditText.setText(used_Name);
         used_Detail_EditText.setText(detail);
         used_Price_EditText.setText(String.valueOf(price));
+        if (images.size() != 0 && images != null) {
+            image_size.setText(images.size() + "/5");
+            if (images.size() >= 5) {
+                image_size.setTextColor(Color.parseColor("#ff0000"));
+            }
+        }
+
         adapter.setOnItemClickListener(new main_adapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 del_File_List.add(images.get(position));
-                Log.e(TAG, "onItemClick: "+del_File_List );
+                Log.e(TAG, "onItemClick: " + del_File_List);
                 images.remove(position);
                 adapter.notifyDataSetChanged();
+                image_size.setText(images.size() + "/5");
+
+
             }
         });
         add_Btn.setOnClickListener(new View.OnClickListener() {
@@ -103,10 +113,10 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         submit_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean condition = used_Name_EditText.getText().toString().trim().length() <= 0 ||used_Detail_EditText.getText().toString().trim().length() <= 0 || used_Name_EditText.getText().toString().trim().length() <= 0 ||used_Price_EditText.getText().toString().trim().length() <= 0;
-                if(condition){
-                    Toast.makeText(Edit_UseditemActivity.this,"게시글을 모두 채우지 않으면 안됩니다!",Toast.LENGTH_SHORT).show();
-                }else{
+                boolean condition = used_Name_EditText.getText().toString().trim().length() <= 0 || used_Detail_EditText.getText().toString().trim().length() <= 0 || used_Name_EditText.getText().toString().trim().length() <= 0 || used_Price_EditText.getText().toString().trim().length() <= 0;
+                if (condition) {
+                    Toast.makeText(Edit_UseditemActivity.this, "게시글을 모두 채우지 않으면 안됩니다!", Toast.LENGTH_SHORT).show();
+                } else {
 //                    ProgressDialog loagindDialog = ProgressDialog.show(Edit_UseditemActivity.this, "물건 올리는중","잠시만 기다려주세요", true, false);
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
 //                    builder.setTitle("게시물").setMessage("올리는중...");
@@ -120,26 +130,29 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                         add_File_List.add(getMultipart(filepath.get(i), i));
                     }
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                    String used_name =used_Name_EditText.getText().toString();
+                    String used_name = used_Name_EditText.getText().toString();
                     String detail = used_Detail_EditText.getText().toString();
                     int price = Integer.parseInt(used_Price_EditText.getText().toString());
-                    int image_size = add_File_List.size();
-                    Call<Signup_model> call = apiInterface.used_update(used_name,detail,price,add_File_List,del_File_List,image_size);
+                    if (del_File_List.size() <= 0) {
+                        del_File_List.add("Empty");
+                    }
+                    Call<Signup_model> call = apiInterface.used_update(num, used_name, detail, price, add_File_List, del_File_List, add_File_List.size());
                     call.enqueue(new Callback<Signup_model>() {
                         @Override
                         public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
-                            Log.e(TAG,"온 리스폰스"+response);
-                            if(response.isSuccessful()){
-                                Log.e(TAG,"리스폰스 200 CODE "+response.body().getResponse());
-                                if(response.body().getResponse().equals("ok")){
-                                    //인텐트 넘기기 아직 하지마셈
+                            Log.e(TAG, "온 리스폰스" + response);
+                            if (response.isSuccessful()) {
+                                Log.e(TAG, "리스폰스 200 CODE " + response.body().getResponse());
+                                if (response.body().getResponse().equals("ok")) {
+                                    Toast.makeText(Edit_UseditemActivity.this, "완료.", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Signup_model> call, Throwable t) {
-                            Log.e(TAG, "onFailure: "+t);
+                            Log.e(TAG, "onFailure: " + t);
                         }
                     });
 
@@ -148,7 +161,8 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         });
 
     }
-    public void layout_init(){
+
+    public void layout_init() {
         recyclerView = findViewById(R.id.update_recyclerview);
         used_Detail_EditText = findViewById(R.id.update_used_detail);
         used_Name_EditText = findViewById(R.id.update_used_name);
@@ -156,7 +170,7 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         add_Btn = findViewById(R.id.update_add_imagebtn);
         image_size = findViewById(R.id.update_image_size);
         submit_Btn = findViewById(R.id.used_update_submit);
-        del_File_List=new ArrayList<>();
+        del_File_List = new ArrayList<>();
         add_File_List = new ArrayList<>();
         uriList = new ArrayList<>();
         filepath = new ArrayList<>();
@@ -174,6 +188,9 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                 images.add(imageUri.toString());
                 uriList.add(imageUri);
                 image_size.setText(images.size() + "/5");
+                if (images.size() >= 5) {
+                    image_size.setTextColor(Color.parseColor("#ff0000"));
+                }
                 adapter.notifyDataSetChanged();
             } else {      // 이미지를 여러장 선택한 경우
                 ClipData clipData = data.getClipData();
@@ -183,16 +200,17 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                     Toast.makeText(Edit_UseditemActivity.this, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
                 } else {   // 선택한 이미지가 1장 이상 5장 이하인 경우
                     Log.e(TAG, "multiple choice");
-
                     for (int i = 0; i < clipData.getItemCount(); i++) {
                         Uri imageUri = clipData.getItemAt(i).getUri();
                         // 선택한 이미지들의 uri를 가져온다.
                         try {
                             images.add(imageUri.toString());  //uri를 list에 담는다.
+                            uriList.add(imageUri);
                             image_size.setText(images.size() + "/5");
-                            if (images.size() > 5) {
+                            if (images.size() >= 5) {
                                 image_size.setTextColor(Color.parseColor("#ff0000"));
                             }
+                            adapter.notifyDataSetChanged();
 
                         } catch (Exception e) {
                             Log.e(TAG, "File select error", e);
@@ -202,7 +220,8 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
             }
         }
     }
-    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
+
+    public String saveBitmapToJpeg(Bitmap bitmap, String imgName) {   // 선택한 이미지 내부 저장소에 저장
         File tempFile = new File(getCacheDir(), imgName);
         Matrix matrix = new Matrix();
         matrix.postRotate(90);    //회전시킬 각도
@@ -214,23 +233,25 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
             newBmp.compress(Bitmap.CompressFormat.JPEG, 60, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
             out.close();    // 스트림 닫아주기
 //            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
-            return getCacheDir()+"/"+imgName;
+            return getCacheDir() + "/" + imgName;
         } catch (Exception e) {
 //            Toast.makeText(getApplicationContext(), "파일 저장 실패", Toast.LENGTH_SHORT).show();
             return null;
         }
     }
-    private MultipartBody.Part getMultipart(String filepath,int i){
+
+    private MultipartBody.Part getMultipart(String filepath, int i) {
         File file = new File(filepath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("uploaded_file"+i, String.valueOf(i), requestBody);
-        Log.e(TAG, "getMultipart: "+fileToUpload);
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("uploaded_file" + i, String.valueOf(i), requestBody);
+        Log.e(TAG, "getMultipart: " + fileToUpload);
         return fileToUpload;
     }
-    private void setFilepath(List<Uri> uri){
+
+    private void setFilepath(List<Uri> uri) {
         ContentResolver resolver = getContentResolver();
         InputStream instream = null;
-        for(int i = 0;i<uri.size();i++){
+        for (int i = 0; i < uri.size(); i++) {
             Bitmap imgBitmap = null;
             try {
                 instream = resolver.openInputStream(uri.get(i));
@@ -242,8 +263,8 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                 e.printStackTrace();
             }
 
-            filepath.add(saveBitmapToJpeg(imgBitmap,String.valueOf(i)));
-            Log.e(TAG, "setFilepath: "+filepath.get(i));
+            filepath.add(saveBitmapToJpeg(imgBitmap, String.valueOf(i)));
+            Log.e(TAG, "setFilepath: " + filepath.get(i));
         }
     }
 
