@@ -38,10 +38,15 @@ public class F_home extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        select_used(1);
+    public void onStart() {
+        super.onStart();
+        select_used(page);
     }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        select_used(1);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,11 +116,8 @@ public class F_home extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<item_model>> call, Response<ArrayList<item_model>> response) {
                 if(response.body() != null){
-                    if(page <= 1){
+                    onGetResult(response.body());
 
-                    }else{
-                        onGetResult(response.body());
-                    }
                 }
             }
 
