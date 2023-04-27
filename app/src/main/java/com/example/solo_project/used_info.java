@@ -25,6 +25,7 @@ import com.google.android.gms.common.api.Api;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -74,7 +75,7 @@ public class used_info extends AppCompatActivity implements Serializable {
         });
         MyNickname = i.getStringExtra("my_nickname");
         receiver = i.getStringExtra("nickname");
-        str_price = i.getStringExtra("price");
+        str_price = comma_to_int(i.getStringExtra("price"));
         str_detail = i.getStringExtra("detail");
         nickname.setText("판매자:   " +receiver);
 
@@ -216,6 +217,11 @@ public class used_info extends AppCompatActivity implements Serializable {
         else{
             return false;
         }
+    }
+    public String comma_to_int(String number){
+        DecimalFormat df = new DecimalFormat("###,###");
+        String money = df.format(number);
+        return money;
     }
     public void sold_out(){
         ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
