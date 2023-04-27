@@ -62,11 +62,11 @@ dependencies {
 //    implementation 'com.github.chrisbanes:PhotoView:2.1.3' //photo View
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'org.webrtc:google-webrtc:1.0.32006'
 
 //    implementation 'com.github.bootpay:client_android_java:3.2.47'
     implementation 'io.github.bootpay:android:4.2.0'
+
+    implementation 'com.google.guava:guava:30.1-jre'
 
 }

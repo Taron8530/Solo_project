@@ -21,10 +21,11 @@
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/drawable/msg_count_bg.xml" value="0.1435" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/drawable/send_chat.xml" value="0.1" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/drawable/sold_out_textview.xml" value="0.1435" />
+        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/font/font.xml" value="0.14791666666666667" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_chating.xml" value="0.36363636363636365" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_chatting_image_view.xml" value="0.2585034013605442" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_credit.xml" value="0.4" />
-        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_edit_useditem.xml" value="0.3651226158038147" />
+        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_edit_useditem.xml" value="0.3252496433666191" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_kakao_payment.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/activity_main.xml" value="0.2" />
@@ -55,7 +56,7 @@
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/left_image_chat.xml" value="0.4" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/left_location_share.xml" value="0.264" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/multi_image_item.xml" value="0.264" />
-        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/notification.xml" value="0.264" />
+        <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/notification.xml" value="0.3911504424778761" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/profile_menu.xml" value="0.41695501730103807" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/right_chat.xml" value="0.264" />
         <entry key="..\:/Users/jgye8/AndroidStudioProjects/Solo_project/app/src/main/res/layout/right_image_chat.xml" value="0.4" />

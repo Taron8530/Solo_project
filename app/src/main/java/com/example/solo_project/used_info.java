@@ -78,7 +78,7 @@ public class used_info extends AppCompatActivity implements Serializable {
         str_detail = i.getStringExtra("detail");
         nickname.setText("판매자:   " +receiver);
 
-        detail.setText("설명글 \n\n\n"+str_detail);
+        detail.setText(str_detail);
         price.setText(str_price+" 원");
         used_name.setText(i.getStringExtra("used_name"));
         Glide.with(this)
@@ -93,7 +93,9 @@ public class used_info extends AppCompatActivity implements Serializable {
         sliderViewPager.setOffscreenPageLimit(1);
         if(image_size == 0){
             FrameLayout F = findViewById(R.id.viewpager_frame);
+            LinearLayout L = findViewById(R.id.layoutIndicators);
             F.setVisibility(View.GONE);
+            L.setVisibility(View.GONE);
         }
         for(String image_name:image_names){
             Log.e("number check",image_name);
@@ -277,6 +279,7 @@ public class used_info extends AppCompatActivity implements Serializable {
                 break;
             case R.id.used_edit:
                 used_update();
+                finish();
                 break;
         }
 

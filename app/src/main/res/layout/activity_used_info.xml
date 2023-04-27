@@ -78,10 +78,11 @@
             <TextView
                 android:id="@+id/used_info_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingLeft="20dp"
                 android:text="detail"
                 android:textSize="15dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,11 +90,12 @@
 
             <TextView
                 android:id="@+id/used_info_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:text="usedname"
                 android:paddingLeft="15dp"
+                android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
                 android:paddingRight="15dp"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -121,6 +123,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/btn_color"
+        android:padding="10dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -128,20 +131,24 @@
 
         <TextView
             android:id="@+id/used_info_price"
-            android:layout_width="150dp"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingBottom="15dp"
-            android:textSize="20dp"
+            android:layout_width="156dp"
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
-            android:text="price" />
+            android:fontFamily="@font/nexon_lv1_gothic_low_otf"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="price"
+            android:textSize="20dp" />
 
         <Button
             android:id="@+id/go_chating"
             android:layout_width="154dp"
             android:layout_height="53dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/send_chat"
+            android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
             android:text="채팅하기" />
     </LinearLayout>
 

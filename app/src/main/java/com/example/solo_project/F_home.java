@@ -38,9 +38,9 @@ public class F_home extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        select_used(page);
+    public void onResume() {
+        super.onResume();
+        select_used(1);
     }
 
     @Override
@@ -111,7 +111,11 @@ public class F_home extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<item_model>> call, Response<ArrayList<item_model>> response) {
                 if(response.body() != null){
-                    onGetResult(response.body());
+                    if(page <= 1){
+
+                    }else{
+                        onGetResult(response.body());
+                    }
                 }
             }
 
@@ -131,6 +135,11 @@ public class F_home extends Fragment {
         progressBar.setVisibility(View.GONE);
         Log.e("접근 완료",list.toString());
         Log.e("접근 완료",lists.toString());
+        adapter.notifyDataSetChanged();
+    }
+    private void getList(ArrayList<item_model> lists){
+        page = 2;
+        list = lists;
         adapter.notifyDataSetChanged();
     }
 }

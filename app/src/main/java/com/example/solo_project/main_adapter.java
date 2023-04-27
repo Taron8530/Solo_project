@@ -87,7 +87,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
             nickname.setText("판매자: "+item.getNickname());
             Log.e("adapter", String.valueOf(item.getImage_size()));
             String image_name = "";
-            if(item.getImage_names().size() > 0){
+            if(item.getImage_names() != null && item.getImage_names().size() > 0){
                 image_name = item.getImage_names().get(0);
             }
             Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"/"+image_name).override(100, 100).error(R.drawable.app_icon).into(image);
