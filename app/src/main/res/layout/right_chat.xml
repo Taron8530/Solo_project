@@ -17,6 +17,7 @@
         android:paddingRight="16dp"
         android:paddingBottom="4dp"
         android:text="내가 보낸 메세지"
+        android:background="@drawable/right_chat_bg"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
