@@ -1,11 +1,14 @@
 package com.example.solo_project;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +28,7 @@ import com.google.android.gms.common.api.Api;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -75,7 +79,8 @@ public class used_info extends AppCompatActivity implements Serializable {
         });
         MyNickname = i.getStringExtra("my_nickname");
         receiver = i.getStringExtra("nickname");
-        str_price = comma_to_int(i.getStringExtra("price"));
+        String t = i.getStringExtra("price");
+        str_price = comma_to_int(t);
         str_detail = i.getStringExtra("detail");
         nickname.setText("판매자:   " +receiver);
 
@@ -219,8 +224,12 @@ public class used_info extends AppCompatActivity implements Serializable {
         }
     }
     public String comma_to_int(String number){
+        if (number.length() == 0) {
+            return "";
+        }
+        long value = Long.parseLong(number);
         DecimalFormat df = new DecimalFormat("###,###");
-        String money = df.format(number);
+        String money = df.format(value);
         return money;
     }
     public void sold_out(){

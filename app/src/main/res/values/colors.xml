@@ -11,5 +11,6 @@
     <color name="red">#cc3931</color>
     <color name="btn_color">#f2f4fa</color>
     <color name="sold_out_color">#9c3034</color>
+    <color name="main">#FFFFFF</color>
 
 </resources>

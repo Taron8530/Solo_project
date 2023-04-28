@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.solo_project.webrtc.Video_call_Activity;
 import com.google.android.gms.common.api.Api;
 
 import org.w3c.dom.Text;
@@ -107,22 +108,9 @@ public class F_profile extends Fragment {
         change_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<String> del_file_list = new ArrayList<>();
-                del_file_list.add("ㅎㅇ");
-                del_file_list.add("t.jpeg");
-                ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                Call<String> call = apiInterface.test_php(del_file_list);
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        Log.e(TAG, "onResponse: "+response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.e(TAG, "onFailure: "+t);
-                    }
-                });
+                Intent i = new Intent(getActivity(), Video_call_Activity.class);
+                startActivity(i);
+                getActivity().finish();
             }
         });
         creditActivity.setOnClickListener(new View.OnClickListener() {

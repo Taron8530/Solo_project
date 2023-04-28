@@ -132,7 +132,7 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
                     String used_name = used_Name_EditText.getText().toString();
                     String detail = used_Detail_EditText.getText().toString();
-                    int price = Integer.parseInt(used_Price_EditText.getText().toString());
+                    int price = Integer.parseInt(used_Price_EditText.getText().toString().replaceAll(",",""));
                     if (del_File_List.size() <= 0) {
                         del_File_List.add("Empty");
                     }

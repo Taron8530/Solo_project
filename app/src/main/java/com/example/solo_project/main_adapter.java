@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> {
@@ -83,7 +84,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
             Log.e(TAG, "onbind: 호출됨");
             Log.e(TAG,"이미지 이름 확인"+item.getImage_names());
             Log.e("sold_out",item.getSold_out());
-            price.setText(item.getPrice()+"원");
+            price.setText(comma_to_int(item.getPrice())+"원");
             used_item.setText(item.getusedname());
             nickname.setText("판매자: "+item.getNickname());
             Log.e("adapter", String.valueOf(item.getImage_size()));
@@ -96,6 +97,15 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
                 sold_out.setVisibility(View.VISIBLE);
                 used_item.setPaintFlags(used_item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //취소선
             }
+        }
+        public String comma_to_int(String number){
+            if (number.length() == 0) {
+                return "";
+            }
+            long value = Long.parseLong(number);
+            DecimalFormat df = new DecimalFormat("###,###");
+            String money = df.format(value);
+            return money;
         }
     }
 }

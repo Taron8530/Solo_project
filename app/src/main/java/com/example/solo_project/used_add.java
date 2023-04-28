@@ -14,6 +14,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,6 +81,7 @@ public class used_add extends AppCompatActivity {
         e_used_name = findViewById(R.id.add_used_name);
         e_price = findViewById(R.id.add_used_price);
         e_detail = findViewById(R.id.add_used_detail);
+        e_price.addTextChangedListener(new UsedAddCustomTextWatchar(e_price));
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +112,7 @@ public class used_add extends AppCompatActivity {
                         multi.add(getMultipart(filepath.get(i), i));
                     }
                     apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                    Call<Signup_model> call = apiInterface.used_insert(nickname, e_used_name.getText().toString(), e_detail.getText().toString(), Integer.parseInt(e_price.getText().toString()), multi, multi.size(),getTime());
+                    Call<Signup_model> call = apiInterface.used_insert(nickname, e_used_name.getText().toString(), e_detail.getText().toString(), Integer.parseInt(e_price.getText().toString().replaceAll(",","")), multi, multi.size(),getTime());
                     call.enqueue(new Callback<Signup_model>() {
                         @Override
                         public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
@@ -190,6 +196,15 @@ public class used_add extends AppCompatActivity {
                 }
             }
         }
+    }
+    public String comma_to_int(String number){
+        if (number.length() == 0) {
+            return "";
+        }
+        long value = Long.parseLong(number);
+        DecimalFormat df = new DecimalFormat("###,###");
+        String money = df.format(value);
+        return money;
     }
     private void setFilepath(List<Uri> uri){
         ContentResolver resolver = getContentResolver();

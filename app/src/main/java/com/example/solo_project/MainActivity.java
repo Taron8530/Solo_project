@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         chating_fregment = new F_chating(nickname);
         home_fregment = new F_home(nickname);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, home_fregment).commit();
-        setTitle("홈");
+        setTitle("물건");
         BottomNavigationView bottom = findViewById(R.id.bottom_menu);
         bottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -64,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab_home:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, home_fregment).commit();
                         Log.e("프래그먼트", "여긴 홈");
-                        setTitle("홈");
+                        setTitle("물건");
                         return true;
                     case R.id.tab_chating:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, chating_fregment).commit();
                         Log.e("프래그먼트", "여긴 채팅");
-                        setTitle("채팅");
+                        setTitle("채팅 목록");
                         return true;
                     case R.id.tab_profile:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, profile_fregment).commit();

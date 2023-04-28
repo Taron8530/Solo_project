@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.solo_project.R;
 import com.google.common.collect.ImmutableList;
@@ -18,12 +19,13 @@ import java.util.stream.Stream;;
 public class Video_call_Activity extends AppCompatActivity {
 
     private PeerConnectionFactory peerConnectionFactory;
+    public TextView test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_video_call);
+        test = findViewById(R.id.test_ip);
         // PeerConnectionFactory 초기화
         PeerConnectionFactory.initialize(PeerConnectionFactory
                 .InitializationOptions.builder(this)
@@ -76,6 +78,8 @@ public class Video_call_Activity extends AppCompatActivity {
             // 공인 IP 주소 추출
             String ip = candidate.sdp.split(" ")[4].split("/")[1];
             Log.d("Video_call_Activity", "Public IP address: " + ip);
+//            test.setText(candidate.sdp);
+
         }
 
         @Override
