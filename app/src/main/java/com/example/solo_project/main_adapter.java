@@ -1,6 +1,7 @@
 package com.example.solo_project;
 
 
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +94,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
             Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"/"+image_name).override(100, 100).error(R.drawable.app_icon).into(image);
             if(item.getSold_out().equals("1")){
                 sold_out.setVisibility(View.VISIBLE);
+                used_item.setPaintFlags(used_item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //취소선
             }
         }
     }

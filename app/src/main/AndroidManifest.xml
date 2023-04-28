@@ -25,7 +25,7 @@
         android:theme="@style/Theme.Solo_project"
         tools:targetApi="31">
         <activity
-            android:name=".Video_call_Activity"
+            android:name=".webrtc.Video_call_Activity"
             android:exported="false" />
         <activity
             android:name=".Edit_UseditemActivity"
