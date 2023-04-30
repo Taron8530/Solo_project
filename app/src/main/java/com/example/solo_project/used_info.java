@@ -45,7 +45,7 @@ public class used_info extends AppCompatActivity implements Serializable {
     private TextView detail;
     private Button chat_btn;
     private ImageView profile;
-    private int image_size;
+    private int image_size = 0;
     private String MyNickname;
     private String receiver;
     private PagerAdapter adapter;
@@ -93,7 +93,9 @@ public class used_info extends AppCompatActivity implements Serializable {
                 .error(R.drawable.app_icon)
                 .into(profile);
 //        image_size = i.getIntExtra("image_size",0);
-        image_size = image_names.size();
+        if(image_names != null){
+            image_size = image_names.size();
+        }
         sliderViewPager = findViewById(R.id.viewpager);
         layoutIndicator = findViewById(R.id.layoutIndicators);
         sliderViewPager.setOffscreenPageLimit(1);
@@ -102,10 +104,11 @@ public class used_info extends AppCompatActivity implements Serializable {
             LinearLayout L = findViewById(R.id.layoutIndicators);
             F.setVisibility(View.GONE);
             L.setVisibility(View.GONE);
-        }
-        for(String image_name:image_names){
-            Log.e("number check",image_name);
-            images.add("http://35.166.40.164//used_image/"+num+"/"+image_name);
+        }else {
+            for (String image_name : image_names) {
+                Log.e("number check", image_name);
+                images.add("http://35.166.40.164//used_image/" + num + "/" + image_name);
+            }
         }
         adapter = new PagerAdapter(this, images);
         sliderViewPager.setAdapter(adapter);

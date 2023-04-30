@@ -110,7 +110,6 @@ public class F_profile extends Fragment {
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), Video_call_Activity.class);
                 startActivity(i);
-                getActivity().finish();
             }
         });
         creditActivity.setOnClickListener(new View.OnClickListener() {

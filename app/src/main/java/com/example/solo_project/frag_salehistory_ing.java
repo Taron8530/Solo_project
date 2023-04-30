@@ -16,13 +16,14 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class frag_salehistory_ing extends Fragment {
+public class frag_salehistory_ing extends Fragment implements Serializable {
     private String nickname;
     RecyclerView recyclerView;
     main_adapter adapter;
@@ -39,7 +40,7 @@ public class frag_salehistory_ing extends Fragment {
         View root = inflater.inflate(R.layout.fragment_frag_salehistory_ing, container, false);
         // Inflate the layout for this fragment
         recyclerView = root.findViewById(R.id.sales_recyclerview);
-        adapter = new main_adapter();
+        adapter = new main_adapter(getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));

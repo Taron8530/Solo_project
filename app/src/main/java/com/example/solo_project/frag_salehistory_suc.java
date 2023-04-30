@@ -13,13 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class frag_salehistory_suc extends Fragment {
+public class frag_salehistory_suc extends Fragment implements Serializable {
     private String nickname;
     private RecyclerView recyclerView;
     private main_adapter adapter;
@@ -33,7 +34,7 @@ public class frag_salehistory_suc extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_frag_salehistory_suc, container, false);
         recyclerView = root.findViewById(R.id.suc_recyclerview);
-        adapter = new main_adapter();
+        adapter = new main_adapter(getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));

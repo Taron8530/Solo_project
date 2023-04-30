@@ -12,5 +12,8 @@
     <color name="btn_color">#f2f4fa</color>
     <color name="sold_out_color">#9c3034</color>
     <color name="main">#FFFFFF</color>
+    <color name="darkGray">#FFDDDDDD</color>
+    <color name="gray">#FFC6C6C6</color>
+    <color name="lightGray">#FFE9E9E9</color>
 
 </resources>

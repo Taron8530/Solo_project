@@ -20,7 +20,7 @@ public class Video_call_Activity extends AppCompatActivity {
 
     private PeerConnectionFactory peerConnectionFactory;
     public TextView test;
-
+    private String TAG = "Video_Call_Activity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,74 +67,9 @@ public class Video_call_Activity extends AppCompatActivity {
             @Override
             public void onCreateSuccess(SessionDescription sdp) {
                 // LocalDescription 설정
+                Log.e(TAG,"offer 생성됨: " + sdp.description);
                 pc.setLocalDescription(new SDPObserver(), sdp);
             }
         }, constraints);
-    }
-
-    private class PCObserver implements PeerConnection.Observer {
-        @Override
-        public void onIceCandidate(IceCandidate candidate) {
-            // 공인 IP 주소 추출
-            String ip = candidate.sdp.split(" ")[4].split("/")[1];
-            Log.d("Video_call_Activity", "Public IP address: " + ip);
-//            test.setText(candidate.sdp);
-
-        }
-
-        @Override
-        public void onIceCandidatesRemoved(IceCandidate[] candidates) {}
-
-        @Override
-        public void onSignalingChange(PeerConnection.SignalingState newState) {}
-
-        @Override
-        public void onIceConnectionChange(PeerConnection.IceConnectionState newState) {}
-
-        @Override
-        public void onConnectionChange(PeerConnection.PeerConnectionState newState) {}
-
-        @Override
-        public void onIceConnectionReceivingChange(boolean receiving) {}
-
-        @Override
-        public void onIceGatheringChange(PeerConnection.IceGatheringState iceGatheringState) {
-
-        }
-
-        @Override
-        public void onSelectedCandidatePairChanged(CandidatePairChangeEvent event) {}
-
-        @Override
-        public void onStandardizedIceConnectionChange(PeerConnection.IceConnectionState newState) {}
-
-        @Override
-        public void onAddStream(MediaStream stream) {}
-
-        @Override
-        public void onRemoveStream(MediaStream stream) {}
-
-        @Override
-        public void onDataChannel(DataChannel channel) {}
-
-        @Override
-        public void onRenegotiationNeeded() {}
-
-        @Override
-        public void onAddTrack(RtpReceiver receiver, MediaStream[] streams) {}
-    }
-
-    private class SDPObserver implements SdpObserver {
-        @Override
-        public void onCreateSuccess(SessionDescription sdp) {}
-
-        @Override
-        public void onSetSuccess() {}
-
-        @Override
-        public void onCreateFailure(String error) {}
-
-        @Override
-        public void onSetFailure(String error) {}
     }
 }

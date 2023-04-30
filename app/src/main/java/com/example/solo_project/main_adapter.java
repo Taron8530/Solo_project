@@ -1,15 +1,19 @@
 package com.example.solo_project;
 
 
+import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,8 +24,10 @@ import java.util.ArrayList;
 public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> {
     String TAG = "main_adapter";
     ArrayList<item_model> lists;
-
-
+    Context context;
+    public main_adapter(Context context){
+        this.context = context;
+    }
     @Override
     public int getItemViewType(int position) {
         return position;
@@ -59,6 +65,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
         TextView nickname;
         ImageView image;
         TextView sold_out;
+        LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +75,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
             nickname = itemView.findViewById(R.id.r_nickname);
             image = itemView.findViewById(R.id.used_image);
             sold_out = itemView.findViewById(R.id.sold_out);
+            layout = itemView.findViewById(R.id.used_item);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,6 +104,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
             if(item.getSold_out().equals("1")){
                 sold_out.setVisibility(View.VISIBLE);
                 used_item.setPaintFlags(used_item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //취소선
+                layout.setBackgroundColor(ContextCompat.getColor(context, R.color.darkGray));
             }
         }
         public String comma_to_int(String number){

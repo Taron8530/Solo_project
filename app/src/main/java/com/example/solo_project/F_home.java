@@ -53,7 +53,7 @@ public class F_home extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), 1));
         Log.e("onCreateView", "닉네임은:"+nickname);
-        adapter = new main_adapter();
+        adapter = new main_adapter(getContext());
         recyclerView.setAdapter(adapter);
         adapter.setlist(list);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
