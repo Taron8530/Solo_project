@@ -42,12 +42,6 @@ public class F_home extends Fragment {
         super.onStart();
         select_used(page);
     }
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        select_used(1);
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

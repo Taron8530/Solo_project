@@ -241,7 +241,9 @@ public class used_info extends AppCompatActivity implements Serializable {
                 Log.e("sold_out",response.body().toString());
                 if(response.body().equals("성공")){
                     Toast.makeText(used_info.this,"성공.",Toast.LENGTH_SHORT).show();
-                    finish();
+                    Intent intent = new Intent(used_info.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             }
 
@@ -270,6 +272,9 @@ public class used_info extends AppCompatActivity implements Serializable {
                 Log.e("used_delete",response.body().toString());
                 if(response.body().equals("성공")){
                     Toast.makeText(used_info.this,"성공.",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(used_info.this,MainActivity.class);
+                    startActivity(intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                 }
             }

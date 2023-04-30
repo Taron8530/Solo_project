@@ -80,6 +80,7 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         used_Name_EditText.setText(used_Name);
         used_Detail_EditText.setText(detail);
         used_Price_EditText.setText(String.valueOf(price));
+        used_Price_EditText.addTextChangedListener(new UsedAddCustomTextWatchar(used_Price_EditText));
         if (images.size() != 0 && images != null) {
             image_size.setText(images.size() + "/5");
             if (images.size() >= 5) {
@@ -145,6 +146,9 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                                 Log.e(TAG, "리스폰스 200 CODE " + response.body().getResponse());
                                 if (response.body().getResponse().equals("ok")) {
                                     Toast.makeText(Edit_UseditemActivity.this, "완료.", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(Edit_UseditemActivity.this,MainActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);//액티비티 스택제거
+                                    startActivity(i);
                                     finish();
                                 }
                             }
