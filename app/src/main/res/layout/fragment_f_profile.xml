@@ -134,11 +134,11 @@
 
         <TextView
             android:id="@+id/credit"
-            android:layout_width="91dp"
+            android:layout_width="wrap_content"
             android:layout_height="22dp"
-            android:layout_marginTop="232dp"
-            android:layout_marginEnd="217dp"
-            android:text="TextView"
+            android:layout_marginTop="230dp"
+            android:layout_marginEnd="210dp"
+            android:text="보유 크래딧"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

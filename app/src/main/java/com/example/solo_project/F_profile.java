@@ -133,9 +133,9 @@ public class F_profile extends Fragment {
                 Log.e("프로필 프래그먼트 Credit","요청함" +response);
 
                 if(response.isSuccessful()){
-                    Log.e("프로필프래그먼트 Credit", String.valueOf(response.body()));
+                    Log.e("프로필프래그먼트 Credit", String.valueOf(response.body().getCredit()));
                     credit = response.body().getCredit();
-                    credit_View.setText("보유 크래딧: "+credit+"C");
+                    credit_View.setText("보유 크래딧: "+ credit +"C");
                 }
             }
 
