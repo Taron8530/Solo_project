@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class chat_promise extends AppCompatActivity {
@@ -61,6 +62,16 @@ public class chat_promise extends AppCompatActivity {
         exit = findViewById(R.id.promise_exit);
         EditText et_Date = (EditText) findViewById(R.id.promise_date);
         EditText et_time = (EditText) findViewById(R.id.promise_time);
+        long mNow;
+        Date mDate;
+        Date tDate;
+        SimpleDateFormat mdate_format = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat mtime_format = new SimpleDateFormat("a h시 mm분");
+        mNow = System.currentTimeMillis();
+        mDate = new Date(mNow);
+        tDate = new Date(mNow);
+        et_Date.setText(mdate_format.format(mDate));
+        et_time.setText(mtime_format.format(tDate));
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

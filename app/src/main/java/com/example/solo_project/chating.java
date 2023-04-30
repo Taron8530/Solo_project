@@ -478,7 +478,7 @@ public class chating extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(chating.this);
-                                builder.setTitle("약속 시간").setMessage("\n"+response.body().getPromise_time());
+                                builder.setTitle("약속 시간").setMessage("\n"+response.body().getPromise_date()+" "+response.body().getPromise_time());
                                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

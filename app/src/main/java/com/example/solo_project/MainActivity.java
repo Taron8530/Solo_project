@@ -3,6 +3,7 @@ package com.example.solo_project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, home_fregment).commit();
         setTitle("물건");
         BottomNavigationView bottom = findViewById(R.id.bottom_menu);
+//        MenuItem tab = findViewById(R.id.tab_add);
+//        tab.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                return false;
+//            }
+//        })
         bottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent I = new Intent(MainActivity.this,used_add.class);
                         I.putExtra("nickname",nickname);
                         startActivity(I);
-                        return true;
+                        return false;
                 }
                 return false;
             }
