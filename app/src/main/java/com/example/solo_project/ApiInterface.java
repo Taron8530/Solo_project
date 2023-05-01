@@ -1,5 +1,7 @@
 package com.example.solo_project;
 
+import org.webrtc.SessionDescription;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -129,4 +131,6 @@ public interface ApiInterface {
     @Multipart
     @POST("test.php")
     Call<String> test_php(@Part("del_file_list[]") List<String> del_file_list);
+    @POST("webrtc_offer.php")
+    Call<String> send_offer(@Field("sdp") String sdp,@Field("nickname") String nickname);
 }

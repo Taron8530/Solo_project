@@ -6,15 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.solo_project.ApiInterface;
+import com.example.solo_project.Apiclient;
 import com.example.solo_project.R;
 import com.google.common.collect.ImmutableList;
 
-import org.webrtc.AudioSource;
-import org.webrtc.AudioTrack;
 import org.webrtc.*;
 
-import java.util.List;
-import java.util.stream.Stream;;
+;import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Video_call_Activity extends AppCompatActivity {
 
@@ -26,22 +27,22 @@ public class Video_call_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
         test = findViewById(R.id.test_ip);
-        // PeerConnectionFactory 초기화
+
         PeerConnectionFactory.initialize(PeerConnectionFactory
                 .InitializationOptions.builder(this)
                 .createInitializationOptions());
 
-        // PeerConnectionFactory 생성
+
         PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
         peerConnectionFactory = PeerConnectionFactory.builder()
                 .setOptions(options)
                 .createPeerConnectionFactory();
 
-        // MediaConstraints 생성
+
         MediaConstraints constraints = new MediaConstraints();
         constraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
 
-        // RTCPeerConnection 생성
+
         PeerConnection.RTCConfiguration config = new PeerConnection.RTCConfiguration(
                 ImmutableList.of(new PeerConnection.IceServer("stun:stun.l.google.com:19302")));
         config.tcpCandidatePolicy = PeerConnection.TcpCandidatePolicy.DISABLED;
@@ -53,7 +54,6 @@ public class Video_call_Activity extends AppCompatActivity {
                 config,
                 new PCObserver());
 
-        // DataChannel 생성
         DataChannel.Init init = new DataChannel.Init();
         init.ordered = true;
         init.negotiated = false;
@@ -62,13 +62,33 @@ public class Video_call_Activity extends AppCompatActivity {
         init.id = 1;
         DataChannel dc = pc.createDataChannel("test", init);
 
+
         // Offer 생성
         pc.createOffer(new SDPObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sdp) {
+                String nickname = "하섬";
                 // LocalDescription 설정
                 Log.e(TAG,"offer 생성됨: " + sdp.description);
                 pc.setLocalDescription(new SDPObserver(), sdp);
+                test.setText(String.valueOf(sdp));
+                ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+                Call<String> call = apiInterface.send_offer(sdp.description,nickname);
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if(response.isSuccessful()){
+                            Log.e(TAG, "onResponse: "+"완료");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.e(TAG, "onFailure: "+t);
+
+                    }
+                });
+                
             }
         }, constraints);
     }
