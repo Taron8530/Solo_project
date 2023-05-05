@@ -131,6 +131,7 @@ public interface ApiInterface {
     @Multipart
     @POST("test.php")
     Call<String> test_php(@Part("del_file_list[]") List<String> del_file_list);
+    @FormUrlEncoded
     @POST("webrtc_offer.php")
     Call<String> send_offer(@Field("sdp") String sdp,@Field("nickname") String nickname);
 }

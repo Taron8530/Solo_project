@@ -67,27 +67,31 @@ public class Video_call_Activity extends AppCompatActivity {
         pc.createOffer(new SDPObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sdp) {
-                String nickname = "하섬";
+                String nickname = "테스트우";
                 // LocalDescription 설정
                 Log.e(TAG,"offer 생성됨: " + sdp.description);
                 pc.setLocalDescription(new SDPObserver(), sdp);
                 test.setText(String.valueOf(sdp));
-                ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                Call<String> call = apiInterface.send_offer(sdp.description,nickname);
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if(response.isSuccessful()){
-                            Log.e(TAG, "onResponse: "+"완료");
+                try {
+                    ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+                    Call<String> call = apiInterface.send_offer(sdp.description, nickname);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.isSuccessful()) {
+                                Log.e(TAG, "onResponse: " + response.body());
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.e(TAG, "onFailure: "+t);
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Log.e(TAG, "onFailure: " + t);
 
-                    }
-                });
+                        }
+                    });
+                }catch (Exception e){
+                    Log.e(TAG, "onCreateSuccess: "+e );
+                }
                 
             }
         }, constraints);

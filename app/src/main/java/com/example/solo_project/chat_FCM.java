@@ -51,7 +51,7 @@ public class chat_FCM extends FirebaseMessagingService {
         String room_num = null;
         String receiver = null;
         Log.e("노티피케이션", remoteMessage.getNotification().getTitle() + remoteMessage.getNotification().getBody());
-        if (remoteMessage.getData().size() > 0) {
+        if (remoteMessage.getData() != null) {
 //            showNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("message"));
             Log.e("노티피케이션", remoteMessage.getData().get("sdp"));
         }

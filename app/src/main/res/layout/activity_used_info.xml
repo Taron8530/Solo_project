@@ -146,7 +146,7 @@
             android:id="@+id/used_info_price"
             android:layout_width="156dp"
             android:layout_height="match_parent"
-
+            android:textColor="@color/black"
             android:layout_marginRight="10dp"
             android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
             android:paddingLeft="15dp"

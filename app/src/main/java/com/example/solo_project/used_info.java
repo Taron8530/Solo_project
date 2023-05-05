@@ -144,12 +144,13 @@ public class used_info extends AppCompatActivity implements Serializable {
                             DBHelper myDb = new DBHelper(used_info.this);
                             try{
                                 myDb.insert_data(Integer.parseInt(response.body()),i.getStringExtra("nickname"),i.getStringExtra("nickname"),MyNickname,0);
+                                I.putExtra("room_num",response.body());
+                                startActivity(I);
                             }
                             catch (NumberFormatException ex){
+                                Log.e("Usedinfo", "onResponse: "+ex );
                                 Toast.makeText(used_info.this, "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();
                             }
-                            I.putExtra("room_num",response.body());
-                            startActivity(I);
                         }else{
                             Toast.makeText(used_info.this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         }
