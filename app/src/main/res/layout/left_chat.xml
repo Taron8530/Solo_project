@@ -28,6 +28,8 @@
         android:background="@drawable/layout_background"
         android:padding="10dp"
         android:text="상대방이 보낸 메세지"
+        android:maxWidth="250dp"
+        android:maxLines="5"
         android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"

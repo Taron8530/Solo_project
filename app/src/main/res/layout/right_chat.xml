@@ -15,6 +15,8 @@
         android:layout_weight="0.5"
         android:padding="7dp"
         android:text="내가 보낸 메세지"
+        android:maxWidth="250dp"
+        android:maxLines="5"
         android:background="@drawable/right_chat_bg"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
