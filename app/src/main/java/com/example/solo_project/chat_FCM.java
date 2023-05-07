@@ -44,19 +44,25 @@ public class chat_FCM extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        pref = getSharedPreferences("user_verify", Context.MODE_PRIVATE);
-        nickname = pref.getString("user_nickname", "");
-        String message = null;
-        String time = null;
-        String room_num = null;
-        String receiver = null;
-        Log.e("노티피케이션", remoteMessage.getNotification().getTitle() + remoteMessage.getNotification().getBody());
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE); //fcm이 날라왔는데 look 상태일때
+        @SuppressLint("InvalidWakeLockTag")
+        PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+        wakeLock.acquire(3000);
         if (remoteMessage.getData() != null) {
+            // 여기가 webrtc fcm 부분
 //            showNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("message"));
-            Log.e("노티피케이션", remoteMessage.getData().get("sdp"));
+            Log.e("노티피케이션", String.valueOf(remoteMessage.getData()));
         }
 
         if (remoteMessage.getNotification() != null) {
+            pref = getSharedPreferences("user_verify", Context.MODE_PRIVATE);
+            nickname = pref.getString("user_nickname", "");
+            String message = null;
+            String time = null;
+            String room_num = null;
+            String receiver = null;
+            Log.e("노티피케이션", remoteMessage.getNotification().getTitle() + remoteMessage.getNotification().getBody());
+
             Log.e("body", remoteMessage.getNotification().getBody());
 //            String[] bodys = remoteMessage.getNotification().getBody().split("/"); //노티피케이션 body를 구분자 / 기준으로 자른것
             try {
@@ -68,10 +74,6 @@ public class chat_FCM extends FirebaseMessagingService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE); //fcm이 날라왔는데 look 상태일때
-            @SuppressLint("InvalidWakeLockTag")
-            PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
-            wakeLock.acquire(3000);
             Log.e("title", remoteMessage.getNotification().getTitle());
             chat_data_db_Helper myDb = new chat_data_db_Helper(chat_FCM.this); //채팅 데이터 객체화
             DBHelper dbHelper = new DBHelper(chat_FCM.this);//채팅 룸 객체화

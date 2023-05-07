@@ -61,6 +61,7 @@ public class Signup_prof extends AppCompatActivity {
     String email;
     String PW;
     Boolean checkname = false;
+    private String phone_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class Signup_prof extends AppCompatActivity {
         EditText nk = (EditText) findViewById(R.id.editNickname);
         email = I.getStringExtra("email");
         PW = I.getStringExtra("PW");
+        phone_number = I.getStringExtra("phone_number");
         Log.e("insert", email + "/" + PW);
         next.setClickable(false);
         profilebtn.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +168,7 @@ public class Signup_prof extends AppCompatActivity {
                 } else {
                     Log.e("insert", email + "/" + PW);
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                    Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname);
+                    Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname,phone_number);
                     filepath = getRealPathFromURI(Uri,nickname);
                     UpdatePhoto(nickname);
                     call.enqueue(new Callback<Signup_model>() {

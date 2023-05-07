@@ -22,10 +22,6 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
     //로그인 기능
-    @GET("test.php")
-    Call<String> test(
-            @Query("email") String email
-    );
 
     @GET("account_select.php")
     Call<Signup_model> getLogin(
@@ -38,7 +34,8 @@ public interface ApiInterface {
     Call<Signup_model> insertaccount(
             @Query("email") String email,
             @Query("PW") String PW,
-            @Query("nickname") String nickname
+            @Query("nickname") String nickname,
+            @Query("phone_number") String phone_numer
     );
 
     //닉네임 체크(회원가입 절차)
@@ -133,5 +130,5 @@ public interface ApiInterface {
     Call<String> test_php(@Part("del_file_list[]") List<String> del_file_list);
     @FormUrlEncoded
     @POST("webrtc_offer.php")
-    Call<String> send_offer(@Field("sdp") String sdp,@Field("nickname") String nickname);
+    Call<String> send_offer(@Field("sdp") String sdp,@Field("receiver") String nickname);
 }

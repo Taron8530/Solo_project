@@ -43,6 +43,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="5dp"
+                android:maxLength="14"
+                android:ellipsize="end"
                 android:text="마지막으로 보낸 메세지" />
 
         </LinearLayout>

@@ -52,6 +52,7 @@ public class Signup extends AppCompatActivity {
     private String verficationID;
     private EditText verifycode;
     private Button varify_Btn;
+    private String phone_number;
     private LinearLayout Linear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +139,7 @@ public class Signup extends AppCompatActivity {
                 String PW = Password.getText().toString();
                 I.putExtra("email",email);
                 I.putExtra("PW",PW);
+                I.putExtra("phone_number",phone_number);
                 startActivity(I);
 
             }
@@ -248,6 +250,7 @@ public class Signup extends AppCompatActivity {
         btn.setVisibility(View.VISIBLE);
         Linear.setVisibility(View.VISIBLE);
         num.setInputType(InputType.TYPE_NULL);
+        phone_number = number;
         PhoneAuthOptions options;
         options = PhoneAuthOptions.newBuilder(mauth)
                 .setPhoneNumber("+82 10"+number)       // Phone number to verify
