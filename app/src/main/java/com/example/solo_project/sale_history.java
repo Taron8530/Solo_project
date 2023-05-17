@@ -40,6 +40,7 @@ public class sale_history extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("거래 목록");
         setContentView(R.layout.activity_sale_history);
         Intent i = getIntent();
         nickname = i.getStringExtra("nickname");

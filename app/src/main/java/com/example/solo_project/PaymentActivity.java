@@ -76,10 +76,10 @@ public class PaymentActivity extends AppCompatActivity {
             if (url != null && url.contains("pg_token=")) {
                 String pg_Token = url.substring(url.indexOf("pg_token=") + 9);
                 pgToken = pg_Token;
-                approveRequest();
-//                update_token(pg_Token);
+//                approveRequest();
+                update_token(pg_Token);
 //                approveRequest(); // 결제요청
-//                finish();
+                finish();
                 return false;
 
             } else if (url != null && url.startsWith("intent://")) {

@@ -30,7 +30,7 @@
           android:id="@+id/chating_text"
           android:layout_width="0dp"
           android:layout_weight="1"
-          android:layout_height="54dp"
+          android:layout_height="wrap_content"
           android:layout_marginTop="5dp"
           android:layout_marginRight="10dp"
           android:layout_marginBottom="5dp"
@@ -96,6 +96,8 @@
           android:id="@+id/sender_nickname"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
+          android:textAlignment="center"
+          android:gravity="center"
           android:text="닉네임"
           android:textSize="20dp" />
 
@@ -122,6 +124,7 @@
           android:background="@drawable/ic_noti" />
 
       <TextView
+
           android:id="@+id/promise_date"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"

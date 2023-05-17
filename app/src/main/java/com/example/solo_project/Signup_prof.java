@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,35 +126,44 @@ public class Signup_prof extends AppCompatActivity {
                 dialog.show();
             }
         });
-        checkn.setOnClickListener(new View.OnClickListener() {
+        EditText nickname = findViewById(R.id.editNickname); //edit text
+        checkn.setOnClickListener(new View.OnClickListener() { // 중복 확인 부분.
             @Override
             public void onClick(View view) {
-                EditText nk = findViewById(R.id.editNickname);
-                TextView Check = findViewById(R.id.checking);
-                if (!nk.getText().toString().trim().equals("")) {
-                    ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                    Call<String> call = apiInterface.checknickname(nk.getText().toString());
-                    call.enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            if (response.body() != null) {
-                                if (response.body().equals("가능")) {
-                                    Check.setText("사용가능한 닉네임입니다.");
-                                    Check.setTextColor(Color.parseColor("#00ff22"));
-                                    next.setClickable(true);
-                                    checkname = true;
-                                } else {
-                                    Check.setText("사용불가능한 닉네임입니다.");
-                                    Check.setTextColor(Color.parseColor("#ff0000"));
+                if(checkn.getText().toString().equals("수정")){
+                    nickname.setInputType(InputType.TYPE_CLASS_TEXT);
+                    checkn.setText("중복체크");
+                    next.setClickable(false);
+
+                }else{
+                    TextView Check = findViewById(R.id.checking);
+                    if (!nickname.getText().toString().trim().equals("")) {
+                        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+                        Call<String> call = apiInterface.checknickname(nickname.getText().toString());
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if (response.body() != null) {
+                                    if (response.body().equals("가능")) {
+                                        nickname.setInputType(InputType.TYPE_NULL);
+                                        checkn.setText("수정");
+                                        Check.setText("사용가능한 닉네임입니다.");
+                                        Check.setTextColor(Color.parseColor("#00ff22"));
+                                        next.setClickable(true);
+                                        checkname = true;
+                                    } else {
+                                        Check.setText("사용불가능한 닉네임입니다.");
+                                        Check.setTextColor(Color.parseColor("#ff0000"));
+                                    }
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Log.e("체크", "onFailure: " + t);
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Log.e("체크", "onFailure: " + t);
+                            }
+                        });
+                    }
                 }
 
             }

@@ -1,0 +1,5 @@
+<resources>
+    <style name="CustomSpinnerStyle" parent="@android:style/Widget.Spinner">
+        <item name="android:background">@mipmap/ic_list_round</item>
+    </style>
+</resources>

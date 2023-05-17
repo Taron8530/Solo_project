@@ -11,14 +11,38 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/used_finder"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+
+            <TextView
+                android:id="@+id/search_icon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@mipmap/ic_search"
+                android:layout_weight="0"
+                />
+
+            <Spinner
+                android:id="@+id/sort"
+                style="@style/CustomSpinnerStyle"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right" />
+
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_recyclerview"
@@ -31,7 +55,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
 
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/used_finder"
             app:layout_constraintVertical_bias="0.012"
             android:scrollbars="vertical"
             android:scrollbarFadeDuration="0"/>
@@ -46,5 +70,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

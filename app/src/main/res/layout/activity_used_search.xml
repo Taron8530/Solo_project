@@ -4,11 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Chatting_Image_View"
-    >
+    tools:context=".UsedSearchActivity">
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/chating_image_View"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/used_search_widget"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:queryHint="검색어를 입력해주세요"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constrainedHeight="true"
@@ -16,20 +24,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_exit"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/image_view_exit"
+    <Switch
+        android:id="@+id/radioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:text="거래 가능 상품만 보기"
+        android:textSize="13dp"
+        android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        android:padding="5dp"
-        android:textSize="30dp"
-        android:text="←"
-        android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/used_search_widget" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -235,8 +235,7 @@ public class Signup extends AppCompatActivity {
         }
 
         @Override
-        public void onCodeSent(@NonNull String s,
-                               @NonNull PhoneAuthProvider.ForceResendingToken token) {
+        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken token) {
             super.onCodeSent(s,token);
             verficationID = s;
         }

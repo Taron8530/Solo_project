@@ -16,7 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,6 +38,10 @@ public class F_home extends Fragment {
     String nickname;
     int page = 1;
     ProgressBar progressBar;
+    TextView search;
+
+    private Spinner spinner;
+    private ArrayAdapter<CharSequence> sort_adapter;
     public F_home(String nickname){
         this.nickname = nickname;
     }
@@ -56,6 +65,18 @@ public class F_home extends Fragment {
         adapter = new main_adapter(getContext());
         recyclerView.setAdapter(adapter);
         adapter.setlist(list);
+        search = root.findViewById(R.id.search_icon);
+
+        search.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View view) {
+                                          Intent i = new Intent(getActivity().getApplicationContext(),UsedSearchActivity.class);
+                                          startActivity(i);
+                                      }
+                                  }
+        );
+
+        set_sort_dropdown(); //스피너 설정
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -137,5 +158,29 @@ public class F_home extends Fragment {
         page = 2;
         list = lists;
         adapter.notifyDataSetChanged();
+    }
+    private void set_sort_dropdown(){
+        Spinner spinner = root.findViewById(R.id.sort);
+
+        // 스피너에 표시할 데이터 어댑터 설정
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.spinner_options, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        // 선택된 아이템 핸들링
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // 선택이 취소될 때 동작
+            }
+        });
     }
 }

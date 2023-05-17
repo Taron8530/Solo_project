@@ -131,4 +131,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("webrtc_offer.php")
     Call<String> send_offer(@Field("sdp") String sdp,@Field("receiver") String nickname);
+
+    @GET("used_search.php")
+        // 검색기능
+    Call<ArrayList<item_model>> used_search(@Query("comment") String comment);
 }

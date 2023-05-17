@@ -68,6 +68,7 @@ public class used_add extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("물건 등록");
         setContentView(R.layout.activity_used_add);
         recyclerView = findViewById(R.id.add_recyclerview);
         submit = findViewById(R.id.used_add_submit);
