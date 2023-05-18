@@ -38,6 +38,7 @@ public class UsedSearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("검색");
         setContentView(R.layout.activity_used_search);
         searchView = findViewById(R.id.used_search_widget);
         searchView.setIconified(false);
@@ -74,6 +75,7 @@ public class UsedSearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                setTitle(query);
                 select_used(query);
                 return false;
             }
