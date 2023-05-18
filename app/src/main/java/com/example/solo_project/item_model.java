@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class item_model {
+public class item_model{
     @Expose
     @SerializedName("nickname")private String nickname;
     @Expose
@@ -24,6 +24,8 @@ public class item_model {
     @SerializedName("sold_out") private String sold_out;
     @Expose
     @SerializedName("image_names") private ArrayList<String> image_names;
+    @Expose
+    @SerializedName("date") private String date;
 
     item_model(String nickname,String price,String usedname,String detail,String num,int image_size,String sold_out,ArrayList<String> image_names){
         this.nickname = nickname;
@@ -39,7 +41,7 @@ public class item_model {
     public ArrayList<String> getImage_names() {
         return image_names;
     }
-
+    public String getDate() {return date;}
     public String getNickname(){
         return nickname;
     }
@@ -75,4 +77,5 @@ public class item_model {
     public void setImage_size(int size){
         this.image_size = size;
     }
+
 }

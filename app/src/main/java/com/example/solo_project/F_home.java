@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -164,18 +166,28 @@ public class F_home extends Fragment {
         Spinner spinner = root.findViewById(R.id.sort);
 
         // 스피너에 표시할 데이터 어댑터 설정
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+        ArrayAdapter<CharSequence> sadapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.spinner_options, android.R.layout.simple_spinner_item);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        sadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(sadapter);
 
         // 선택된 아이템 핸들링
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                if(selectedItem.equals("최신순")){
+                    Collections.sort(list,new FruitDateComparator());
+                    adapter.notifyDataSetChanged();
+                }else if(selectedItem.equals("높은가격순")){
+                    Collections.sort(list,new FruitPriceComparator());
+                    adapter.notifyDataSetChanged();
+                }else {
+                    Collections.sort(list,new FruitminPriceComparator());
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -183,5 +195,34 @@ public class F_home extends Fragment {
                 // 선택이 취소될 때 동작
             }
         });
+    }
+}
+class FruitPriceComparator implements Comparator<item_model> {
+    @Override
+    public int compare(item_model f1, item_model f2) {
+        if (Integer.parseInt(f1.getPrice().replaceAll(",","").trim()) > Integer.parseInt(f2.getPrice().replaceAll(",","").trim())) {
+            return -1;
+        } else if (Integer.parseInt(f1.getPrice().replaceAll(",","").trim()) < Integer.parseInt(f2.getPrice().replaceAll(",","").trim())) {
+            return 1;
+        }
+        return 0;
+    }
+}
+class FruitminPriceComparator implements Comparator<item_model> {
+    @Override
+    public int compare(item_model f1, item_model f2) {
+        if (Integer.parseInt(f1.getPrice().replaceAll(",","").trim()) <Integer.parseInt(f2.getPrice().replaceAll(",","").trim())) {
+            return -1;
+        } else if (Integer.parseInt(f1.getPrice().replaceAll(",","").trim()) > Integer.parseInt(f2.getPrice().replaceAll(",","").trim())) {
+            return 1;
+        }
+        return 0;
+    }
+}
+
+class FruitDateComparator implements Comparator<item_model> {
+    @Override
+    public int compare(item_model f1, item_model f2) {
+        return f2.getDate().compareTo(f1.getDate());
     }
 }
