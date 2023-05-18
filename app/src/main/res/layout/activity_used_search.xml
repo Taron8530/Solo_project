@@ -6,17 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".UsedSearchActivity">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/used_search_widget"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:queryHint="검색어를 입력해주세요"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+    <TextView
+        android:id="@+id/search_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constrainedHeight="true"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:text="←"
+        app:layout_constraintBottom_toTopOf="@+id/filter_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/used_search_widget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/search_exit"
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="검색어를 입력해주세요">
+
+    </androidx.appcompat.widget.SearchView>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_item_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constrainedHeight="true"
@@ -24,11 +40,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButton"
+        app:layout_constraintTop_toBottomOf="@+id/filter_item"
         app:layout_constraintVertical_bias="0.0" />
 
     <Switch
-        android:id="@+id/radioButton"
+        android:id="@+id/filter_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="거래 가능 상품만 보기"
@@ -38,5 +54,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/used_search_widget" />
+
+    <TextView
+        android:id="@+id/search_except"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="324dp"
+        android:visibility="invisible"
+        android:textSize="25dp"
+        android:text="검색결과가 없습니다."
+        android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

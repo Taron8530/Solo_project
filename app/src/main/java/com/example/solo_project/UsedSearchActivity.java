@@ -1,17 +1,146 @@
 package com.example.solo_project;
 
+import static com.example.solo_project.R.id.search_except;
+import static com.example.solo_project.R.id.used_item;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UsedSearchActivity extends AppCompatActivity {
     private SearchView searchView;
+    RecyclerView recyclerView;
+    main_adapter adapter;
+    ArrayList<item_model> list = new ArrayList<>();
+    TextView search_except;
+    String nickname;
+    Switch aSwitch;
+    TextView exit;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_used_search);
         searchView = findViewById(R.id.used_search_widget);
         searchView.setIconified(false);
+        search_except = findViewById(R.id.search_except);
+        aSwitch = findViewById(R.id.filter_item);
+        exit = findViewById(R.id.search_exit);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    if (searchView.getQuery().toString().trim().length() > 0) {
+                        for (item_model item : list) {
+                            if (item.getSold_out().equals("1")) {
+                                list.remove(item);
+                            }
+                        }
+                        if (list.size() <= 0) {
+                            recyclerView.setVisibility(View.GONE);
+                            search_except.setVisibility(View.VISIBLE);
+                        }
+                    }else{
+                        Toast.makeText(UsedSearchActivity.this,"검색어를 입력해주세요!",Toast.LENGTH_SHORT).show();
+                        aSwitch.setChecked(false);
+                    }
+                }else{
+                    select_used(String.valueOf(searchView.getQuery()));
+                }
+
+            }
+        });
+        exit.setOnClickListener(v -> finish()); //람다식
+        setRecyclerView();
+        nickname = getIntent().getStringExtra("nickname");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                select_used(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+    public void setRecyclerView(){
+        recyclerView = findViewById(R.id.search_item_recyclerview);
+        adapter = new main_adapter(getApplicationContext());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), 1));
+        recyclerView.setAdapter(adapter);
+        adapter.setlist(list);
+        adapter.setOnItemClickListener(new main_adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Log.e("itemcl",list.get(position).getDetail()+" 눌림");
+                Intent i = new Intent(UsedSearchActivity.this,used_info.class);
+                i.putExtra("used_name",list.get(position).getusedname());
+                i.putExtra("detail",list.get(position).getDetail());
+                i.putExtra("nickname",list.get(position).getNickname());
+                i.putExtra("price",list.get(position).getPrice());
+                i.putExtra("image_size",list.get(position).getImage_size());
+                i.putExtra("num",list.get(position).getNum());
+                i.putExtra("my_nickname",nickname);
+                i.putExtra("image_names",list.get(position).getImage_names());
+                startActivity(i);
+            }
+        });
+
+    }
+    private void select_used(String comment)
+    {
+        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
+        Call<ArrayList<item_model>> call = apiInterface.used_search(comment);
+        call.enqueue(new Callback<ArrayList<item_model>>() {
+            @Override
+            public void onResponse(Call<ArrayList<item_model>> call, Response<ArrayList<item_model>> response) {
+                if(response.body() != null){
+                    if(response.body().size() <= 0){
+                        recyclerView.setVisibility(View.GONE);
+                        search_except.setVisibility(View.VISIBLE);
+                    }else{
+                        recyclerView.setVisibility(View.VISIBLE);
+                        search_except.setVisibility(View.GONE);
+                        onGetResult(response.body());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<item_model>> call, Throwable t) {
+                Log.e("에러 에러", String.valueOf(t));
+            }
+        });
+    }
+    private void onGetResult(ArrayList<item_model> lists)
+    {
+        list = lists;
+        adapter.setlist(list);
+        Log.e("접근 완료",list.toString());
+        adapter.notifyDataSetChanged();
     }
 }

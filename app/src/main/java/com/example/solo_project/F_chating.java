@@ -41,7 +41,7 @@ public class F_chating extends Fragment {
     public F_chating(String nickname){
         this.nickname = nickname;
     }
-
+    public F_chating(){}
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

@@ -45,7 +45,7 @@ public class F_home extends Fragment {
     public F_home(String nickname){
         this.nickname = nickname;
     }
-
+    public F_home(){}
     @Override
     public void onStart() {
         super.onStart();
@@ -71,6 +71,7 @@ public class F_home extends Fragment {
                                       @Override
                                       public void onClick(View view) {
                                           Intent i = new Intent(getActivity().getApplicationContext(),UsedSearchActivity.class);
+                                          i.putExtra("nickname",nickname);
                                           startActivity(i);
                                       }
                                   }
@@ -93,7 +94,7 @@ public class F_home extends Fragment {
 //                int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
-                if (lastVisibleItem == list.size()   && dy > 0) {
+                if (lastVisibleItem == list.size() -1  && dy > 0) {
                     if(recyclerView.canScrollVertically(-1)){
                         Log.e("F_home", String.valueOf(page));
                         progressBar.setVisibility(View.VISIBLE);
