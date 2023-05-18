@@ -19,7 +19,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,13 +51,15 @@ public class UsedSearchActivity extends AppCompatActivity {
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                ArrayList<item_model> remove_list = new ArrayList<>();
                 if(b) {
                     if (searchView.getQuery().toString().trim().length() > 0) {
-                        for (item_model item : list) {
-                            if (item.getSold_out().equals("1")) {
-                                list.remove(item);
+                        for (int i = 0;list.size() > i;i++) {
+                            if (list.get(i).getSold_out().equals("1")) {
+                                list.remove(list.get(i));
                             }
                         }
+                        adapter.notifyDataSetChanged();
                         if (list.size() <= 0) {
                             recyclerView.setVisibility(View.GONE);
                             search_except.setVisibility(View.VISIBLE);
@@ -126,7 +131,10 @@ public class UsedSearchActivity extends AppCompatActivity {
                     }else{
                         recyclerView.setVisibility(View.VISIBLE);
                         search_except.setVisibility(View.GONE);
-                        onGetResult(response.body());
+                        ArrayList<item_model> list = response.body();
+                        Collections.sort(list,new Used_Item_Comparator());
+
+                        onGetResult(list);
                     }
 
                 }
@@ -144,5 +152,12 @@ public class UsedSearchActivity extends AppCompatActivity {
         adapter.setlist(list);
         Log.e("접근 완료",list.toString());
         adapter.notifyDataSetChanged();
+    }
+
+}
+class Used_Item_Comparator implements Comparator<item_model> {
+    @Override
+    public int compare(item_model f1, item_model f2) {
+        return f1.getSold_out().compareTo(f2.getSold_out());
     }
 }
