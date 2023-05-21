@@ -179,13 +179,13 @@ public class F_home extends Fragment {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 //                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
                 if(selectedItem.equals("최신순")){
-                    Collections.sort(list,new FruitDateComparator());
+                    Collections.sort(list,new Used_item_DateComparator());
                     adapter.notifyDataSetChanged();
                 }else if(selectedItem.equals("높은가격순")){
-                    Collections.sort(list,new FruitPriceComparator());
+                    Collections.sort(list,new Used_item_MaxPriceComparator());
                     adapter.notifyDataSetChanged();
                 }else {
-                    Collections.sort(list,new FruitminPriceComparator());
+                    Collections.sort(list,new Used_item_MinPriceComparator());
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -197,7 +197,7 @@ public class F_home extends Fragment {
         });
     }
 }
-class FruitPriceComparator implements Comparator<item_model> {
+class Used_item_MaxPriceComparator implements Comparator<item_model> {
     @Override
     public int compare(item_model f1, item_model f2) {
         if (Integer.parseInt(f1.getPrice().replaceAll(",","").trim()) > Integer.parseInt(f2.getPrice().replaceAll(",","").trim())) {
@@ -208,7 +208,7 @@ class FruitPriceComparator implements Comparator<item_model> {
         return 0;
     }
 }
-class FruitminPriceComparator implements Comparator<item_model> {
+class Used_item_MinPriceComparator implements Comparator<item_model> {
     @Override
     public int compare(item_model f1, item_model f2) {
         if (Integer.parseInt(f1.getPrice().replaceAll(",","").trim()) <Integer.parseInt(f2.getPrice().replaceAll(",","").trim())) {
@@ -220,7 +220,7 @@ class FruitminPriceComparator implements Comparator<item_model> {
     }
 }
 
-class FruitDateComparator implements Comparator<item_model> {
+class Used_item_DateComparator implements Comparator<item_model> {
     @Override
     public int compare(item_model f1, item_model f2) {
         return f2.getDate().compareTo(f1.getDate());
