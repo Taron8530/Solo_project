@@ -22,6 +22,7 @@ public class CreditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit);
+        setTitle("크래딧 충전소");
         credit_500 =findViewById(R.id.credit_btn_1);
         credit_1000 = findViewById(R.id.credit_btn_2);
         credit_5000 = findViewById(R.id.credit_btn_3);

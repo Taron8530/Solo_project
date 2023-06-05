@@ -77,7 +77,6 @@ public class Signup_prof extends AppCompatActivity {
         PW = I.getStringExtra("PW");
         phone_number = I.getStringExtra("phone_number");
         Log.e("insert", email + "/" + PW);
-        next.setClickable(false);
         profilebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +132,7 @@ public class Signup_prof extends AppCompatActivity {
                 if(checkn.getText().toString().equals("수정")){
                     nickname.setInputType(InputType.TYPE_CLASS_TEXT);
                     checkn.setText("중복체크");
-                    next.setClickable(false);
+//                    next.setClickable(false);
 
                 }else{
                     TextView Check = findViewById(R.id.checking);
@@ -149,7 +148,7 @@ public class Signup_prof extends AppCompatActivity {
                                         checkn.setText("수정");
                                         Check.setText("사용가능한 닉네임입니다.");
                                         Check.setTextColor(Color.parseColor("#00ff22"));
-                                        next.setClickable(true);
+//                                        next.setClickable(true);
                                         checkname = true;
                                     } else {
                                         Check.setText("사용불가능한 닉네임입니다.");
@@ -178,7 +177,7 @@ public class Signup_prof extends AppCompatActivity {
                 } else {
                     Log.e("insert", email + "/" + PW);
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                    Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname,phone_number);
+                    Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname);
                     filepath = getRealPathFromURI(Uri,nickname);
                     UpdatePhoto(nickname);
                     call.enqueue(new Callback<Signup_model>() {
@@ -225,6 +224,7 @@ public class Signup_prof extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 Log.e("이미지 URI", String.valueOf(data.getData()));
+//                Glide.with(getApplicationContext()).load(data.getData()).into((ImageView) findViewById(R.id.profilebtn));
                 ((ImageButton) findViewById(R.id.profilebtn)).setImageBitmap(imageBitmap);
             }
         }

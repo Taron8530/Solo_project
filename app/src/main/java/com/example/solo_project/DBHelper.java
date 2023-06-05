@@ -81,6 +81,21 @@ public class DBHelper extends SQLiteOpenHelper {
         String UPDATE_QUERY = "UPDATE "+TABLE_NAME_chat_room+" SET msg_count = 0 WHERE room_num = "+room_num;
         getWritableDatabase().execSQL(UPDATE_QUERY);
     }
+    public boolean remove_room(String room_num){
+        SQLiteDatabase db = getWritableDatabase();
+        String whereClause = "room_num=?";
+        String[] whereArgs = { room_num };
+
+        int deletedRows = db.delete(TABLE_NAME_chat_room, whereClause, whereArgs);
+
+        db.close();
+
+        if (deletedRows > 0) {
+            return true; //삭제 성공
+        } else {
+            return false; //삭제 실패
+        }
+    }
     public boolean check_room(int room_num){
         String SELECT_QUERY = "SELECT * FROM "+TABLE_NAME_chat_room+" WHERE room_num ="+room_num;
         Cursor cur = getReadableDatabase().rawQuery(SELECT_QUERY,null);
@@ -100,12 +115,15 @@ public class DBHelper extends SQLiteOpenHelper {
         String SELECT_QUERY = "SELECT * FROM " + TABLE_NAME_chat_room + " ORDER BY last_msg_time DESC";
 
         Cursor cur = getWritableDatabase().rawQuery(SELECT_QUERY, null);
-
         if (cur != null && cur.moveToFirst()) {
 
             do {
                 Log.e("테스트",cur.getString(0) + " , " + cur.getString(1) + " , " + cur.getString(3)+" , " + cur.getString(4)+" , " + cur.getString(2)+" , " + cur.getString(5)+" 시간: , " + cur.getString(6));
-                list.add(new chat_room_item(cur.getString(0),cur.getString(1),cur.getString(2),Integer.parseInt(cur.getString(5))));
+                if(cur.getString(2) != null) {
+                    list.add(new chat_room_item(cur.getString(0), cur.getString(1), cur.getString(2), Integer.parseInt(cur.getString(5))));
+                }else{
+                    list.add(new chat_room_item(cur.getString(0), cur.getString(1), "메세지를 보내보세요!", Integer.parseInt(cur.getString(5))));
+                }
             } while (cur.moveToNext());
 
         }

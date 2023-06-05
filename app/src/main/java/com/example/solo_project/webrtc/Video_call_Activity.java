@@ -2,18 +2,26 @@ package com.example.solo_project.webrtc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.solo_project.ApiInterface;
 import com.example.solo_project.Apiclient;
+import com.example.solo_project.F_chating;
+import com.example.solo_project.F_home;
+import com.example.solo_project.F_profile;
 import com.example.solo_project.R;
 import com.google.common.collect.ImmutableList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.webrtc.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -22,97 +30,91 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Video_call_Activity extends AppCompatActivity{
+public class Video_call_Activity extends AppCompatActivity implements OnCall_Choice_ClickListener,OnCallingClickListener{
+    private Signaling_Socket socket;
+    private String sender;
+    private String status;
+    private String receiver;
+    private CallingFragment callingFragment;
+    private CallChoiceFragment callChoiceFragment;
+    private VideoCallFragment videoCallFragment;
+    private String TAG = "Video_call_activity";
+    private boolean setOffer = false;
 
-    private PeerConnectionFactory peerConnectionFactory;
-    public TextView test;
-    private String TAG = "Video_Call_Activity";
-    private MediaConstraints audioConstraints;
-    private AudioTrack localAudioTrack;
-    private AudioSource audioSource;
-    private MediaStream stream;
-    PeerConnectionFactory.Options options;
-    private PeerConnection local_peer;
-    private List<PeerConnection.IceServer> iceServers;
-    private PeerConnection remote_peer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
-        initWebRTC();
+        try {
+            init_();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void init_socket(){
-
-    }
-    public void initWebRTC() {
-        PeerConnectionFactory.initialize(PeerConnectionFactory
-                .InitializationOptions.builder(this)
-                .createInitializationOptions());
-
-        PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-        peerConnectionFactory = PeerConnectionFactory.builder()
-                .setOptions(options)
-                .createPeerConnectionFactory();
-
-        audioConstraints = new MediaConstraints();
-        audioSource = peerConnectionFactory.createAudioSource(audioConstraints);
-        localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
-        localAudioTrack.setEnabled(true);
-        stream = peerConnectionFactory.createLocalMediaStream("102");
-        stream.addTrack(localAudioTrack);
-        initIceServers();
-
-        local_peer = peerConnectionFactory.createPeerConnection(
-                new PeerConnection.RTCConfiguration(iceServers),
-                new PCObserver());
-        createOffer();
-    }
-    private void createOffer() {
-        MediaConstraints constraints = new MediaConstraints();
-        constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"));
-        constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "false"));
-        local_peer.createOffer(new SDPObserver() {
+    private void init_() throws IOException {
+        Intent i = getIntent();
+        status = i.getStringExtra("status");
+        sender = i.getStringExtra("sender");
+        receiver = i.getStringExtra("receiver");
+        socket = new Signaling_Socket(sender);
+        if(status.equals("call_request")){
+            callingFragment = new CallingFragment(socket,receiver);
+            getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, callingFragment).commit();
+        }else{
+            callChoiceFragment = new CallChoiceFragment(socket,receiver);
+            getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, callChoiceFragment).commit();
+        }
+        socket.setOnItemClickListener(new Signaling_Socket.readMsgListener() {
             @Override
-            public void onCreateSuccess(SessionDescription sdp) {
-                // LocalDescription 설정
-                Log.e(TAG, "offer 생성됨: " + sdp.description);
-                local_peer.setLocalDescription(new SDPObserver(), sdp);
-            }
-        }, constraints);
-    }
-    private void initIceServers() {
-        iceServers = new ArrayList<>();
-        iceServers.add(PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer());
-    }
-    private void join_websocket(String nickname){
-
-    }
-    private void send_offer(String nickname, String sdp){
-
-    }
-    public void call(){
-
-    }
-    private VideoCapturer createCameraCapture(CameraEnumerator enumerator){
-        final String[] deviceNames = enumerator.getDeviceNames();
-
-        for(String deviceName : deviceNames){
-            if(enumerator.isBackFacing(deviceName)){
-                VideoCapturer videoCapturer = enumerator.createCapturer(deviceName,null);
-                if(videoCapturer != null){
-                    return videoCapturer;
+            public void onServerMsgRead(String msg) throws JSONException {
+                Log.d(TAG, "onServerMsgRead: "+msg);
+                JSONObject jsonObject = new JSONObject(msg);
+                String type = (String) jsonObject.get("type");
+                Log.d(TAG, "onServerMsgRead: "+type);
+                if(type.equals("call_accept")){
+                    Log.d(TAG, "onServerMsgRead: 첫번째 조건문 호출됨");
+                    videoCallFragment = new VideoCallFragment(socket,true,sender,receiver);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, videoCallFragment).commit();
+                }else if(type.equals("call_failed")) {
+                    Log.d(TAG, "onServerMsgRead: 두번째 조건문 호출됨");
+                    finish();
+                    Log.d(TAG, "onServerMsgRead: 두번째 조건문 호출됨2");
                 }
             }
-        }
+        });
+    }
 
-        for (String deviceName : deviceNames){
-            if(!enumerator.isBackFacing(deviceName)){
-                VideoCapturer videoCapturer = enumerator.createCapturer(deviceName,null);
-                if(videoCapturer != null){
-                    return videoCapturer;
-                }
-            }
+    @Override
+    public void onFailedButtonClicked() {
+        // 콜을 받았을때 취소 버튼 클릭
+        socket.sendMsg(sender,receiver,"call_failed");
+        finish();
+    }
+
+    @Override
+    public void onAcceptButtonClicked() {
+        // 콜을 받았을때 수락 버튼 클릭
+        socket.sendMsg(sender,receiver,"call_accept");
+        videoCallFragment = new VideoCallFragment(socket,false,sender,receiver);
+        getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, videoCallFragment).commit();
+    }
+
+    @Override
+    public void onCancelButtonClicked() {
+        // 콜을 걸다가 취소를 눌렀을때 버튼 클릭
+        socket.sendMsg(sender,receiver,"call_cancel");
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            socket.socket_disconnect(sender);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 }

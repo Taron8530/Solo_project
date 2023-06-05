@@ -46,9 +46,42 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
-    @Override
+    public String comma_to_int(String number){
+        if (number.length() == 0) {
+            return "";
+        }
+        long value = Long.parseLong(number);
+        DecimalFormat df = new DecimalFormat("###,###");
+        String money = df.format(value);
+        return money;
+    }
+
     public void onBindViewHolder(@NonNull main_adapter.ViewHolder holder, int position) {
-        holder.onbind(lists.get(position));
+        item_model item = lists.get(position);
+        holder.price.setText(comma_to_int(item.getPrice())+"원");
+        holder.used_item.setText(item.getusedname());
+        holder.nickname.setText("판매자: "+item.getNickname());
+        Log.e("adapter", String.valueOf(item.getImage_size()));
+        String image_name = "";
+        if(item.getImage_names() != null && item.getImage_names().size() > 0) {
+            image_name = item.getImage_names().get(0);
+        }
+        Glide.with(holder.itemView)
+                .load("http://35.166.40.164/used_image/"+item.getNum()+"/"+image_name)
+                .override(100, 100)
+                .error(R.drawable.app_icon)
+                .into(holder.image);
+
+        if(lists.get(position).getSold_out().equals("1")) {
+            holder.sold_out.setVisibility(View.VISIBLE);
+            holder.used_item.setPaintFlags(holder.used_item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //취소선
+            holder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.darkGray));
+        } else {
+            // 상태를 기본 상태로 설정
+            holder.sold_out.setVisibility(View.GONE);
+            holder.used_item.setPaintFlags(holder.used_item.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)); //취소선 제거
+            holder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        }
         Log.e(TAG, "onBindViewHolder: 호충");
     }
 
@@ -65,6 +98,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
         TextView nickname;
         ImageView image;
         TextView sold_out;
+
         LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -87,7 +121,6 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
                 }
             });
         }
-
         public void onbind(item_model item) {
             Log.e(TAG, "onbind: 호출됨");
             Log.e(TAG,"이미지 이름 확인"+item.getImage_names());
@@ -101,20 +134,11 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
                 image_name = item.getImage_names().get(0);
             }
             Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"/"+image_name).override(100, 100).error(R.drawable.app_icon).into(image);
-            if(item.getSold_out().equals("1")){
-                sold_out.setVisibility(View.VISIBLE);
-                used_item.setPaintFlags(used_item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //취소선
-                layout.setBackgroundColor(ContextCompat.getColor(context, R.color.darkGray));
-            }
-        }
-        public String comma_to_int(String number){
-            if (number.length() == 0) {
-                return "";
-            }
-            long value = Long.parseLong(number);
-            DecimalFormat df = new DecimalFormat("###,###");
-            String money = df.format(value);
-            return money;
+//            if(item.getSold_out().equals("1")){
+//                sold_out.setVisibility(View.VISIBLE);
+//                used_item.setPaintFlags(used_item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //취소선
+//                layout.setBackgroundColor(ContextCompat.getColor(context, R.color.darkGray));
+//            }
         }
     }
 }

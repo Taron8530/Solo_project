@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_search"
+        android:icon="@mipmap/ic_search"
+        android:title="검색"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_spinner"
+        android:title="정렬"
+        app:actionViewClass="android.widget.Spinner"
+        android:icon="@mipmap/ic_list"
+
+        app:showAsAction="always" />
+</menu>

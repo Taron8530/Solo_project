@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.solo_project.webrtc.Video_call_Activity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -332,7 +333,41 @@ public class chating extends AppCompatActivity {
                 Location_Share();
                 break;
             case R.id.chating_exit:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("채팅방 나가기");
+                builder.setMessage("정말로 나가시겠습니까?");
+
+                builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 취소 버튼이 클릭된 경우 실행할 코드를 작성하세요.
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("나가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 나가기 버튼이 클릭된 경우 실행할 코드를 작성하세요.
+                        if(myDb.remove_room(room_num)){
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"다시 시도해주세요.",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
                 //채팅방 데이터 모두 지우기
+                break;
+            case R.id.video_call:
+                Intent i = new Intent(chating.this, Video_call_Activity.class);
+                i.putExtra("status","call_request");
+                i.putExtra("sender",nickname);
+                i.putExtra("receiver",sender);
+                sendMsg("Video_Call_Request",sender,room_num,"Video_Call_Request");
+                startActivity(i);
                 break;
         }
 
@@ -426,6 +461,7 @@ public class chating extends AppCompatActivity {
                     sendWriter = new PrintWriter(socket.getOutputStream());
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     send_nickname(nickname,room_num);
+                    Log.e(TAG,"Waiting_msg") ;
                     while(true){
                         read = input.readLine();
                         if(read!=null){
@@ -447,7 +483,14 @@ public class chating extends AppCompatActivity {
                             }else if(str[0].equals("약____속")){
                                 //함수로 하기
                                 Promise_select(room_num);
-                            }else{
+                            }else if(str[0].equals("Video_Call")){
+                                Intent i = new Intent(chating.this, Video_call_Activity.class);
+                                i.putExtra("status","call");
+                                i.putExtra("sender",nickname);
+                                i.putExtra("receiver",sender);
+                                startActivity(i);
+                            }
+                            else{
                                 mHandler.post(new MsgUpdate(read));
                                 Same_time();
                             }
@@ -458,6 +501,9 @@ public class chating extends AppCompatActivity {
                     socket_Disconnect();
                     Log.e(TAG+"Wait_msg",e.toString());
                 } }}.start();
+    }
+    private void VideoCallRequest(){
+
     }
     private void Promise_select(String room_num){
         ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);

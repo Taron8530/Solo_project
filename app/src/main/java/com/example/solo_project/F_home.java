@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -13,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -53,6 +57,63 @@ public class F_home extends Fragment {
         super.onStart();
         select_used(page);
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.home_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        MenuItem item = menu.findItem(R.id.menu_spinner);
+        Spinner spinner = (Spinner) item.getActionView();
+
+        // 스피너에 표시할 데이터 어댑터 설정
+        ArrayAdapter<CharSequence> sadapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.spinner_options, R.layout.spinner_item);
+
+        sadapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(sadapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                              @Override
+                                              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                  String selectedItem = parent.getItemAtPosition(position).toString();
+//                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                                                  if (selectedItem.equals("최신순")) {
+                                                      Collections.sort(list, new Used_item_DateComparator());
+                                                      adapter.notifyDataSetChanged();
+                                                  } else if (selectedItem.equals("높은가격순")) {
+                                                      Collections.sort(list, new Used_item_MaxPriceComparator());
+                                                      adapter.notifyDataSetChanged();
+                                                  } else {
+                                                      Collections.sort(list, new Used_item_MinPriceComparator());
+                                                      adapter.notifyDataSetChanged();
+                                                  }
+                                              }
+
+                                              @Override
+                                              public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                              }
+                                          });
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent i = new Intent(getActivity(),UsedSearchActivity.class);
+                i.putExtra("nickname",nickname);
+                startActivity(i);
+                return true;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,19 +128,18 @@ public class F_home extends Fragment {
         adapter = new main_adapter(getContext());
         recyclerView.setAdapter(adapter);
         adapter.setlist(list);
-        search = root.findViewById(R.id.search_icon);
+//        search = root.findViewById(R.id.search_icon);
 
-        search.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View view) {
-                                          Intent i = new Intent(getActivity().getApplicationContext(),UsedSearchActivity.class);
-                                          i.putExtra("nickname",nickname);
-                                          startActivity(i);
-                                      }
-                                  }
-        );
+//        search.setOnClickListener(new View.OnClickListener() {
+//                                      @Override
+//                                      public void onClick(View view) {
+//                                          Intent i = new Intent(getActivity().getApplicationContext(),UsedSearchActivity.class);
+//                                          i.putExtra("nickname",nickname);
+//                                          startActivity(i);
+//                                      }
+//                                  }
+//        );
 
-        set_sort_dropdown(); //스피너 설정
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -162,40 +222,40 @@ public class F_home extends Fragment {
         list = lists;
         adapter.notifyDataSetChanged();
     }
-    private void set_sort_dropdown(){
-        Spinner spinner = root.findViewById(R.id.sort);
-
-        // 스피너에 표시할 데이터 어댑터 설정
-        ArrayAdapter<CharSequence> sadapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.spinner_options, android.R.layout.simple_spinner_item);
-
-        sadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(sadapter);
-
-        // 선택된 아이템 핸들링
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getItemAtPosition(position).toString();
-//                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
-                if(selectedItem.equals("최신순")){
-                    Collections.sort(list,new Used_item_DateComparator());
-                    adapter.notifyDataSetChanged();
-                }else if(selectedItem.equals("높은가격순")){
-                    Collections.sort(list,new Used_item_MaxPriceComparator());
-                    adapter.notifyDataSetChanged();
-                }else {
-                    Collections.sort(list,new Used_item_MinPriceComparator());
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // 선택이 취소될 때 동작
-            }
-        });
-    }
+//    private void set_sort_dropdown(){
+//        Spinner spinner = root.findViewById(R.id.sort);
+//
+//        // 스피너에 표시할 데이터 어댑터 설정
+//        ArrayAdapter<CharSequence> sadapter = ArrayAdapter.createFromResource(getActivity(),
+//                R.array.spinner_options, android.R.layout.simple_spinner_item);
+//
+//        sadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner.setAdapter(sadapter);
+//
+//        // 선택된 아이템 핸들링
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String selectedItem = parent.getItemAtPosition(position).toString();
+////                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+//                if(selectedItem.equals("최신순")){
+//                    Collections.sort(list,new Used_item_DateComparator());
+//                    adapter.notifyDataSetChanged();
+//                }else if(selectedItem.equals("높은가격순")){
+//                    Collections.sort(list,new Used_item_MaxPriceComparator());
+//                    adapter.notifyDataSetChanged();
+//                }else {
+//                    Collections.sort(list,new Used_item_MinPriceComparator());
+//                    adapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // 선택이 취소될 때 동작
+//            }
+//        });
+//    }
 }
 class Used_item_MaxPriceComparator implements Comparator<item_model> {
     @Override

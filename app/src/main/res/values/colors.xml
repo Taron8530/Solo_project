@@ -15,5 +15,7 @@
     <color name="darkGray">#FFDDDDDD</color>
     <color name="gray">#FFC6C6C6</color>
     <color name="lightGray">#FFE9E9E9</color>
+    <color name="main_color">#F17F42</color>
+
 
 </resources>

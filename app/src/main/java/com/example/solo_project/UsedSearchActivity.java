@@ -37,6 +37,7 @@ public class UsedSearchActivity extends AppCompatActivity {
     String nickname;
     Switch aSwitch;
     TextView exit;
+    String TAG = "UsedSearchActivity";
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +52,17 @@ public class UsedSearchActivity extends AppCompatActivity {
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                ArrayList<item_model> remove_list = new ArrayList<>();
+                ArrayList<item_model> remove_list = new ArrayList<>();
                 if(b) {
                     if (searchView.getQuery().toString().trim().length() > 0) {
                         for (int i = 0;list.size() > i;i++) {
                             if (list.get(i).getSold_out().equals("1")) {
-                                list.remove(list.get(i));
+                                remove_list.add(list.get(i));
+                                Log.d(TAG, "onCheckedChanged: "+remove_list);
+//                                list.remove(list.get(i));
                             }
                         }
+                        list.removeAll(remove_list);
                         adapter.notifyDataSetChanged();
                         if (list.size() <= 0) {
                             recyclerView.setVisibility(View.GONE);

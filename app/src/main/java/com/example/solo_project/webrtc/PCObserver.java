@@ -12,6 +12,8 @@ import org.webrtc.RtpTransceiver;
 
 public class PCObserver implements PeerConnection.Observer{
     String TAG = "PCObserver";
+    PCObserver(){
+    }
     @Override
     public void onSignalingChange(PeerConnection.SignalingState signalingState) {
         Log.e(TAG, "onSignalingChange: "+signalingState);
@@ -47,7 +49,8 @@ public class PCObserver implements PeerConnection.Observer{
 
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
-        Log.e(TAG, "onIceCandidate: "+iceCandidate.sdp);
+        Log.e(TAG, "onIceCandidate: "+iceCandidate);
+
     }
 
     @Override

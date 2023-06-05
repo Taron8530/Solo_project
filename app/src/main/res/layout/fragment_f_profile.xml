@@ -41,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_marginTop="15dp"
+            android:gravity="center"
             android:text="닉네임 적히는 곳"
             android:textColor="@color/black"
             android:textAlignment="textStart"
@@ -136,10 +137,12 @@
             android:id="@+id/credit"
             android:layout_width="wrap_content"
             android:layout_height="22dp"
-            android:layout_marginTop="224dp"
-            android:layout_marginEnd="200dp"
+            android:layout_marginTop="230dp"
+            android:layout_marginRight="30dp"
             android:text="보유 크래딧"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

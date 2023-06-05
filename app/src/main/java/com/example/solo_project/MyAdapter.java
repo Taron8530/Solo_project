@@ -127,7 +127,20 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             image = itemView.findViewById(R.id.content);
             time = itemView.findViewById(R.id.time);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition() ;
+                    if (pos != RecyclerView.NO_POSITION) {
+                        // 리스너 객체의 메서드 호출.
+                        if (mListener != null) {
+                            mListener.onImageClick(view, pos) ;
+                        }
+                    }
+                }
+            });
         }
+
     }
     public class Left_image_chat extends RecyclerView.ViewHolder{
         TextView time;
