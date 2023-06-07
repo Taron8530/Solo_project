@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +88,7 @@ public class VideoCallFragment extends Fragment
     private static final int PERMISSION_REQUEST_CODE = 1;
     private EglBase eglBase;
     private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+    private Button close_Call;
     private boolean signalingStatus;
     public VideoCallFragment(Signaling_Socket socket,boolean status,String sender,String receiver) {
         this.socket = socket;
@@ -112,6 +114,13 @@ public class VideoCallFragment extends Fragment
         my_view.setMirror(true);
         my_view.init(eglBase.getEglBaseContext(),null);
         videoTrack.addSink(my_view);
+        close_Call = root.findViewById(R.id.video_call_closw);
+        close_Call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                socket.sendMsg(sender,receiver,"close_call");
+            }
+        });
         Log.d(TAG, "init_view: status check" + status);
 
         socket.setOnItemClickListener(new Signaling_Socket.readMsgListener() {
