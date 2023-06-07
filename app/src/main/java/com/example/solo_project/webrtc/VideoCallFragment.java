@@ -1,8 +1,12 @@
 package com.example.solo_project.webrtc;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.media.AudioManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +23,10 @@ import android.widget.Toast;
 
 import com.example.solo_project.R;
 
+import org.webrtc.DefaultVideoDecoderFactory;
+import org.webrtc.DefaultVideoEncoderFactory;
+import org.webrtc.EglBase14;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.AudioSource;
@@ -29,6 +37,7 @@ import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
 import org.webrtc.EglBase;
+import org.webrtc.HardwareVideoEncoderFactory;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaSource;
@@ -37,11 +46,15 @@ import org.webrtc.MediaStreamTrack;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.RtpReceiver;
+import org.webrtc.VideoCodecType;
 import org.webrtc.RtpTransceiver;
 import org.webrtc.SessionDescription;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoCapturer;
+import org.webrtc.VideoDecoderFactory;
+import org.webrtc.VideoEncoder;
+import org.webrtc.VideoEncoderFactory;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 
@@ -60,7 +73,7 @@ public class VideoCallFragment extends Fragment
     private VideoTrack videoTrack;
     private MediaStream stream;
 
-//    PeerConnectionFactory.Options options;
+    //    PeerConnectionFactory.Options options;
     private PeerConnection peerConnection;
     private List<PeerConnection.IceServer> iceServers;
     private Signaling_Socket socket;
@@ -120,6 +133,7 @@ public class VideoCallFragment extends Fragment
                         peerConnection.addIceCandidate(iceCandidate);
                     }else if(type.equals("close_call")){
                         // 종료되었다고 알림
+                        getActivity().finish();
                     }
 
                 }
@@ -130,14 +144,20 @@ public class VideoCallFragment extends Fragment
         }
     }
     public void initWebRTC() {
+        eglBase = EglBase.create();
         PeerConnectionFactory.initialize(PeerConnectionFactory
                 .InitializationOptions.builder(getContext())
                 .createInitializationOptions());
 
         PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
+        VideoEncoderFactory encoderFactory = new DefaultVideoEncoderFactory(eglBase.getEglBaseContext(), true, true);
+        VideoDecoderFactory decoderFactory = new DefaultVideoDecoderFactory(eglBase.getEglBaseContext());
         peerConnectionFactory = PeerConnectionFactory.builder()
                 .setOptions(options)
-                .createPeerConnectionFactory();
+                .setVideoDecoderFactory(decoderFactory)
+                .setVideoEncoderFactory(encoderFactory)
+                .createPeerConnectionFactory()
+        ;
 //        CameraEnumerator cameraEnumerator =
 //        VideoCapturer videoCapturer = createCameraCapture();
         audioConstraints = new MediaConstraints();
@@ -202,32 +222,35 @@ public class VideoCallFragment extends Fragment
                         super.onAddTrack(rtpReceiver, mediaStreams);
                     }
                 });
-        eglBase = EglBase.create();
         SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBase.getEglBaseContext());
         VideoCapturer videoCapturer = createCameraCapturer();
         videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast());
-
         videoCapturer.initialize(surfaceTextureHelper, getActivity().getApplicationContext(), videoSource.getCapturerObserver());
         videoCapturer.startCapture(1000, 1000, 30);
-
         videoTrack = peerConnectionFactory.createVideoTrack("103",videoSource);
         audioSource = peerConnectionFactory.createAudioSource(audioConstraints);
         localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
         localAudioTrack.setEnabled(true);
-//        peerConnection.addTrack(localAudioTrack);
-//        peerConnection.addTrack(videoTrack);
-
+        videoTrack.setEnabled(true);
         stream = peerConnectionFactory.createLocalMediaStream("102");
+        stream.addTrack(videoTrack);
+        stream.addTrack(localAudioTrack);
         peerConnection.addStream(stream);
-//        peerConnection.addStream(stream);
-//        stream.addTrack(videoTrack);
-//        stream.addTrack(localAudioTrack);
 
     }
     private void createOffer() {
         MediaConstraints constraints = new MediaConstraints();
+// Add video codecs
+        constraints.mandatory.add(new MediaConstraints.KeyValuePair("videoCodec", "H.264H"));
+        constraints.mandatory.add(new MediaConstraints.KeyValuePair("audioCodec", "opus"));
+
+// Set other constraints
         constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"));
-        constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "false"));
+//        constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"));
+        constraints.mandatory.add(new MediaConstraints.KeyValuePair("maxWidth", "1000"));
+        constraints.mandatory.add(new MediaConstraints.KeyValuePair("maxHeight", "1000"));
+        constraints.optional.add(new MediaConstraints.KeyValuePair("maxFrameRate", "30"));
+
         peerConnection.createOffer(new SDPObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sdp) {
@@ -237,6 +260,7 @@ public class VideoCallFragment extends Fragment
                 socket.sendOffer(sender,receiver,sdp.description);
             }
         }, constraints);
+
     }
     public void setAnswer(String remoteSdp){
         MediaConstraints constraints = new MediaConstraints();
@@ -296,33 +320,45 @@ public class VideoCallFragment extends Fragment
             init_view();
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stop_Call();
+    }
+
     private void gotRemoteStream (MediaStream stream) {
         List<VideoTrack> videoTracks = stream.videoTracks;
         List<AudioTrack> audioTracks = stream.audioTracks;
         Log.d(TAG, "gotRemoteStream Video Track: "+videoTracks.toString());
         Log.d(TAG, "gotRemoteStream audio Track: "+audioTracks.toString());
-
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    if (!videoTracks.isEmpty() && !audioTracks.isEmpty()) {
-                        VideoTrack videoTrack = videoTracks.get(0);
-                        AudioTrack audioTrack = audioTracks.get(0);
-
-                        other_view = root.findViewById(R.id.otherSurface); // Replace with your actual ID
-                        other_view.init(eglBase.getEglBaseContext(), null);
-                        other_view.setEnabled(true);
-                        videoTrack.addSink(other_view);
-
-                        // If you want to process the remote audio
-                        audioTrack.setEnabled(true);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        getActivity().runOnUiThread(() -> {
+            try {
+                Log.d(TAG, "run: gotremotestream 여기 들어옴?");
+                if(!videoTracks.isEmpty() && !audioTracks.isEmpty()){
+                    VideoTrack videoTrack = videoTracks.get(0);
+                    AudioTrack audioTrack = audioTracks.get(0);
+                    Log.d(TAG, "run: gotremotestream 여기 들어옴1"+videoTrack);
+                    other_view.setMirror(true);
+                    other_view = root.findViewById(R.id.otherSurface); // Replace with your actual ID
+                    other_view.init(eglBase.getEglBaseContext(), null);
+                    other_view.setEnabled(true);
+                    other_view.setZOrderMediaOverlay(false);
+                    other_view.setEnableHardwareScaler(true);
+                    videoTrack.addSink(other_view);
+                    audioTrack.setEnabled(true);
                 }
+
+                // If you want to process the remote audio
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        };
+        });
+
+    }
+    private void stop_Call(){
+        peerConnection.close();
+        peerConnection =null;
 
     }
 }

@@ -1,8 +1,12 @@
 package com.example.solo_project.webrtc;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,6 +79,7 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
                     Log.d(TAG, "onServerMsgRead: 첫번째 조건문 호출됨");
                     videoCallFragment = new VideoCallFragment(socket,true,sender,receiver);
                     getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, videoCallFragment).commit();
+                    onSpeaker();
                 }else if(type.equals("call_failed")) {
                     Log.d(TAG, "onServerMsgRead: 두번째 조건문 호출됨");
                     finish();
@@ -97,6 +102,16 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
         socket.sendMsg(sender,receiver,"call_accept");
         videoCallFragment = new VideoCallFragment(socket,false,sender,receiver);
         getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, videoCallFragment).commit();
+        onSpeaker();
+    }
+    private void onSpeaker(){
+        // Audio Manager를 생성할 때 Context 객체를 전달해야 함
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+
+// 전화 스피커폰 모드로 설정
+        audioManager.setMode(AudioManager.MODE_IN_CALL);
+        audioManager.setSpeakerphoneOn(true);
     }
 
     @Override
