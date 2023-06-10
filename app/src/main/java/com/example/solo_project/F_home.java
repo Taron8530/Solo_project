@@ -56,6 +56,7 @@ public class F_home extends Fragment {
     public void onStart() {
         super.onStart();
         select_used(page);
+        page += 1;
     }
 
     @Override
@@ -160,6 +161,7 @@ public class F_home extends Fragment {
                     if(recyclerView.canScrollVertically(-1)){
                         Log.e("F_home", String.valueOf(page));
                         progressBar.setVisibility(View.VISIBLE);
+                        page += 1;
                         select_used(page);
                     }
                 }
@@ -207,11 +209,7 @@ public class F_home extends Fragment {
     }
     private void onGetResult(ArrayList<item_model> lists)
     {
-        for(int i = 0;i<lists.size();i++){
-            list.add(lists.get(i));
-        }
-        page += 1;
-        adapter.setlist(list);
+        list.addAll(lists);
         progressBar.setVisibility(View.GONE);
         Log.e("접근 완료",list.toString());
         Log.e("접근 완료",lists.toString());

@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constrainedHeight="true"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="@+id/used_info_bottom_bar"
         app:layout_constraintLeft_toLeftOf="parent"
 
@@ -69,7 +70,7 @@
             <TextView
                 android:id="@+id/used_info_detail"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:paddingLeft="10dp"
                 android:text="detail"

@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/used_item"
         android:layout_width="match_parent"
-        android:layout_height="129dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="20dp">
 
@@ -22,7 +22,7 @@
 
         <LinearLayout
             android:layout_width="250dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:orientation="vertical">
 
@@ -78,6 +78,16 @@
                 android:text="닉네임"
                 android:textColor="#444"
                 android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/times"
+                android:gravity="right"
+                android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
+                android:paddingRight="40dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="..일전" />
         </LinearLayout>
 
     </LinearLayout>
