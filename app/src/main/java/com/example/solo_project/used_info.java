@@ -66,17 +66,11 @@ public class used_info extends AppCompatActivity implements Serializable {
         used_name = findViewById(R.id.used_info_name);
         profile = findViewById(R.id.user_profile);
         chat_btn = findViewById(R.id.go_chating);
-        exit = findViewById(R.id.used_info_exit);
         num = i.getStringExtra("num");
         image_names = (ArrayList<String>) i.getSerializableExtra("image_names");
         Log.e("sold_out",num);
         images = new ArrayList<>();
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         MyNickname = i.getStringExtra("my_nickname");
         receiver = i.getStringExtra("nickname");
         String t = i.getStringExtra("price");
@@ -295,6 +289,9 @@ public class used_info extends AppCompatActivity implements Serializable {
 
         switch(item.getItemId())
         {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
             case R.id.used_sold_out:
                 sold_out();
                 break;

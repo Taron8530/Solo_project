@@ -19,12 +19,14 @@ import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,6 +70,7 @@ public class used_add extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("물건 등록");
         setContentView(R.layout.activity_used_add);
         recyclerView = findViewById(R.id.add_recyclerview);
@@ -83,6 +86,8 @@ public class used_add extends AppCompatActivity {
         e_price = findViewById(R.id.add_used_price);
         e_detail = findViewById(R.id.add_used_detail);
         e_price.addTextChangedListener(new UsedAddCustomTextWatchar(e_price));
+
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,5 +261,16 @@ public class used_add extends AppCompatActivity {
         Date mDate = new Date(mNow);
         SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");;
         return mFormat.format(mDate);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }

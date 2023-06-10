@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -33,7 +34,6 @@ public class sale_history extends AppCompatActivity {
     private frag_salehistory_suc frag_salehistory_suc;
     private String nickname;
     private TabLayout tabLayout;
-    private TextView back;
     private TabLayout tl;
     final List<String> tabel = Arrays.asList("판매중","판매완료");
 
@@ -44,13 +44,6 @@ public class sale_history extends AppCompatActivity {
         setContentView(R.layout.activity_sale_history);
         Intent i = getIntent();
         nickname = i.getStringExtra("nickname");
-        back = findViewById(R.id.sale_back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         createFragment();
 
@@ -67,6 +60,7 @@ public class sale_history extends AppCompatActivity {
 
         frag_salehistory_suc = new frag_salehistory_suc(nickname);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -149,5 +143,15 @@ public class sale_history extends AppCompatActivity {
 
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

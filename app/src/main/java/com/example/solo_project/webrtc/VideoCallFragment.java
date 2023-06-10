@@ -303,7 +303,7 @@ public class VideoCallFragment extends Fragment
         String[] deviceNames = enumerator.getDeviceNames();
 
         for (String deviceName : deviceNames) {
-            if (enumerator.isFrontFacing(deviceName)) {
+            if (enumerator.isBackFacing(deviceName)) {
                 VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
                 if (videoCapturer != null) {
                     return videoCapturer;
@@ -346,7 +346,7 @@ public class VideoCallFragment extends Fragment
                 Log.d(TAG, "run: gotremotestream 여기 들어옴?");
                 if(!videoTracks.isEmpty() && !audioTracks.isEmpty()){
                     VideoTrack videoTrack = videoTracks.get(0);
-                    AudioTrack audioTrack = audioTracks.get(0);
+                    AudioTrack audioTrack = audioTracks.get(0);// 이 코드를 통해 스피커폰 출력 on/off를 조정할 수 있습니다.
                     Log.d(TAG, "run: gotremotestream 여기 들어옴1"+videoTrack);
                     other_view.setMirror(true);
                     other_view = root.findViewById(R.id.otherSurface); // Replace with your actual ID

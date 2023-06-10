@@ -172,6 +172,7 @@ public class chating extends AppCompatActivity {
         Promise_select(room_num);
         dataList = new ArrayList<>();
         myDb = new DBHelper(chating.this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
         try {
             dataList = db.SelectAllKids(Integer.parseInt(room_num));
@@ -182,7 +183,6 @@ public class chating extends AppCompatActivity {
         myDb.msg_count_reset(Integer.parseInt(room_num));
 
         Log.e("chat_room_num",String.valueOf(room_num));
-        back = findViewById(R.id.chat_exit);
         sender_nickname = findViewById(R.id.sender_nickname);
         sender_nickname.setText(sender);
         sender_profile = findViewById(R.id.sender_profile);
@@ -243,13 +243,6 @@ public class chating extends AppCompatActivity {
                     Log.e(TAG,"눌림");
                 }else{
                     Toast.makeText(chating.this, "메세지를 입력해주세요", Toast.LENGTH_SHORT).show();             }
-            }
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                socket_Disconnect();
             }
         });
         chat_plus.setOnClickListener(new View.OnClickListener() {
@@ -325,6 +318,10 @@ public class chating extends AppCompatActivity {
 
         switch(item.getItemId())
         {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                socket_Disconnect();
+                finish();
+                return true;
             case R.id.promise:
                 //약속잡기 구현 호출
                 promise();

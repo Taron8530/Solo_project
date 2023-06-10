@@ -113,7 +113,15 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
         audioManager.setMode(AudioManager.MODE_IN_CALL);
         audioManager.setSpeakerphoneOn(true);
     }
+    private void offSpeaker(){
+        // Audio Manager를 생성할 때 Context 객체를 전달해야 함
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+
+// 전화 스피커폰 모드로 설정
+        audioManager.setMode(AudioManager.MODE_IN_CALL);
+        audioManager.setSpeakerphoneOn(false);
+    }
     @Override
     public void onCancelButtonClicked() {
         // 콜을 걸다가 취소를 눌렀을때 버튼 클릭
@@ -126,6 +134,7 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
         super.onStop();
         try {
             socket.socket_disconnect(sender);
+            offSpeaker();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (JSONException e) {
