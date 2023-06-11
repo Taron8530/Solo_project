@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.TextView;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +39,7 @@ public class F_chating extends Fragment {
     private RecyclerView recyclerView;
     private chat_room_adapter adapter;
     private DBHelper myDb;
+    private View root;
     public F_chating(String nickname){
         this.nickname = nickname;
     }
@@ -53,7 +55,7 @@ public class F_chating extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        Log.e(TAG,nickname);
-        View root = inflater.inflate(R.layout.fragment_f_chating, container, false);
+        root = inflater.inflate(R.layout.fragment_f_chating, container, false);
         Log.e("로그 확인!","root 할당됨");// 뷰 변수
         recyclerView = root.findViewById(R.id.chat_room_recyclerview);
         Log.e("로그 확인!",String.valueOf(recyclerView));
@@ -81,8 +83,15 @@ public class F_chating extends Fragment {
     }
     private void list_select(){
         list = myDb.SelectAllKids();
-        adapter.setLists(list);
-        adapter.notifyDataSetChanged();
+        if(list.size() <= 0){
+            recyclerView.setVisibility(View.GONE);
+            TextView comment = root.findViewById(R.id.chat_empty_comment);
+            comment.setVisibility(View.VISIBLE);
+
+        }else {
+            adapter.setLists(list);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
