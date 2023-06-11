@@ -129,5 +129,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return list;
     }
+    public void allRemove(){
 
+        SQLiteDatabase db = getWritableDatabase(); // dbHelper는 SQLiteOpenHelper 또는 SQLiteDatabase 인스턴스입니다.
+        db.delete(TABLE_NAME_chat_room,null,null);
+    }
 }

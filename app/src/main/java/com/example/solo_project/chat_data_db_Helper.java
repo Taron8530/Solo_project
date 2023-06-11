@@ -68,7 +68,6 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
         String new_time = new SimpleDateFormat("H시 mm분").format(date);
         return new_time;
     }
-
     public ArrayList<chat_item> SelectAllKids(int room_num) throws ParseException {
         int i = 0;
         ArrayList<chat_item> list = new ArrayList<>();
@@ -99,5 +98,10 @@ public class chat_data_db_Helper extends SQLiteOpenHelper {
 
         }
         return list;
+    }
+    public void allRemove(){
+
+        SQLiteDatabase db = getWritableDatabase(); // dbHelper는 SQLiteOpenHelper 또는 SQLiteDatabase 인스턴스입니다.
+        db.delete(TABLE_NAME_chat_data,null,null);
     }
 }

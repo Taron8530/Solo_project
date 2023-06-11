@@ -1,9 +1,11 @@
 package com.example.solo_project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,6 +25,7 @@ public class CreditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit);
         setTitle("크래딧 충전소");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         credit_500 =findViewById(R.id.credit_btn_1);
         credit_1000 = findViewById(R.id.credit_btn_2);
         credit_5000 = findViewById(R.id.credit_btn_3);
@@ -80,5 +83,15 @@ public class CreditActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

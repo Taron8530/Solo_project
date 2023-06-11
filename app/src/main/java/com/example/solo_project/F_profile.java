@@ -98,8 +98,12 @@ public class F_profile extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(),Login.class);
+                DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
+                chat_data_db_Helper chat_data_db_helper = new chat_data_db_Helper(getActivity().getApplicationContext());
                 SharedPreferences sv = getActivity().getSharedPreferences("user_verify",Context.MODE_PRIVATE);
                 SharedPreferences.Editor E = sv.edit();
+                dbHelper.allRemove();
+                chat_data_db_helper.allRemove();
                 E.clear();
                 E.commit();
                 startActivity(i);

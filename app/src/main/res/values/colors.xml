@@ -9,13 +9,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#738FE5</color>
     <color name="red">#cc3931</color>
-    <color name="btn_color">#f2f4fa</color>
+    <color name="btn_color">#F8EFE7</color>
     <color name="sold_out_color">#9c3034</color>
     <color name="main">#FFFFFF</color>
     <color name="darkGray">#FFDDDDDD</color>
     <color name="gray">#FFC6C6C6</color>
     <color name="lightGray">#FFE9E9E9</color>
-    <color name="main_color">#F17F42</color>
+    <color name="main_color">#FF9E6A</color>
 
 
 </resources>
