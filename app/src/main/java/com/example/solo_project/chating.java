@@ -91,6 +91,7 @@ public class chating extends AppCompatActivity {
     private ActivityResultLauncher<Intent> mStartForResult;
     private ActivityResultLauncher<Intent> location_start_for_result;
     private LinearLayout container;
+    private BufferedReader input;
 
     @Override
     protected void onPause() {
@@ -320,7 +321,6 @@ public class chating extends AppCompatActivity {
         {
             case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
                 socket_Disconnect();
-                finish();
                 return true;
             case R.id.promise:
                 //약속잡기 구현 호출
@@ -436,8 +436,10 @@ public class chating extends AppCompatActivity {
                         jsonObject.put("type","disconnect");
                         sendWriter.println(jsonObject);
                         sendWriter.flush();
+                        input.close();
                         socket.close();
                         sendWriter.close();
+                        finish();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -456,7 +458,7 @@ public class chating extends AppCompatActivity {
                     serverAddr = InetAddress.getByName(ip);
                     socket = new Socket(serverAddr, port);
                     sendWriter = new PrintWriter(socket.getOutputStream());
-                    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     send_nickname(nickname,room_num);
                     Log.e(TAG,"Waiting_msg") ;
                     while(true){

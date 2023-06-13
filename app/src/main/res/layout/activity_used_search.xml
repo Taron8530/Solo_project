@@ -6,26 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".UsedSearchActivity">
 
-    <TextView
-        android:id="@+id/search_exit"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:layout_constrainedHeight="true"
-        android:gravity="center"
-        android:textSize="30dp"
-        android:text="←"
-        app:layout_constraintBottom_toTopOf="@+id/filter_item"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/used_search_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/search_exit"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="검색어를 입력해주세요">
 

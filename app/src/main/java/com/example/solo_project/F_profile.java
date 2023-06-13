@@ -113,10 +113,7 @@ public class F_profile extends Fragment {
         change_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), Video_call_Activity.class);
-                i.putExtra("status","call_request");
-                i.putExtra("sender",nickname);
-                i.putExtra("receiver","카프리");
+                Intent i = new Intent(getActivity(), TestGoogleLoginActivity.class);
                 startActivity(i);
             }
         });

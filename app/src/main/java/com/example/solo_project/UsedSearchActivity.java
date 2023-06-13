@@ -3,6 +3,7 @@ package com.example.solo_project;
 import static com.example.solo_project.R.id.search_except;
 import static com.example.solo_project.R.id.used_item;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -13,6 +14,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -36,19 +38,18 @@ public class UsedSearchActivity extends AppCompatActivity {
     TextView search_except;
     String nickname;
     Switch aSwitch;
-    TextView exit;
     String TAG = "UsedSearchActivity";
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("검색");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_used_search);
         searchView = findViewById(R.id.used_search_widget);
         searchView.setIconified(false);
         search_except = findViewById(R.id.search_except);
         aSwitch = findViewById(R.id.filter_item);
-        exit = findViewById(R.id.search_exit);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -78,7 +79,6 @@ public class UsedSearchActivity extends AppCompatActivity {
 
             }
         });
-        exit.setOnClickListener(v -> finish()); //람다식
         setRecyclerView();
         nickname = getIntent().getStringExtra("nickname");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -156,6 +156,16 @@ public class UsedSearchActivity extends AppCompatActivity {
         adapter.setlist(list);
         Log.e("접근 완료",list.toString());
         adapter.notifyDataSetChanged();
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 
 }

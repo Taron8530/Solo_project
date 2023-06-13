@@ -1,5 +1,6 @@
 package com.example.solo_project;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,6 +67,7 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_useditem);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         layout_init();
         Intent i = getIntent();
         used_Name = i.getStringExtra("used_name");
@@ -272,4 +275,13 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

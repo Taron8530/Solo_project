@@ -48,7 +48,6 @@ public class F_chating extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         list = new ArrayList<>();
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -103,6 +102,7 @@ public class F_chating extends Fragment {
     public void onResume() {
         super.onResume();
         list_select();
+        EventBus.getDefault().unregister(this);
     }
     public void room_update(){
         list_select();

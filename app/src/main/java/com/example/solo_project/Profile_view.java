@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,12 +31,12 @@ public class Profile_view extends AppCompatActivity {
     private frag_salehistory_ing frag_salehistory_ing;
     private frag_salehistory_suc frag_salehistory_suc;
     private TabLayout tabLayout;
-    private TextView back;
     private TabLayout tl;
     final List<String> tabel = Arrays.asList("판매중","판매완료");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_profile_view);
         nickname_view = findViewById(R.id.profile_nickname);
         profile_view = findViewById(R.id.profile_image);
@@ -50,13 +51,6 @@ public class Profile_view extends AppCompatActivity {
                 .override(600,600)
                 .error(R.drawable.app_icon)
                 .into(profile_view);
-        back = findViewById(R.id.profile_back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
         createFragment();
 
         createViewpager();
@@ -98,4 +92,13 @@ public class Profile_view extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

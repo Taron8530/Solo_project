@@ -7,71 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/e_mail"
-
-        android:layout_width="270dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:hint="이메일 주소"
-        android:textSize="15dp"
-        android:background="@drawable/edit_textbox"
-        android:maxLines="1"
-        android:paddingLeft="15dp"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    <TextView
-        android:id="@+id/title"
-        android:height="150px"
-        android:width="300px"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="로그인 하기"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:layout_marginTop="100dp"
-        tools:layout_editor_absoluteX="177dp"
-        tools:layout_editor_absoluteY="111dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/password_login"
-        android:layout_width="270dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="16dp"
-        android:hint="패스워드"
-        android:paddingLeft="15dp"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:background="@drawable/edit_textbox"
-        android:textSize="15dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/e_mail" />
-
-    <Button
-        android:id="@+id/submit"
-        android:layout_width="270dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="40dp"
-        android:text="로그인"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/login_btn"
-        app:layout_constraintTop_toBottomOf="@+id/password_login" />
-
     <TextView
         android:id="@+id/Signup"
         android:layout_width="wrap_content"
@@ -82,26 +17,101 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submit" />
 
-    <TextView
-        android:id="@+id/findPw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:text="이메일 및 비밀번호 찾기"
-        app:layout_constraintStart_toEndOf="@+id/Signup"
-        app:layout_constraintTop_toBottomOf="@+id/submit" />
-
     <ImageButton
         android:id="@+id/kakao_login_btn"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
+        android:padding="10dp"
         android:background="@drawable/kakao_login_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submit"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleLoginBtn"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kakao_login_btn" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/password_login"
+        android:layout_width="270dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_textbox"
+        android:hint="패스워드"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/e_mail" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:width="300px"
+        android:height="150px"
+        android:gravity="center"
+        android:text="로그인 하기"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="270dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/login_btn"
+        android:text="로그인"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_login" />
+
+    <TextView
+        android:id="@+id/findPw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="이메일 및 비밀번호 찾기"
+        app:layout_constraintStart_toEndOf="@+id/Signup"
+        app:layout_constraintTop_toBottomOf="@+id/submit" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/e_mail"
+
+        android:layout_width="270dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_textbox"
+        android:hint="이메일 주소"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

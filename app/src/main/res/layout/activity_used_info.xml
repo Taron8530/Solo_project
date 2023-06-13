@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         app:layout_constrainedHeight="true"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="@+id/used_info_bottom_bar"
+        app:layout_constraintBottom_toTopOf="@+id/used_info_bottom_bar"
         app:layout_constraintLeft_toLeftOf="parent"
 
         app:layout_constraintRight_toRightOf="parent"
