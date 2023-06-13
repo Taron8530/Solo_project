@@ -87,7 +87,10 @@ public class used_add extends AppCompatActivity {
         e_detail = findViewById(R.id.add_used_detail);
         e_price.addTextChangedListener(new UsedAddCustomTextWatchar(e_price));
 
+        adapter = new MultiImageAdapter(uriList, used_add.this);
 
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(used_add.this, LinearLayoutManager.HORIZONTAL, false));    // 리사이클러뷰 수평 스크롤 적용
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,9 +167,6 @@ public class used_add extends AppCompatActivity {
                 uriList.add(imageUri);
                 size = size+1;
                 image_size.setText(size+"/5");
-                adapter = new MultiImageAdapter(uriList, used_add.this);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(used_add.this, LinearLayoutManager.HORIZONTAL, true));
             }
             else{      // 이미지를 여러장 선택한 경우
                 ClipData clipData = data.getClipData();
@@ -194,10 +194,6 @@ public class used_add extends AppCompatActivity {
                         }
                     }
 
-                    adapter = new MultiImageAdapter(uriList, getApplicationContext());
-                    recyclerView.setAdapter(adapter);   // 리사이클러뷰에 어댑터 세팅
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, true));     // 리사이클러뷰 수평 스크롤 적용
-                    recyclerView.scrollToPosition(uriList.size() - 1);
                     adapter.notifyDataSetChanged();
                 }
             }

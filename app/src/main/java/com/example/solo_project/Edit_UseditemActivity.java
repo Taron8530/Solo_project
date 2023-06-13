@@ -78,7 +78,7 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         Log.e(TAG, "onCreate: " + images);
         adapter = new Edit_Used_Adapter(images, Edit_UseditemActivity.this, num);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(Edit_UseditemActivity.this, LinearLayoutManager.HORIZONTAL, true));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         adapter.notifyDataSetChanged();
         used_Name_EditText.setText(used_Name);
         used_Detail_EditText.setText(detail);
