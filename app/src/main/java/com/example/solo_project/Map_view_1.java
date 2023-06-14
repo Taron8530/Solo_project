@@ -1,9 +1,11 @@
 package com.example.solo_project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,13 +27,13 @@ public class Map_view_1 extends AppCompatActivity implements MapView.CurrentLoca
     private MapPoint mapPoint;
     private Button goto_my_location;
     private Button goto_location;
-    private TextView exit;
     private String location_add;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view1);
         Intent i = getIntent();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         data = i.getStringExtra("location").split(">");
         location_address = findViewById(R.id.location_address);
         if(data.length > 2){
@@ -47,7 +49,6 @@ public class Map_view_1 extends AppCompatActivity implements MapView.CurrentLoca
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         goto_my_location = findViewById(R.id.map_view_goto_my_location);
         goto_location = findViewById(R.id.map_view_goto_location);
-        exit = findViewById(R.id.map_view_exit);
 
         mapViewContainer.addView(mapView);
         mapView.setMapViewEventListener(this);
@@ -74,12 +75,6 @@ public class Map_view_1 extends AppCompatActivity implements MapView.CurrentLoca
             @Override
             public void onClick(View view) {
                 mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-            }
-        });
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
     }
@@ -146,5 +141,14 @@ public class Map_view_1 extends AppCompatActivity implements MapView.CurrentLoca
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

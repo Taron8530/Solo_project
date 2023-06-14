@@ -18,6 +18,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,7 +38,6 @@ public class Map_View extends AppCompatActivity implements MapView.CurrentLocati
     private ViewGroup mapViewContainer;
     private String TAG = "Map_View";
     private MapPOIItem mMarker;
-    private TextView exit;
     private Button submit;
     private double latitude = 0; // 위도
     private double longitude = 0; // 경도
@@ -48,17 +48,11 @@ public class Map_View extends AppCompatActivity implements MapView.CurrentLocati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
-        exit = findViewById(R.id.map_view_exit);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         submit = findViewById(R.id.map_view_submit);
         location_address = findViewById(R.id.location_address);
 
         submit.setClickable(false);
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -269,5 +263,15 @@ public class Map_View extends AppCompatActivity implements MapView.CurrentLocati
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
         Log.e(TAG,"onMapViewMoveFinished: "+ mapPoint.toString());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

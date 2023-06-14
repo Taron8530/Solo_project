@@ -84,12 +84,17 @@ public class VideoCallFragment extends Fragment
     private String receiver;
     private String sender;
     private View root;
+    private boolean camera_Status = false; // 0이면 후면 1이면 전면
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     private EglBase eglBase;
     private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
     private Button close_Call;
     private boolean signalingStatus;
+    private Button camera_Changer;
+    private Button mic_Close;
+    private Button sound_Close;
+    private AudioTrack remoteAudioTrack;
     public VideoCallFragment(Signaling_Socket socket,boolean status,String sender,String receiver) {
         this.socket = socket;
         this.status = status;
@@ -115,10 +120,26 @@ public class VideoCallFragment extends Fragment
         my_view.init(eglBase.getEglBaseContext(),null);
         videoTrack.addSink(my_view);
         close_Call = root.findViewById(R.id.video_call_closw);
+        camera_Changer = root.findViewById(R.id.video_call_camera_switch);
+        mic_Close = root.findViewById(R.id.video_call_micOff);
+        sound_Close = root.findViewById(R.id.video_call_volume_off);
+        mic_Close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stream.removeTrack(localAudioTrack);
+            }
+        });
+        sound_Close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remoteAudioTrack.setEnabled(false);
+            }
+        });
         close_Call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 socket.sendMsg(sender,receiver,"close_call");
+                getActivity().finish();
             }
         });
         Log.d(TAG, "init_view: status check" + status);
@@ -153,6 +174,7 @@ public class VideoCallFragment extends Fragment
         }
     }
     public void initWebRTC() {
+
         eglBase = EglBase.create();
         PeerConnectionFactory.initialize(PeerConnectionFactory
                 .InitializationOptions.builder(getContext())
@@ -170,7 +192,6 @@ public class VideoCallFragment extends Fragment
 //        CameraEnumerator cameraEnumerator =
 //        VideoCapturer videoCapturer = createCameraCapture();
         audioConstraints = new MediaConstraints();
-        videoConstraints = new MediaConstraints();
         initIceServers();
         peerConnection = peerConnectionFactory.createPeerConnection(
                 new PeerConnection.RTCConfiguration(iceServers),
@@ -188,23 +209,6 @@ public class VideoCallFragment extends Fragment
                             signalingStatus = true;
                         }
                     }
-
-//                    @Override
-//                    public void onTrack(RtpTransceiver transceiver) {
-//                        Log.d(TAG, "onTrack: 호출됨. " + transceiver.getReceiver().track());
-//                        super.onTrack(transceiver);
-//                        MediaStreamTrack track = transceiver.getReceiver().track();
-//                        if (track instanceof VideoTrack) {
-//                            // 원격 비디오 트랙을 처리하는 로직
-//                            VideoTrack remoteVideoTrack = (VideoTrack) track;
-//                            SurfaceViewRenderer remoteVideoView = root.findViewById(R.id.otherSurface);
-//                            remoteVideoTrack.addSink(remoteVideoView);
-//                        } else if (track instanceof AudioTrack) {
-//                            // 원격 오디오 트랙을 처리하는 로직
-//                            AudioTrack remoteAudioTrack = (AudioTrack) track;
-//                            // 오디오 트랙을 사용하려면 중복 처리, 재생하는 로직 구현이 필요합니다.
-//                        }
-//                    }
 
                     @Override
                     public void onAddStream(MediaStream mediaStream) {
@@ -279,6 +283,18 @@ public class VideoCallFragment extends Fragment
         peerConnection.setRemoteDescription(new SDPObserver(),receivedSessionDescription);
 
     }
+    private void camera_Change(){
+        SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBase.getEglBaseContext());
+        VideoCapturer videoCapturer;
+        if(camera_Status){
+            videoCapturer = createCameraCapturer();
+        }else{
+            videoCapturer = createCameraFront();
+        }
+        videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast());
+        videoCapturer.initialize(surfaceTextureHelper, getActivity().getApplicationContext(), videoSource.getCapturerObserver());
+        videoCapturer.startCapture(1000, 1000, 30);
+    }
     private void createAnswer(String remoteSdp) {
         MediaConstraints constraints = new MediaConstraints();
         String sdpType = "offer"; // "offer" 또는 "answer"
@@ -304,6 +320,20 @@ public class VideoCallFragment extends Fragment
 
         for (String deviceName : deviceNames) {
             if (enumerator.isBackFacing(deviceName)) {
+                VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
+                if (videoCapturer != null) {
+                    return videoCapturer;
+                }
+            }
+        }
+        return null;
+    }
+    private VideoCapturer createCameraFront() {
+        Camera1Enumerator enumerator = new Camera1Enumerator(false);
+        String[] deviceNames = enumerator.getDeviceNames();
+
+        for (String deviceName : deviceNames) {
+            if (enumerator.isFrontFacing(deviceName)) {
                 VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
                 if (videoCapturer != null) {
                     return videoCapturer;
@@ -346,7 +376,7 @@ public class VideoCallFragment extends Fragment
                 Log.d(TAG, "run: gotremotestream 여기 들어옴?");
                 if(!videoTracks.isEmpty() && !audioTracks.isEmpty()){
                     VideoTrack videoTrack = videoTracks.get(0);
-                    AudioTrack audioTrack = audioTracks.get(0);// 이 코드를 통해 스피커폰 출력 on/off를 조정할 수 있습니다.
+                    remoteAudioTrack = audioTracks.get(0);// 이 코드를 통해 스피커폰 출력 on/off를 조정할 수 있습니다.
                     Log.d(TAG, "run: gotremotestream 여기 들어옴1"+videoTrack);
                     other_view.setMirror(true);
                     other_view = root.findViewById(R.id.otherSurface); // Replace with your actual ID
@@ -355,7 +385,7 @@ public class VideoCallFragment extends Fragment
                     other_view.setZOrderMediaOverlay(false);
                     other_view.setEnableHardwareScaler(true);
                     videoTrack.addSink(other_view);
-                    audioTrack.setEnabled(true);
+                    remoteAudioTrack.setEnabled(true);
                 }
 
                 // If you want to process the remote audio

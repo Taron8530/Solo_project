@@ -321,7 +321,8 @@ public class chating extends AppCompatActivity {
         {
             case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
                 socket_Disconnect();
-                return true;
+                finish();
+                break;
             case R.id.promise:
                 //약속잡기 구현 호출
                 promise();
@@ -439,7 +440,6 @@ public class chating extends AppCompatActivity {
                         input.close();
                         socket.close();
                         sendWriter.close();
-                        finish();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -500,9 +500,6 @@ public class chating extends AppCompatActivity {
                     socket_Disconnect();
                     Log.e(TAG+"Wait_msg",e.toString());
                 } }}.start();
-    }
-    private void VideoCallRequest(){
-
     }
     private void Promise_select(String room_num){
         ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
