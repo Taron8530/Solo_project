@@ -71,7 +71,7 @@ public class F_home extends Fragment {
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         MenuItem item = menu.findItem(R.id.menu_spinner);
-        Spinner spinner = (Spinner) item.getActionView();
+        spinner = (Spinner) item.getActionView();
 
         // 스피너에 표시할 데이터 어댑터 설정
         ArrayAdapter<CharSequence> sadapter = ArrayAdapter.createFromResource(getActivity(),
@@ -161,6 +161,16 @@ public class F_home extends Fragment {
                     if(recyclerView.canScrollVertically(-1)){
                         Log.e("F_home", String.valueOf(page));
                         progressBar.setVisibility(View.VISIBLE);
+                        if(spinner.getSelectedItem().toString().equals("최신순")){
+                            Collections.sort(list, new Used_item_DateComparator());
+                            adapter.notifyDataSetChanged();
+                        } else if (spinner.getSelectedItem().toString().equals("높은가격순")) {
+                            Collections.sort(list, new Used_item_MaxPriceComparator());
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Collections.sort(list, new Used_item_MinPriceComparator());
+                            adapter.notifyDataSetChanged();
+                        }
                         page += 1;
                         select_used(page);
                     }
