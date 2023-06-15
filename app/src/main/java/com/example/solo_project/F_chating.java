@@ -102,7 +102,7 @@ public class F_chating extends Fragment {
     public void onResume() {
         super.onResume();
         list_select();
-        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().register(this);
     }
     public void room_update(){
         list_select();
@@ -114,11 +114,6 @@ public class F_chating extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBus.getDefault().unregister(this);
-    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void FinishLoad(msg_box msg){
         Log.e("FinishLoad",msg.getMsg());

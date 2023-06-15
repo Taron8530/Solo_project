@@ -2,10 +2,15 @@ package com.example.solo_project.webrtc;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,8 +47,10 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
     private CallingFragment callingFragment;
     private CallChoiceFragment callChoiceFragment;
     private VideoCallFragment videoCallFragment;
+    private static final int PERMISSION_REQUEST_CODE = 1;
     private String TAG = "Video_call_activity";
     private boolean setOffer = false;
+    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,7 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
         }
     }
     private void init_() throws IOException {
+        requestPermissions();
         Intent i = getIntent();
         status = i.getStringExtra("status");
         sender = i.getStringExtra("sender");
@@ -139,6 +147,23 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
             throw new RuntimeException(e);
         } catch (JSONException e) {
             throw new RuntimeException(e);
+        }
+    }
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(Video_call_Activity.this, permissions, PERMISSION_REQUEST_CODE);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(Video_call_Activity.this, "권한 요청 거부됨. 앱이 제대로 작동하지 않을 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    break;
+                }else{
+
+                }
+            }
         }
     }
 }

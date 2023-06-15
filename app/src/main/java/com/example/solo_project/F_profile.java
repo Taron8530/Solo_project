@@ -139,7 +139,7 @@ public class F_profile extends Fragment {
                 if(response.isSuccessful()){
                     Log.e("프로필프래그먼트 Credit", String.valueOf(response.body().getCredit()));
                     credit = response.body().getCredit();
-                    credit_View.setText("보유 크래딧: "+ credit +"C");
+                    credit_View.setText(credit+"C");
                 }
             }
 

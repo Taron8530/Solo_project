@@ -67,7 +67,7 @@
                 android:layout_marginLeft="10dp"
 
                 android:layout_weight="1"
-                android:background="@mipmap/ic_call_mic_off" />
+                android:background="@mipmap/ic_call_mic_on" />
 
             <Button
                 android:id="@+id/video_call_volume_off"
@@ -77,7 +77,7 @@
                 android:layout_marginLeft="10dp"
 
                 android:layout_weight="1"
-                android:background="@drawable/ic_call_volume_off" />
+                android:background="@mipmap/ic_call_volume_on" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

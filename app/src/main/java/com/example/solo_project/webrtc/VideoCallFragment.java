@@ -5,12 +5,14 @@ import static androidx.core.content.ContextCompat.getSystemService;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -85,6 +87,8 @@ public class VideoCallFragment extends Fragment
     private String sender;
     private View root;
     private boolean camera_Status = false; // 0이면 후면 1이면 전면
+    private boolean audio_Status = false; //0이면 꺼짐 1이면 켜짐
+    private boolean remote_audio_Status = false; //0이면 꺼짐 1이면 켜짐
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     private EglBase eglBase;
@@ -95,6 +99,7 @@ public class VideoCallFragment extends Fragment
     private Button mic_Close;
     private Button sound_Close;
     private AudioTrack remoteAudioTrack;
+    private VideoCapturer videoCapturer;
     public VideoCallFragment(Signaling_Socket socket,boolean status,String sender,String receiver) {
         this.socket = socket;
         this.status = status;
@@ -107,7 +112,7 @@ public class VideoCallFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_video_call, container, false);
-        requestPermissions();
+//        requestPermissions();
         initWebRTC();
         init_view();
         return root;
@@ -123,16 +128,44 @@ public class VideoCallFragment extends Fragment
         camera_Changer = root.findViewById(R.id.video_call_camera_switch);
         mic_Close = root.findViewById(R.id.video_call_micOff);
         sound_Close = root.findViewById(R.id.video_call_volume_off);
+        camera_Changer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                camera_Change();
+                Log.d(TAG, "onClick: camera_Changer 클릭됨");
+            }
+        });
         mic_Close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stream.removeTrack(localAudioTrack);
+                if(audio_Status){
+                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_off);
+                    mic_Close.setBackground(drawable);
+                    stream.removeTrack(localAudioTrack);
+                }else{
+                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_on);
+                    mic_Close.setBackground(drawable);
+                    localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
+                    localAudioTrack.setEnabled(true);
+                    stream.addTrack(localAudioTrack);
+                }
+
             }
         });
         sound_Close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                remoteAudioTrack.setEnabled(false);
+                if(remote_audio_Status){
+                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_volume_off);
+                    sound_Close.setBackground(drawable);
+                    remoteAudioTrack.setEnabled(false);
+                    remote_audio_Status = false;
+                }else{
+                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_volume_on);
+                    sound_Close.setBackground(drawable);
+                    remoteAudioTrack.setEnabled(true);
+                    remote_audio_Status = true;
+                }
             }
         });
         close_Call.setOnClickListener(new View.OnClickListener() {
@@ -236,7 +269,7 @@ public class VideoCallFragment extends Fragment
                     }
                 });
         SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBase.getEglBaseContext());
-        VideoCapturer videoCapturer = createCameraCapturer();
+        videoCapturer = createCameraCapturer();
         videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast());
         videoCapturer.initialize(surfaceTextureHelper, getActivity().getApplicationContext(), videoSource.getCapturerObserver());
         videoCapturer.startCapture(1000, 1000, 30);
@@ -285,15 +318,34 @@ public class VideoCallFragment extends Fragment
     }
     private void camera_Change(){
         SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBase.getEglBaseContext());
-        VideoCapturer videoCapturer;
+        try {
+            videoCapturer.stopCapture();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         if(camera_Status){
-            videoCapturer = createCameraCapturer();
-        }else{
+            if(videoCapturer != null){
+                videoCapturer.dispose();
+            }
             videoCapturer = createCameraFront();
+            camera_Status = false;
+        }else{
+            if(videoCapturer != null){
+                videoCapturer.dispose();
+            }
+            videoCapturer = createCameraCapturer();
+            camera_Status = true;
         }
         videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast());
         videoCapturer.initialize(surfaceTextureHelper, getActivity().getApplicationContext(), videoSource.getCapturerObserver());
         videoCapturer.startCapture(1000, 1000, 30);
+        stream.removeTrack(videoTrack);
+        videoTrack = peerConnectionFactory.createVideoTrack("103",videoSource);
+        videoTrack.addSink(my_view);
+        stream.addTrack(videoTrack);
+
+
+
     }
     private void createAnswer(String remoteSdp) {
         MediaConstraints constraints = new MediaConstraints();

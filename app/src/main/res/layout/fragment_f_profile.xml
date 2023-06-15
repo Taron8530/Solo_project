@@ -137,13 +137,25 @@
             android:id="@+id/credit"
             android:layout_width="wrap_content"
             android:layout_height="22dp"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="30dp"
+            android:textColor="@color/black"
             android:text="보유 크래딧"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/f_email" />
+
+        <TextView
+            android:id="@+id/credit_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="크래딧"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.279"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/massege" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

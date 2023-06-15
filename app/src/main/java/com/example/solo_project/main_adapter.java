@@ -116,7 +116,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
         } else if ((diffTime /= DAY) < MONTH) {
             msg = (diffTime) + "달 전";
         } else {
-            msg = (diffTime) + "년 전";
+            msg = (diffTime / 12 ) + "년 전";
         }
         return msg;
     }

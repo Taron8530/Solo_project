@@ -140,7 +140,7 @@ public class chat_FCM extends FirebaseMessagingService {
         } else {
             builder = builder.setContentTitle(title)
                     .setContentText(message)
-                    .setSmallIcon(R.drawable.app_icon);
+                    .setSmallIcon(R.drawable.app_icon).setContentIntent(pendingIntent);
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

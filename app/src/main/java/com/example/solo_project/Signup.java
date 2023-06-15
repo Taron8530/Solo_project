@@ -286,19 +286,4 @@ public class Signup extends AppCompatActivity {
             }
         });
     }
-    public void Timer(TextView time){
-        int timer = 300; //300초 변수 선언
-        int hour = (timer - 1) / 5;
-
-
-        time.post(new Runnable() {
-            @Override
-            public void run() {
-                if(timer <= 0){
-                    return;
-                }
-            }
-        });
-
-    }
 }

@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:text="거래 가능 상품만 보기"
         android:textSize="13dp"
+        android:layout_marginStart="10dp"
         android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
