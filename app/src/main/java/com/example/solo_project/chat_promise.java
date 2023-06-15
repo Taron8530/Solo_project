@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,7 +39,6 @@ public class chat_promise extends AppCompatActivity {
     private TextView tx2;
     private Button submit;
     private DatePickerDialog datePickerDialog;
-    private TextView exit;
     private String TAG = "chat_promise";
 
     @Override
@@ -59,7 +60,7 @@ public class chat_promise extends AppCompatActivity {
         tx1 = findViewById(R.id.textView);
         tx2 = findViewById(R.id.textView2);
         submit = findViewById(R.id.promise_submit);
-        exit = findViewById(R.id.promise_exit);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         EditText et_Date = (EditText) findViewById(R.id.promise_date);
         EditText et_time = (EditText) findViewById(R.id.promise_time);
         long mNow;
@@ -99,13 +100,6 @@ public class chat_promise extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         et_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,5 +132,14 @@ public class chat_promise extends AppCompatActivity {
 
         EditText et_date = (EditText) findViewById(R.id.promise_date);
         et_date.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
