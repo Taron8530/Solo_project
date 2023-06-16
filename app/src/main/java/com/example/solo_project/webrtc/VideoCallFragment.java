@@ -142,12 +142,14 @@ public class VideoCallFragment extends Fragment
                     Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_off);
                     mic_Close.setBackground(drawable);
                     stream.removeTrack(localAudioTrack);
+                    audio_Status = false;
                 }else{
                     Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_on);
                     mic_Close.setBackground(drawable);
                     localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
                     localAudioTrack.setEnabled(true);
                     stream.addTrack(localAudioTrack);
+                    audio_Status = true;
                 }
 
             }
