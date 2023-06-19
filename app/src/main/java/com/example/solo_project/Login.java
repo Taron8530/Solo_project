@@ -22,8 +22,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.user.UserApiClient;
@@ -40,7 +43,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 public class Login extends AppCompatActivity {
-    String TAG = "Login Acticity";
+    private String TAG = "Login Acticity";
+    private SignInButton signInButton;
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+    private int RC_SIGN_IN=123;
+    private String Key = "336778946478-j9p8irl6mu25oj2mkncqs0gu5kt1dn2c.apps.googleusercontent.com";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +98,7 @@ public class Login extends AppCompatActivity {
             kakao_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.e("getHash",getKeyHash(Login.this));
+//                    Log.e("getHash",getKeyHash(Login.this));
 
                     KakaoSdk.init(Login.this, "4d73f7809329175f76afdf054f1e3e42");
 
@@ -119,6 +128,7 @@ public class Login extends AppCompatActivity {
 
                 }
             });
+            mAuth = FirebaseAuth.getInstance();
         }
     }
     public static String getKeyHash(final Context context) {
@@ -158,9 +168,7 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void onResponse(@NonNull Call<Signup_model> call, @NonNull Response<Signup_model> response)
                         {
-                            boolean test = response.isSuccessful();
                             Log.e("selectTest","연결 후");
-                            System.out.println("selectTest"+test);
                             if (response.isSuccessful() && response.body() != null)
                             {
                                 String t = response.toString();

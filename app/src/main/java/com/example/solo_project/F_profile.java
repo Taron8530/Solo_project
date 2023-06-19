@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.solo_project.webrtc.Video_call_Activity;
 import com.google.android.gms.common.api.Api;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
@@ -44,9 +45,11 @@ public class F_profile extends Fragment {
     Button change_profile;
     Button creditActivity;
     final String TAG = "F_Profile";
+    private FirebaseAuth mAuth;
     public F_profile(String nickname,String email){
         this.nickname = nickname;
         this.email = email;
+        mAuth = FirebaseAuth.getInstance();
     }
     public F_profile(){}
     @Override

@@ -14,11 +14,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.StrictMode;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,17 +56,22 @@ public class Signup extends AppCompatActivity {
     private Button varify_Btn;
     private String phone_number;
     private LinearLayout Linear;
+    private EditText inputPhoneNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         mauth = FirebaseAuth.getInstance();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_signup);
-        TextView back = findViewById(R.id.back);
         Button verify = findViewById(R.id.verify);
         Button next = findViewById(R.id.next0);
         Button Verification = findViewById(R.id.sendveritication);
         varify_Btn = findViewById(R.id.verify_btn);
+        inputPhoneNumber = findViewById(R.id.inputnumber);
+        inputPhoneNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+
         EditText e_mail_signup = findViewById(R.id.e_mail_signup);
         verifycode = findViewById(R.id.verifycode);
         EditText Password = findViewById(R.id.password2);
@@ -123,14 +130,6 @@ public class Signup extends AppCompatActivity {
                 }
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent I = new Intent(getApplicationContext(),Login.class);
-                startActivity(I);
-                finish();
-            }
-        });
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,10 +147,13 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText n = findViewById(R.id.inputnumber);
-                String number = n.getText().toString();
+                String number = n.getText().toString().replaceAll("-","").substring(3);
+                Log.d("SignupActivity", "onClick: 전화번호"+number);
                 if(TextUtils.isEmpty(n.getText().toString())){
                     Toast T = Toast.makeText(Signup.this,"번호를 입력해주세요",Toast.LENGTH_SHORT);
                     T.show();
+                }else if(number.length() > 11){
+                    Toast.makeText(Signup.this,"제대로 된 번호를 입력해주세요.",Toast.LENGTH_SHORT);
                 }else{
                     send_verificationcode(number);
                 }
@@ -285,5 +287,17 @@ public class Signup extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                Intent i = new Intent(Signup.this,Login.class);
+                startActivity(i);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

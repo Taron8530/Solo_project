@@ -102,6 +102,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constrainedWidth="true"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,6 +125,7 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:paddingTop="5dp"
+          android:layout_marginTop="5dp"
           android:paddingBottom="5dp"
           android:text="TextView"
           android:textSize="18dp" />

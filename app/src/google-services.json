@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "336778946478",
+    "firebase_url": "https://solo-project-bfdd3-default-rtdb.firebaseio.com",
     "project_id": "solo-project-bfdd3",
     "storage_bucket": "solo-project-bfdd3.appspot.com"
   },
@@ -14,15 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "336778946478-fkb1b7qegvmtdk0pd3srjau0vuuvmc69.apps.googleusercontent.com",
+          "client_id": "336778946478-iv0apki0rc65q5o00o34tlost9qunb6u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.solo_project",
-            "certificate_hash": "4143c7eac6769b30190719339d0524de5a02ddc8"
+            "certificate_hash": "832e0372f099771e7aa90bea9cfc7de33aca50c6"
           }
         },
         {
-          "client_id": "336778946478-8ndamgk18hptqs5vi8oha1ri3t3c13bp.apps.googleusercontent.com",
+          "client_id": "336778946478-j9p8irl6mu25oj2mkncqs0gu5kt1dn2c.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

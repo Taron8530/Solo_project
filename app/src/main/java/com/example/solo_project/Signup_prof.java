@@ -76,7 +76,7 @@ public class Signup_prof extends AppCompatActivity {
         email = I.getStringExtra("email");
         PW = I.getStringExtra("PW");
         phone_number = I.getStringExtra("phone_number");
-        Log.e("insert", email + "/" + PW);
+        Log.e("insert", email + "/" + PW+"/"+phone_number);
         profilebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,9 +175,9 @@ public class Signup_prof extends AppCompatActivity {
                 if (checkname == false) {
                     Toast.makeText(Signup_prof.this, "닉네임 중복확인을 먼저 진행해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.e("insert", email + "/" + PW);
+                    Log.e("insert", email + "/" + PW+"/"+phone_number);
                     ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-                    Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname);
+                    Call<Signup_model> call = apiInterface.insertaccount(email, PW, nickname,phone_number);
                     filepath = getRealPathFromURI(Uri,nickname);
                     UpdatePhoto(nickname);
                     call.enqueue(new Callback<Signup_model>() {

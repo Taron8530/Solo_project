@@ -16,6 +16,8 @@ public class Signup_model {
     @SerializedName("verify") private  String verify;
     @Expose
     @SerializedName("credit") private String credit;
+    @Expose
+    @SerializedName("phoneNumber") private String phoneNumber;
     public String getNickname(){
         return nickname;
     }
@@ -30,6 +32,9 @@ public class Signup_model {
     }
     public String getResponse(){return response;}
     public String getVerify(){return verify;}
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
     public void setResponse(String response){this.response = response;}
     public void setE_mail(String E_mail){
         this.email = E_mail;

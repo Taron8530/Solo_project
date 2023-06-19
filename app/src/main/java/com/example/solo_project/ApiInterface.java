@@ -34,8 +34,9 @@ public interface ApiInterface {
     Call<Signup_model> insertaccount(
             @Query("email") String email,
             @Query("PW") String PW,
-            @Query("nickname") String nickname
-    );
+            @Query("nickname") String nickname,
+            @Query("phoneNumber") String phoneNumber
+            );
 
     //닉네임 체크(회원가입 절차)
     @GET("check_nickname.php")
