@@ -22,7 +22,6 @@
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:padding="10dp"
         android:background="@drawable/kakao_login_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -30,13 +29,16 @@
         app:layout_constraintTop_toBottomOf="@+id/submit"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <com.google.android.gms.common.SignInButton
+    <com.shobhitpuri.custombuttons.GoogleSignInButton
         android:id="@+id/googleLoginBtn"
         android:layout_width="270dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="구글 로그인      "
+        android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/kakao_login_btn" />
 

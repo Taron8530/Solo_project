@@ -7,7 +7,7 @@
     tools:context=".ChangeProfileActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/change_profile_profile"
         android:layout_width="255dp"
         android:layout_height="252dp"
         android:layout_marginTop="56dp"
@@ -39,5 +39,5 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/change_profile_profile" />
 </androidx.constraintlayout.widget.ConstraintLayout>

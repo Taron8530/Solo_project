@@ -67,6 +67,12 @@ public class F_profile extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,7 +122,8 @@ public class F_profile extends Fragment {
         change_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), TestGoogleLoginActivity.class);
+                Intent i = new Intent(getActivity(), ChangeProfileActivity.class);
+                i.putExtra("nickname",nickname);
                 startActivity(i);
             }
         });

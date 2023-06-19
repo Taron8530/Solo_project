@@ -86,7 +86,7 @@ public class VideoCallFragment extends Fragment
     private String receiver;
     private String sender;
     private View root;
-    private boolean camera_Status = false; // 0이면 후면 1이면 전면
+    private boolean camera_Status = true; // 0이면 전면 1이면 후면
     private boolean audio_Status = false; //0이면 꺼짐 1이면 켜짐
     private boolean remote_audio_Status = false; //0이면 꺼짐 1이면 켜짐
 

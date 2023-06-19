@@ -16,6 +16,7 @@
     <color name="gray">#FFC6C6C6</color>
     <color name="lightGray">#FFE9E9E9</color>
     <color name="main_color">#FD9B66</color>
+    <color name="btn_enable_color">#a0a0a0</color>
 
 
 </resources>
