@@ -37,9 +37,6 @@
             android:value="AIzaSyB5KOBlx2pS8bF0T1wE_i7jAgmYMmspDKU" />
 
         <activity
-            android:name=".TestGoogleLoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".UsedSearchActivity"
             android:exported="false" />
         <activity

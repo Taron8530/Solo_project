@@ -123,7 +123,6 @@ public class F_profile extends Fragment {
                 chat_data_db_helper.allRemove();
                 E.clear();
                 E.commit();
-                Glide.get(getContext()).clearDiskCache();
                 startActivity(i);
                 getActivity().finish();
             }
