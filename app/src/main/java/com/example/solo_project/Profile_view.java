@@ -44,6 +44,7 @@ public class Profile_view extends AppCompatActivity {
         nickname = i.getStringExtra("nickname");
         Log.e("닉네임 확인",nickname);
         nickname_view.setText(nickname);
+        setTitle(nickname +"님의 프로필");
         Glide.with(getApplicationContext())
 
                 .load("http://35.166.40.164/profile/"+nickname+".png")

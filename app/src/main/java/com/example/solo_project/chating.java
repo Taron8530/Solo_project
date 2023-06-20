@@ -116,7 +116,7 @@ public class chating extends AppCompatActivity {
                             double lati = i.getDoubleExtra("lati",0);
                             double longs = i.getDoubleExtra("long",0);
                             Log.d(TAG,i.getStringExtra("location") + lati + longs);
-                            dataList.add(new chat_item(i.getStringExtra("location") +">"+ lati +">"+ longs,nickname,"전송중...",5));
+                            dataList.add(new chat_item(i.getStringExtra("location") +">"+ lati +">"+ longs,nickname,"전송중...",6));
                             sendMsg(i.getStringExtra("location") +">"+ lati +">"+ longs,sender,room_num,"Location_share");
                             Log.e("위치공유","위치공유"+i.getStringExtra("location") +"/"+ lati +"/"+ longs);
 //                            myDb.insert_data(room_num,"",Msgs[2].replaceAll("위치____공유",""),Msgs[3],4);
@@ -141,7 +141,9 @@ public class chating extends AppCompatActivity {
                                 if(response != null){
                                     Log.d("chating",response.body());
                                     //여기서 소켓으로 메세지 던질거임
-                                    sendMsg("약____속",sender,room_num,"Promise");
+                                    sendMsg(nickname+"님이 약속을 잡았습니다 상단을 확인해주세요!",sender,room_num,"Promise");
+                                    dataList.add(new chat_item(nickname+"님이 약속을 잡았습니다! 상단을 확인해주세요",nickname,"전송중...",5));
+                                    adapter.notifyDataSetChanged();
                                     Promise_select(room_num);
                                 }
                             }
@@ -464,9 +466,11 @@ public class chating extends AppCompatActivity {
                     while(true){
                         read = input.readLine();
                         if(read!=null){
+                            Log.d(TAG, "run: 서버에서 보내는 메세지" + read);
                             String[] str = read.split("/");
                             Log.e("chat",read);
                             if(str[0].equals("보내짐")){
+                                Log.d(TAG, "조건문은 들어오냐?");
                                 runOnUiThread(new Runnable(){
                                     @Override
                                     public void run() {
@@ -479,9 +483,6 @@ public class chating extends AppCompatActivity {
                                         }
                                     }
                                 });
-                            }else if(str[0].equals("약____속")){
-                                //함수로 하기
-                                Promise_select(room_num);
                             }else if(str[0].equals("Video_Call")){
                                 Intent i = new Intent(chating.this, Video_call_Activity.class);
                                 i.putExtra("status","call");
@@ -546,17 +547,23 @@ public class chating extends AppCompatActivity {
         });
     }
     private void check_time(String time) throws ParseException {
+        Log.d(TAG, "check_time: 호출");
         for(int i =0;i<dataList.size();i++){
             if (dataList.get(i).getTime().equals("전송중...")&&dataList.get(i).getViewType() >= 2) {
+                Log.d(TAG, "check_time: 호출"+i);
                 dataList.get(i).setTime(String_extract_time(time));
                 adapter.notifyDataSetChanged();
                 chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
                 db.insert_data(room_num,nickname,dataList.get(i).getContent(),time,dataList.get(i).getViewType());
                 if(dataList.get(i).getContent().contains("image") || dataList.get(i).getContent().contains(".jpeg")){
                     myDb.last_msg_update(Integer.parseInt(room_num),"사진",time);
-                }else if(dataList.get(i).getViewType() == 5){
+                }else if(dataList.get(i).getViewType() == 6){
                     myDb.last_msg_update(Integer.parseInt(room_num),"위치를 공유했어요!",time);
-                }else{
+                }else if(dataList.get(i).getViewType() == 5){
+                    Promise_select(room_num);
+                    myDb.last_msg_update(Integer.parseInt(room_num),"약속을 잡았습니다.",time);
+                }
+                else{
                     myDb.last_msg_update(Integer.parseInt(room_num),dataList.get(i).getContent(),time);
                 }
 
@@ -729,7 +736,6 @@ public class chating extends AppCompatActivity {
             chat_data_db_Helper myDb = new chat_data_db_Helper(chating.this);
             DBHelper myDbs = new DBHelper(chating.this);
             String message = null;
-            String receiver = null;
             String type = null;
             String sender= null;
             String time = null;
@@ -753,6 +759,10 @@ public class chating extends AppCompatActivity {
                 dataList.add(new chat_item(message,sender,String_extract_time(time),4)); //end point
                 myDb.insert_data(room_num,sender,message,time,4);
                 myDbs.last_msg_update(Integer.parseInt(room_num),"위치를 공유했어요!",time);
+            }else if(type.equals("Promise")){
+                dataList.add(new chat_item(message,sender,String_extract_time(time),5)); //end point
+                myDb.insert_data(room_num,sender,message,time,5);
+                myDbs.last_msg_update(Integer.parseInt(room_num),"약속을 잡았습니다.",time);
             }else{
                     dataList.add(new chat_item(message,sender,String_extract_time(time),1));
                     myDb.insert_data(room_num,sender,message,time,1);

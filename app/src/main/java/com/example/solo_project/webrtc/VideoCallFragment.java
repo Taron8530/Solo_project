@@ -69,7 +69,6 @@ public class VideoCallFragment extends Fragment
     private PeerConnectionFactory peerConnectionFactory;
     private String TAG = "VideoCallFragment";
     private MediaConstraints audioConstraints;
-    private MediaConstraints videoConstraints;
     private AudioTrack localAudioTrack;
     private AudioSource audioSource;
     private VideoSource videoSource;

@@ -68,6 +68,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             Log.e("Myadapter","여기 들어옴");
             view = inflater.inflate(R.layout.left_location_share,parent,false);
             return new Leftlocation_Share(view);
+        }else if(viewType == 5){ // 약속 잡았을때
+            Log.e("Myadapter","여기 들어옴");
+            view = inflater.inflate(R.layout.chat_promise_item,parent,false);
+            return new PromiseViewHolder(view);
         }else{ // 내가 위치를 공유했을때
             Log.e("Myadapter","여기 들어옴");
             view = inflater.inflate(R.layout.right_location_share,parent,false);
@@ -104,6 +108,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((Rightlocation_Share) viewHolder).time.setText(myDataList.get(position).getTime());
         }else if(viewHolder instanceof Leftlocation_Share){
             ((Leftlocation_Share) viewHolder).time.setText(myDataList.get(position).getTime());
+        }else if(viewHolder instanceof PromiseViewHolder){
+            ((PromiseViewHolder) viewHolder).content.setText(myDataList.get(position).getContent());
         }
     }
 
@@ -180,6 +186,16 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             content = itemView.findViewById(R.id.content);
 //            name = itemView.findViewById(R.id.name);
             time = itemView.findViewById(R.id.time);
+        }
+    }
+    public class PromiseViewHolder extends RecyclerView.ViewHolder{
+        TextView content;
+        //        TextView name;
+
+        PromiseViewHolder(View itemView)
+        {
+            super(itemView);
+            content = itemView.findViewById(R.id.chat_promise);
         }
     }
 
