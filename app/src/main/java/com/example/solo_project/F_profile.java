@@ -49,11 +49,9 @@ public class F_profile extends Fragment {
     View root;
     ImageView profile;
     final String TAG = "F_Profile";
-    private FirebaseAuth mAuth;
     public F_profile(String nickname,String email){
         this.nickname = nickname;
         this.email = email;
-        mAuth = FirebaseAuth.getInstance();
     }
     public F_profile(){}
     @Override

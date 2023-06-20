@@ -402,6 +402,13 @@ public class Login extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(),"로그인 성공",Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
+                                        mAuth.signOut();
+                                        mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Log.d(TAG, "onComplete: 로그아웃 성공");
+                                            }
+                                        });
                                     }
                                     else {
                                         Log.e("selectTest", "연결이 안댐");
