@@ -1,5 +1,6 @@
 package com.example.solo_project;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -29,18 +30,21 @@ public class frag_salehistory_ing extends Fragment implements Serializable {
     RecyclerView recyclerView;
     main_adapter adapter;
     ArrayList<item_model> list = new ArrayList<>();
+    TextView emptyMessage;
     //    TextView back;
     public frag_salehistory_ing(String nickname){
         this.nickname = nickname;
 
     }public frag_salehistory_ing(){
     }
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_frag_salehistory_ing, container, false);
         // Inflate the layout for this fragment
         recyclerView = root.findViewById(R.id.sales_recyclerview);
+        emptyMessage = root.findViewById(R.id.Sales_history_ing_empty);
         adapter = new main_adapter(getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -93,5 +97,8 @@ public class frag_salehistory_ing extends Fragment implements Serializable {
         Log.e("접근 완료",list.toString());
         Log.e("접근 완료",lists.toString());
         adapter.notifyDataSetChanged();
+        if(list.size() <= 0){
+            emptyMessage.setVisibility(View.VISIBLE);
+        }
     }
 }
