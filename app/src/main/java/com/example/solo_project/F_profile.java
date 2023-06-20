@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.solo_project.webrtc.Video_call_Activity;
 import com.google.android.gms.common.api.Api;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +46,8 @@ public class F_profile extends Fragment {
     Button logout;
     Button change_profile;
     Button creditActivity;
+    View root;
+    ImageView profile;
     final String TAG = "F_Profile";
     private FirebaseAuth mAuth;
     public F_profile(String nickname,String email){
@@ -71,28 +75,32 @@ public class F_profile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Glide.with(F_profile.this).
+                load("http://35.166.40.164/profile/"+nickname+".png").
+                apply(new RequestOptions())
+                .skipMemoryCache(true)
+                .circleCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .override(600,600)
+                .error(R.drawable.app_icon)
+                .into(profile);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_f_profile, container, false);
+        root = inflater.inflate(R.layout.fragment_f_profile, container, false);
         email_view = root.findViewById(R.id.f_email);
         nickname_view = root.findViewById(R.id.f_nickname);
         imagebtn = root.findViewById(R.id.Sales_history);
         logout = root.findViewById(R.id.logout);
         change_profile = root.findViewById(R.id.change_profile);
         creditActivity =root.findViewById(R.id.credit_pay);
-        ImageView profile = root.findViewById(R.id.f_profile);
+        profile = root.findViewById(R.id.f_profile);
         Log.e("onCreateView",email + " " +nickname);
         credit_View = root.findViewById(R.id.credit);
         getCredit();
-        Glide.with(F_profile.this)
-                .load("http://35.166.40.164/profile/"+nickname+".png")
-                .circleCrop()
-                .override(600,600)
-                .error(R.drawable.app_icon)
-                .into(profile);
+
         email_view.setText(email);
         nickname_view.setText(nickname);
         imagebtn.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +123,7 @@ public class F_profile extends Fragment {
                 chat_data_db_helper.allRemove();
                 E.clear();
                 E.commit();
+                Glide.get(getContext()).clearDiskCache();
                 startActivity(i);
                 getActivity().finish();
             }

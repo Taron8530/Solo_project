@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -88,8 +90,11 @@ public class ChangeProfileActivity extends AppCompatActivity {
         nickname = i.getStringExtra("nickname");
         nickname_view.setText(nickname);
         submit = findViewById(R.id.change_profile_submit);
-        Glide.with(ChangeProfileActivity.this)
-                .load("http://35.166.40.164/profile/"+nickname+".png")
+        Glide.with(ChangeProfileActivity.this).
+                load("http://35.166.40.164/profile/"+nickname+".png").
+                apply(new RequestOptions())
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .override(600,600)
                 .error(R.drawable.app_icon)
                 .into(profileImage);
