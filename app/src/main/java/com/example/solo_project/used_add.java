@@ -94,11 +94,20 @@ public class used_add extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Toast.makeText(used_add.this, "5장까지 선택 가능합니다", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(intent, 2222);
+
                 Toast.makeText(used_add.this, "5장까지 선택 가능합니다", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setAction(Intent.ACTION_PICK);
+
                 startActivityForResult(intent, 2222);
             }
         });

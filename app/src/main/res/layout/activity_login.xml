@@ -11,9 +11,9 @@
         android:id="@+id/Signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:text="회원가입"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
+        android:text="회원가입"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submit" />
 
@@ -93,8 +93,8 @@
         android:id="@+id/findPw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:text="이메일 및 비밀번호 찾기"
         app:layout_constraintStart_toEndOf="@+id/Signup"
         app:layout_constraintTop_toBottomOf="@+id/submit" />

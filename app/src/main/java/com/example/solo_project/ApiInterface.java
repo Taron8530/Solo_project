@@ -135,4 +135,9 @@ public interface ApiInterface {
     @GET("used_search.php")
         // 검색기능
     Call<ArrayList<item_model>> used_search(@Query("comment") String comment);
+    @POST("FindEmail.php")
+    @FormUrlEncoded
+    Call<Signup_model> getEmail(
+            @Field("number") String phoneNumber
+    );
 }

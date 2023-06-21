@@ -86,7 +86,7 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent i = new Intent(getApplicationContext(),Signup_prof.class);
+                    Intent i = new Intent(getApplicationContext(),FIndPasswordActivity.class);
                     startActivity(i);
                 }
             });

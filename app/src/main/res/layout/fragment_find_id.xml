@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FindIdFragment">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/put_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:inputType="phone"
+        android:hint="전화번호 입력"
+        android:maxLength="13"
+        android:layout_marginStart="10dp"
+        android:padding="10dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/send_code"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/putCertificationNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="인증번호 입력"
+        android:layout_marginStart="10dp"
+        android:padding="10dp"
+        android:maxLength="8"
+        android:visibility="gone"
+        android:layout_marginRight="10dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/CertificationBtn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/put_number" />
+
+    <Button
+        android:id="@+id/find_email"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
+        android:textColor="@color/white"
+        android:text="이메일 찾기"
+        android:background="@drawable/next_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/putCertificationNumber" />
+
+    <Button
+        android:id="@+id/CertificationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="4dp"
+        android:text="확인"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:background="@drawable/next_btn"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/put_number"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/send_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="4dp"
+        android:padding="10dp"
+        android:background="@drawable/next_btn"
+        android:textColor="@color/white"
+        android:text="인증번호 전송"
+        app:layout_constraintBottom_toTopOf="@+id/CertificationBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/email_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="216dp"
+        android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
+        android:textSize="25dp"
+        android:text="Email"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/show_email2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="abcdefg@gmail.com"
+        android:textSize="30dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_comment" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -110,7 +110,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
         } else if ((diffTime /= SEC) < MIN) {
             msg = diffTime + "분 전";
         } else if ((diffTime /= MIN) < HOUR) {
-            msg = (diffTime) + "시간 전";
+            msg = (diffTime / 12) + "시간 전";
         } else if ((diffTime /= HOUR) < DAY) {
             msg = (diffTime) + "일 전";
         } else if ((diffTime /= DAY) < MONTH) {

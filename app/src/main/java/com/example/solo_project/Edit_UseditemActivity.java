@@ -68,6 +68,7 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_useditem);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("판매글 수정");
         layout_init();
         Intent i = getIntent();
         used_Name = i.getStringExtra("used_name");
