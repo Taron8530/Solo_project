@@ -66,7 +66,7 @@ public class chat_promise extends AppCompatActivity {
         long mNow;
         Date mDate;
         Date tDate;
-        SimpleDateFormat mdate_format = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat mdate_format = new SimpleDateFormat("yyyy년 MM월 dd일 E요일");
         SimpleDateFormat mtime_format = new SimpleDateFormat("a h시 mm분");
         mNow = System.currentTimeMillis();
         mDate = new Date(mNow);
