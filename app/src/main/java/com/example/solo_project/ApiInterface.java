@@ -140,4 +140,10 @@ public interface ApiInterface {
     Call<Signup_model> getEmail(
             @Field("number") String phoneNumber
     );
+    @POST("FindPassword.php")
+    @FormUrlEncoded
+    Call<Signup_model> updatePassword(
+            @Field("number") String phoneNumber,
+            @Field("password") String password
+    );
 }

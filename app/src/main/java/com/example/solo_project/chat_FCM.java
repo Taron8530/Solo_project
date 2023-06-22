@@ -44,6 +44,7 @@ public class chat_FCM extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        Log.d("chat_FCM", "onMessageReceived: 호출됨 ");
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE); //fcm이 날라왔는데 look 상태일때
         @SuppressLint("InvalidWakeLockTag")
         PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");

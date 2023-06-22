@@ -46,7 +46,7 @@ public class FindIdFragment extends Fragment {
     private FirebaseAuth mauth;
     private String phone_number;
     private String verficationID;
-    private boolean check = true;
+    private boolean check = false;
     private String verifyPhoneNumber;
     private String TAG = "FindEmailFragment";
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {

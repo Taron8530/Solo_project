@@ -368,6 +368,7 @@ public class chating extends AppCompatActivity {
                 i.putExtra("receiver",sender);
                 sendMsg("Video_Call_Request",sender,room_num,"Video_Call_Request");
                 startActivity(i);
+                socket_Disconnect();
                 break;
         }
 
@@ -489,6 +490,7 @@ public class chating extends AppCompatActivity {
                                 i.putExtra("sender",nickname);
                                 i.putExtra("receiver",sender);
                                 startActivity(i);
+                                socket_Disconnect();
                             }
                             else{
                                 mHandler.post(new MsgUpdate(read));
