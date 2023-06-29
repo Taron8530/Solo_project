@@ -112,6 +112,7 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setAction(Intent.ACTION_PICK);
                 startActivityForResult(intent, 2222);
             }
         });

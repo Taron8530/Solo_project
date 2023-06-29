@@ -108,23 +108,13 @@ public class chat_FCM extends FirebaseMessagingService {
         return new_time;
     }
 
-    private RemoteViews getCustomDesign(String title, String message, String time) {
-        RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.notification);
-        remoteViews.setTextViewText(R.id.noti_title, title);
-        remoteViews.setTextViewText(R.id.noti_message, message);
-        remoteViews.setTextViewText(R.id.noti_time, time);
-        remoteViews.setImageViewResource(R.id.noti_icon, R.drawable.app_icon);
-        return remoteViews;
-    }
-
     public void showNotification(String title, String message, String room_num, String time) {
         Intent intent = new Intent(this, chating.class);
         intent.putExtra("my_nickname", nickname);
         intent.putExtra("sender", title);
         intent.putExtra("room_num", room_num);
 
-        String channel_id = "";
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        String channel_id = "gd";
 //        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -136,14 +126,16 @@ public class chat_FCM extends FirebaseMessagingService {
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pendingIntent);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder = builder.setContent(getCustomDesign(title, message, time));
-        } else {
-            builder = builder.setContentTitle(title)
-                    .setContentText(message)
-                    .setSmallIcon(R.drawable.app_icon).setContentIntent(pendingIntent);
-        }
-
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            builder = builder.setContent(getCustomDesign(title, message, time));
+//        } else {
+//            builder = builder.setContentTitle(title)
+//                    .setContentText(message)
+//                    .setSmallIcon(R.drawable.app_icon).setContentIntent(pendingIntent);
+//        }
+        builder = builder.setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.app_icon).setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(channel_id, "web_app", NotificationManager.IMPORTANCE_HIGH);

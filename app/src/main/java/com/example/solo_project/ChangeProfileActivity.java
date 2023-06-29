@@ -67,6 +67,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             Glide.with(ChangeProfileActivity.this)
                                     .load(uri)
                                     .override(600,600)
+                                    .circleCrop()
                                     .error(R.drawable.app_icon)
                                     .into(profileImage);
                             checked = true;
@@ -100,6 +101,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .override(600,600)
                 .error(R.drawable.app_icon)
+                .circleCrop()
                 .into(profileImage);
         init_ClickListener();
     }

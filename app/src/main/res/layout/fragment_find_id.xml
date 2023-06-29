@@ -14,6 +14,7 @@
         android:layout_marginTop="28dp"
         android:hint="전화번호 입력 ex)010-1234-1234"
         android:inputType="phone"
+        android:textSize="13dp"
         android:maxLength="13"
         android:padding="10dp"
         app:layout_constrainedWidth="true"
@@ -31,6 +32,7 @@
         android:layout_marginStart="10dp"
         android:padding="10dp"
         android:maxLength="8"
+        android:textSize="13dp"
         android:visibility="gone"
         android:layout_marginRight="10dp"
         app:layout_constrainedWidth="true"
@@ -76,6 +78,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="4dp"
         android:padding="10dp"
+        android:textSize="13dp"
         android:background="@drawable/next_btn"
         android:textColor="@color/white"
         android:text="인증번호 전송"
@@ -84,30 +87,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/email_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:fontFamily="@font/nexon_lv1_gothic_low_otr_bold"
-        android:textSize="25dp"
-        android:text="Email"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/show_email2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="abcdefg@gmail.com"
-        android:textSize="30dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_comment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -117,6 +117,9 @@ public class F_chating extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void FinishLoad(msg_box msg){
         Log.e("FinishLoad",msg.getMsg());
+        TextView comment = root.findViewById(R.id.chat_empty_comment);
+        comment.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         list_select();
     }
 }

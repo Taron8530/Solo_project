@@ -84,8 +84,6 @@ public class FindIdFragment extends Fragment {
         verifyCode = root.findViewById(R.id.CertificationBtn);
         putNumber = root.findViewById(R.id.put_number);
         putCode = root.findViewById(R.id.putCertificationNumber);
-        comment = root.findViewById(R.id.email_comment);
-        showEmail = root.findViewById(R.id.show_email2);
         findEmail = root.findViewById(R.id.find_email);
         mauth = FirebaseAuth.getInstance();
         sendCode.setOnClickListener(new View.OnClickListener() {

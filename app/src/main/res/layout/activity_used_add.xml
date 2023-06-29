@@ -62,6 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="59dp"
                     android:layout_marginTop="20dp"
+                    android:paddingLeft="10dp"
                     android:hint="글 제목" />
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -69,6 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
+                    android:paddingLeft="10dp"
                     android:inputType="number"
                     android:hint="가격(₩)"
                     android:maxLength="10"/>

@@ -205,7 +205,7 @@ public class F_home extends Fragment {
         call.enqueue(new Callback<ArrayList<item_model>>() {
             @Override
             public void onResponse(Call<ArrayList<item_model>> call, Response<ArrayList<item_model>> response) {
-                if(response.body() != null){
+                if(response.body() != null && response.isSuccessful()){
                     onGetResult(response.body());
 
                 }

@@ -160,6 +160,7 @@ public class FindPasswordFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
                         if(response.isSuccessful()){
+                            Log.d(TAG, "onResponse: "+response.body().getResponse());
                             if(response.body().getResponse().equals("ok")){
                                 Toast.makeText(getActivity().getApplicationContext(),"완료",Toast.LENGTH_SHORT).show();
                                 getActivity().finish();

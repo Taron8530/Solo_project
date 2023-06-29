@@ -1,6 +1,7 @@
 package com.example.solo_project;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,10 +13,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,6 +95,7 @@ public class chating extends AppCompatActivity {
     private ActivityResultLauncher<Intent> location_start_for_result;
     private LinearLayout container;
     private BufferedReader input;
+    private EditText inputText;
 
     @Override
     protected void onPause() {
@@ -120,6 +124,7 @@ public class chating extends AppCompatActivity {
                             sendMsg(i.getStringExtra("location") +">"+ lati +">"+ longs,sender,room_num,"Location_share");
                             Log.e("위치공유","위치공유"+i.getStringExtra("location") +"/"+ lati +"/"+ longs);
 //                            myDb.insert_data(room_num,"",Msgs[2].replaceAll("위치____공유",""),Msgs[3],4);
+                            recyclerView.scrollToPosition(dataList.size() -1);
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -143,6 +148,7 @@ public class chating extends AppCompatActivity {
                                     //여기서 소켓으로 메세지 던질거임
                                     sendMsg(nickname+"님이 약속을 잡았습니다 상단을 확인해주세요!",sender,room_num,"Promise");
                                     dataList.add(new chat_item(nickname+"님이 약속을 잡았습니다! 상단을 확인해주세요",nickname,"전송중...",5));
+                                    recyclerView.scrollToPosition(dataList.size() -1);
                                     adapter.notifyDataSetChanged();
                                     Promise_select(room_num);
                                 }
@@ -201,21 +207,15 @@ public class chating extends AppCompatActivity {
         Log.e("닉네임 화깅ㄴ",nickname);
         mHandler = new Handler();//핸들러 변수
         recyclerView = findViewById(R.id.chating_recyclerview); //리사이클러뷰 할당
-        message = findViewById(R.id.chating_text);
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                if(dataList.size() > 0) {
-                    recyclerView.smoothScrollToPosition(dataList.size() - 1);
-                }
-            }
-        }); // auto Scroll 코드
+        message = findViewById(R.id.chating_text);// auto Scroll 코드
         LinearLayoutManager manager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false);//리사이클러뷰 매니저
         recyclerView.setLayoutManager(manager); // LayoutManager 등록
         adapter = new MyAdapter(dataList);
         recyclerView.setAdapter(adapter); //리사이클러뷰에 어뎁터 장착
-        recyclerView.scrollToPosition(dataList.size()-1);
+        if(dataList.size()>0){
+            recyclerView.scrollToPosition(dataList.size());
+        }
         Waiting_msg(); //서버에서 보내는 메세지 받을 준비
         adapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
             @Override
@@ -238,6 +238,7 @@ public class chating extends AppCompatActivity {
                 if(!message.getText().toString().trim().equals("")){
                     dataList.add(new chat_item(message.getText().toString(),nickname,"전송중...",2));
                     adapter.notifyDataSetChanged();
+                    recyclerView.scrollToPosition(dataList.size() -1);
 //                    myDb.last_msg_update(Integer.parseInt(room_num),message.getText().toString());
                     sendMsg(message.getText().toString(),sender,room_num,"General");
 //                    chat_data_db_Helper db = new chat_data_db_Helper(chating.this);
@@ -262,6 +263,7 @@ public class chating extends AppCompatActivity {
                 startActivity(I);
             }
         });
+
         //버튼 활성화 비 활성화 로직 구현하기!!
     }
 //    private void setStringArrayPref(Context context, String key, ArrayList<chat_item> values) {
@@ -594,7 +596,7 @@ public class chating extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        socket_Disconnect();
+        socket_Disconnect();
     }
 
     @Override
@@ -665,6 +667,7 @@ public class chating extends AppCompatActivity {
                         }
                     });
                     dataList.add(new chat_item(Uri.toString(),nickname,"전송중...",3));
+                    recyclerView.scrollToPosition(dataList.size() -1);
 //                    myDb.last_msg_update(Integer.parseInt(room_num),"사진");
                     adapter.notifyDataSetChanged();
                 }catch (Exception e){
@@ -765,6 +768,7 @@ public class chating extends AppCompatActivity {
                 dataList.add(new chat_item(message,sender,String_extract_time(time),5)); //end point
                 myDb.insert_data(room_num,sender,message,time,5);
                 myDbs.last_msg_update(Integer.parseInt(room_num),"약속을 잡았습니다.",time);
+                Promise_select(room_num);
             }else{
                     dataList.add(new chat_item(message,sender,String_extract_time(time),1));
                     myDb.insert_data(room_num,sender,message,time,1);
