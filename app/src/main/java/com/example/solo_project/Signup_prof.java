@@ -36,6 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.w3c.dom.Text;
 
@@ -224,15 +226,18 @@ public class Signup_prof extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 Log.e("이미지 URI", String.valueOf(data.getData()));
-//                Glide.with(getApplicationContext()).load(data.getData()).into((ImageView) findViewById(R.id.profilebtn));
-                ((ImageButton) findViewById(R.id.profilebtn)).setImageBitmap(imageBitmap);
+                Glide.with(getApplicationContext()).load(data.getData()).into((ImageView) findViewById(R.id.profilebtn));
+//                ((ImageButton) findViewById(R.id.profilebtn)).setImageBitmap(imageBitmap);
             }
         }
         if (requestCode == REQUEST_Image) {
             if (resultCode == RESULT_OK) {
                 Uri = data.getData();
                 Log.e("onActivityResult: ", Uri.toString());
-                Glide.with(getApplicationContext()).load(Uri).into((ImageView) findViewById(R.id.profilebtn));
+                Glide.with(getApplicationContext()).
+                        load(Uri)
+                        .override(600,600)
+                        .into((ImageView) findViewById(R.id.profilebtn));
             }
 
         }

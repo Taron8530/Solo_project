@@ -1,5 +1,7 @@
 package com.example.solo_project;
 
+import static java.lang.Thread.sleep;
+
 import android.app.Activity;
 import android.app.Service;
 import android.content.ContentResolver;
@@ -81,7 +83,6 @@ public class chating extends AppCompatActivity {
     String read; //서버에서 보내오는 문자열
     private RecyclerView recyclerView;
     private Button chat_btn;
-    private TextView back;
     private String TAG = "Chat_Activity";
     private TextView sender_nickname;
     private ImageView sender_profile;
@@ -113,6 +114,13 @@ public class chating extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
+                            try
+                            {
+                                sleep(3000);
+                            } catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
                             long mNow = System.currentTimeMillis();
                             Date mDate = new Date(mNow);
                             SimpleDateFormat mFormat = new SimpleDateFormat("hh시mm분");

@@ -135,7 +135,7 @@ public class used_add extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<Signup_model> call, Response<Signup_model> response) {
                             if (response.isSuccessful()) {
-                                Log.e(TAG, "onResponse: " + response.body().getResponse());
+                                Log.e(TAG, "frag_addused: " + response.body().getResponse());
                                 Log.e(TAG, "onResponsen: " + response.body().getNickname());
                                 if (response.body().getResponse().trim().equals("success")&&response.body().getNickname().equals("성공")) {
 //                                    alertDialog.dismiss();

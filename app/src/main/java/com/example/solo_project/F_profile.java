@@ -82,6 +82,7 @@ public class F_profile extends Fragment {
                 .override(600,600)
                 .error(R.drawable.app_icon)
                 .into(profile);
+        getCredit();
     }
 
     @Override
@@ -97,7 +98,6 @@ public class F_profile extends Fragment {
         profile = root.findViewById(R.id.f_profile);
         Log.e("onCreateView",email + " " +nickname);
         credit_View = root.findViewById(R.id.credit);
-        getCredit();
 
         email_view.setText(email);
         nickname_view.setText(nickname);
