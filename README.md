@@ -14,6 +14,11 @@
    - Slack
    - Notion
    - Github
+ - **서버 환경**
+   - Ubuntu 20.04
+   - Apache2
+   - Mysql 8.0
+   - JDK 11
 # ⚙️ 사용 기술
  - retrofit2
  - WebRTC
@@ -26,7 +31,7 @@
 # 📍 핵심 기능
  - 영상통화
  - 채팅
- - 물건 업로드 / 물건 리스트
+ - 물건 업로드 / 물건 리스트 확인
 # 🔨 개발 환경
  - Android Studio
  - Visual Studio Code
