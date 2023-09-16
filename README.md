@@ -23,10 +23,10 @@
  - Kakao Pay API
 
 
-# 📍핵심 기능
+# 📍 핵심 기능
  - 영상통화
  - 채팅
  - 물건 업로드 / 물건 리스트
-# 개발 환경
+# 🔨 개발 환경
  - Android Studio
  - Visual Studio Code
