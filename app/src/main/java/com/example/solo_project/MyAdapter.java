@@ -2,7 +2,6 @@ package com.example.solo_project;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -27,8 +25,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     {
         myDataList = dataList;
     }
-
-    // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener ;
     }
@@ -84,16 +80,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     {
         if(viewHolder instanceof Left_image_chat) //상대가 이미지 보냈을때
         {
-//            ((Left_image_chat) viewHolder).name.setText(myDataList.get(position).getName());
             Glide.with(context).load(myDataList.get(position).getContent()).into(((Left_image_chat) viewHolder).image);
             ((Left_image_chat) viewHolder).time.setText(myDataList.get(position).getTime());
-//            Glide.with(((Left_image_chat) viewHolder).itemView).load("http://35.166.40.164/profile/"+myDataList.get(position).getName()+".png").override(100, 100).error(R.drawable.app_icon).circleCrop().into(((Left_image_chat) viewHolder).profile);
-
-//            ((Left_image_chat) viewHolder).content.setText(myDataList.get(position).getContent());
         }
         else if(viewHolder instanceof LeftViewHolder) //상대가 채팅 보냈을때
         {
-//            ((LeftViewHolder) viewHolder).name.setText(myDataList.get(position).getName());
             ((LeftViewHolder) viewHolder).content.setText(myDataList.get(position).getContent());
             ((LeftViewHolder) viewHolder).time.setText(myDataList.get(position).getTime());
         }
@@ -158,7 +149,6 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         {
             super(itemView);
             time = itemView.findViewById(R.id.left_chat_time);
-//            name = itemView.findViewById(R.id.left_chat_name);
             image = itemView.findViewById(R.id.left_chat_image);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -177,20 +167,17 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public class LeftViewHolder extends RecyclerView.ViewHolder{
         TextView content;
-//        TextView name;
         TextView time;
 
         LeftViewHolder(View itemView)
         {
             super(itemView);
             content = itemView.findViewById(R.id.content);
-//            name = itemView.findViewById(R.id.name);
             time = itemView.findViewById(R.id.time);
         }
     }
     public class PromiseViewHolder extends RecyclerView.ViewHolder{
         TextView content;
-        //        TextView name;
 
         PromiseViewHolder(View itemView)
         {

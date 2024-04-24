@@ -1,13 +1,7 @@
 package com.example.solo_project;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.InputType;
@@ -21,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -81,7 +78,6 @@ public class FindPasswordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_find_password, container, false);
-        // Inflate the layout for this fragment
         init_view();
         return root;
     }
@@ -185,10 +181,10 @@ public class FindPasswordFragment extends Fragment {
         PhoneAuthOptions options;
         phoneNumber = number;
         options = PhoneAuthOptions.newBuilder(mauth)
-                .setPhoneNumber("+82 10"+number)       // Phone number to verify
-                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                .setActivity(getActivity())                 // Activity (for callback binding)
-                .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                .setPhoneNumber("+82 10"+number)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(getActivity())
+                .setCallbacks(mCallbacks)
                 .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
 
@@ -207,8 +203,8 @@ public class FindPasswordFragment extends Fragment {
                 if(task.isSuccessful()){
                     Toast.makeText(getActivity().getApplicationContext(),"완료",Toast.LENGTH_SHORT).show();
 
-                    putCode.setVisibility(View.GONE); // 인증번호 입력칸 숨기기
-                    verifyCode.setVisibility(View.GONE); //인증번호 확인버튼 숨기기
+                    putCode.setVisibility(View.GONE);
+                    verifyCode.setVisibility(View.GONE);
                     putNumber.setVisibility(View.GONE);
                     sendCode.setVisibility(View.GONE);
                     putPassword.setVisibility(View.VISIBLE);

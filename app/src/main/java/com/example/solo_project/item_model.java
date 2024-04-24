@@ -61,21 +61,11 @@ public class item_model{
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
-    public void setUsed_name(String used_name){
-        this.usedname = used_name;
-    }
     public void setPrice(String price){
         this.price = price;
     }
     public void setResponse(String response){
         this.response = response;
-    }
-    public void setDetail(String detail){this.detail = detail;}
-    public void setNum(String num){
-        this.num = num;
-    }
-    public void setImage_size(int size){
-        this.image_size = size;
     }
 
 }

@@ -1,19 +1,8 @@
 package com.example.solo_project;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.StrictMode;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.InputType;
@@ -28,21 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-import org.w3c.dom.Text;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -77,8 +63,8 @@ public class Signup extends AppCompatActivity {
         EditText Password = findViewById(R.id.password2);
         Linear = findViewById(R.id.Linear);
 
-        verifycode.setVisibility(View.GONE); // 인증번호 입력칸 숨기기
-        varify_Btn.setVisibility(View.GONE); //인증번호 확인버튼 숨기기
+        verifycode.setVisibility(View.GONE);
+        varify_Btn.setVisibility(View.GONE);
         Linear.setVisibility(View.GONE);
         Password.addTextChangedListener(new TextWatcher() {
             EditText Pass = findViewById(R.id.password);
@@ -254,10 +240,10 @@ public class Signup extends AppCompatActivity {
         phone_number = number;
         PhoneAuthOptions options;
         options = PhoneAuthOptions.newBuilder(mauth)
-                .setPhoneNumber("+82 10"+number)       // Phone number to verify
-                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                .setActivity(this)                 // Activity (for callback binding)
-                .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                .setPhoneNumber("+82 10"+number)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this)
+                .setCallbacks(mCallbacks)
                 .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
 
@@ -278,9 +264,9 @@ public class Signup extends AppCompatActivity {
                     EditText num = findViewById(R.id.verifycode);
                     num.setInputType(InputType.TYPE_NULL);
                     Toast.makeText(Signup.this,"완료",Toast.LENGTH_SHORT).show();
-                    verifycode.setVisibility(View.GONE); // 인증번호 입력칸 숨기기
-                    varify_Btn.setVisibility(View.GONE); //인증번호 확인버튼 숨기기
-                    Linear.setVisibility(View.GONE); //리니어 숨기기
+                    verifycode.setVisibility(View.GONE);
+                    varify_Btn.setVisibility(View.GONE);
+                    Linear.setVisibility(View.GONE);
                 }else{
                     Toast.makeText(Signup.this,"인증번호를 다시 확인해주세요",Toast.LENGTH_SHORT).show();
 
@@ -292,7 +278,7 @@ public class Signup extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+            case android.R.id.home:
                 Intent i = new Intent(Signup.this,Login.class);
                 startActivity(i);
                 finish();

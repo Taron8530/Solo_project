@@ -15,7 +15,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
@@ -35,8 +34,6 @@ public class chat_promise extends AppCompatActivity {
             updateLabel();
         }
     };
-    private TextView tx1;
-    private TextView tx2;
     private Button submit;
     private DatePickerDialog datePickerDialog;
     private String TAG = "chat_promise";
@@ -57,8 +54,6 @@ public class chat_promise extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_promise);
-        tx1 = findViewById(R.id.textView);
-        tx2 = findViewById(R.id.textView2);
         submit = findViewById(R.id.promise_submit);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         EditText et_Date = (EditText) findViewById(R.id.promise_date);

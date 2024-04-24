@@ -81,41 +81,21 @@ public class Payment {
             return total;
         }
 
-        public void setTotal(int total) {
-            this.total = total;
-        }
-
         public int getTaxFree() {
             return taxFree;
-        }
-
-        public void setTaxFree(int taxFree) {
-            this.taxFree = taxFree;
         }
 
         public int getVat() {
             return vat;
         }
 
-        public void setVat(int vat) {
-            this.vat = vat;
-        }
-
         public int getPoint() {
             return point;
         }
-
-        public void setPoint(int point) {
-            this.point = point;
-        }
-
         public int getDiscount() {
             return discount;
         }
 
-        public void setDiscount(int discount) {
-            this.discount = discount;
-        }
     }
 
     public class CardInfo {
@@ -173,40 +153,20 @@ public class Payment {
             return purchaseCorp;
         }
 
-        public void setPurchaseCorp(String purchaseCorp) {
-            this.purchaseCorp = purchaseCorp;
-        }
-
         public String getPurchaseCorpCode() {
             return purchaseCorpCode;
-        }
-
-        public void setPurchaseCorpCode(String purchaseCorpCode) {
-            this.purchaseCorpCode = purchaseCorpCode;
         }
 
         public String getIssuerCorp() {
             return issuerCorp;
         }
 
-        public void setIssuerCorp(String issuerCorp) {
-            this.issuerCorp = issuerCorp;
-        }
-
         public String getIssuerCorpCode() {
             return issuerCorpCode;
         }
 
-        public void setIssuerCorpCode(String issuerCorpCode) {
-            this.issuerCorpCode = issuerCorpCode;
-        }
-
         public String getBin() {
             return bin;
-        }
-
-        public void setBin(String bin) {
-            this.bin = bin;
         }
 
         public String getCardType() {

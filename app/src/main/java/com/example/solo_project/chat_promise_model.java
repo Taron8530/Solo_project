@@ -59,16 +59,4 @@ public class chat_promise_model {
         this.nickname = nickname;
     }
 
-    public void setPromise_date(String promise_date) {
-        this.promise_date = promise_date;
-    }
-
-    public void setPromise_time(String promise_time) {
-        this.promise_time = promise_time;
-    }
-
-    public void setRoom_num(int room_num) {
-        this.room_num = room_num;
-    }
-
 }

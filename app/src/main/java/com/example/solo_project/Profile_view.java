@@ -1,17 +1,16 @@
 package com.example.solo_project;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
@@ -55,8 +54,6 @@ public class Profile_view extends AppCompatActivity {
         createFragment();
 
         createViewpager();
-//
-//        settingTabLayout();
     }
     private void createFragment() {
         frag_salehistory_ing = new frag_salehistory_ing(nickname);
@@ -96,7 +93,7 @@ public class Profile_view extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+            case android.R.id.home:
                 finish();
                 return true;
         }

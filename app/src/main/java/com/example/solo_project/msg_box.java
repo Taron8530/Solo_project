@@ -6,8 +6,4 @@ public class msg_box {
     public msg_box(String msg) {
         this.msg = msg;
     }
-
-    public String getMsg(){
-        return msg;
-    }
 }

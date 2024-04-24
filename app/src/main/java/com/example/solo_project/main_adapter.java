@@ -2,7 +2,6 @@ package com.example.solo_project;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -157,24 +156,5 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.ViewHolder> 
                 }
             });
         }
-//        public void onbind(item_model item) {
-//            Log.e(TAG, "onbind: 호출됨");
-//            Log.e(TAG,"이미지 이름 확인"+item.getImage_names());
-//            Log.e("sold_out",item.getSold_out());
-//            price.setText(comma_to_int(item.getPrice())+"원");
-//            used_item.setText(item.getusedname());
-//            nickname.setText("판매자: "+item.getNickname());
-//            Log.e("adapter", String.valueOf(item.getImage_size()));
-//            String image_name = "";
-//            if(item.getImage_names() != null && item.getImage_names().size() > 0){
-//                image_name = item.getImage_names().get(0);
-//            }
-//            Glide.with(itemView).load("http://35.166.40.164/used_image/"+item.getNum()+"/"+image_name).override(100, 100).error(R.drawable.app_icon).into(image);
-////            if(item.getSold_out().equals("1")){
-////                sold_out.setVisibility(View.VISIBLE);
-////                used_item.setPaintFlags(used_item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG); //취소선
-////                layout.setBackgroundColor(ContextCompat.getColor(context, R.color.darkGray));
-////            }
-//        }
     }
 }

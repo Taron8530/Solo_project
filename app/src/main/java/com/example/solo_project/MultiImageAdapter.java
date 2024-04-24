@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MultiImageAdapter extends RecyclerView.Adapter<MultiImageAdapter.ViewHolder>{
@@ -47,7 +46,6 @@ public class MultiImageAdapter extends RecyclerView.Adapter<MultiImageAdapter.Vi
     }
 
 
-    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
     public MultiImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
@@ -58,10 +56,8 @@ public class MultiImageAdapter extends RecyclerView.Adapter<MultiImageAdapter.Vi
         return vh ;
     }
 
-    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.e("onbindViewHolder",mData.get(position).toString()+"// "+position);
         Uri image_uri = mData.get(position) ;
 
         Glide.with(mContext)

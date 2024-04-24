@@ -1,7 +1,5 @@
 package com.example.solo_project;
 
-import android.net.Uri;
-
 public class chat_item {
     private String content;
     private String name;

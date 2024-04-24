@@ -2,21 +2,14 @@ package com.example.solo_project;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.*;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "chat_db";
@@ -67,8 +60,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
     public void last_msg_update(int room_num,String last_msg,String time){
-//        DBHelper db = new DBHelper(context.getApplicationContext());
-//        SQLiteDatabase dbs = db.getWritableDatabase() ;
         String UPDATE_QUERY = "UPDATE "+TABLE_NAME_chat_room+" SET last_msg ='"+last_msg+"', last_msg_time =" + "'"+time+"' WHERE room_num ="+room_num;
         getWritableDatabase().execSQL(UPDATE_QUERY);
     }

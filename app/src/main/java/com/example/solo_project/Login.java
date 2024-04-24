@@ -1,20 +1,14 @@
 package com.example.solo_project;
 
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.media.MediaSession2;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,13 +16,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -36,26 +31,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.gson.Gson;
-import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.sdk.user.UserApiClient;
-import com.kakao.sdk.user.model.Account;
-import com.kakao.sdk.user.model.User;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
-
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Login extends AppCompatActivity {
     private String TAG = "Login Acticity";
@@ -240,34 +225,6 @@ public class Login extends AppCompatActivity {
             return null;
         });
     }
-    public void findPW(){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        View view = LayoutInflater.from(this).inflate(R.layout.findpw, null, false);
-//        builder.setView(view);
-//
-//        final AlertDialog dialog = builder.create();
-//        dialog.show();
-    }
-//    private void getHashKey() {
-//        PackageInfo packageInfo = null;
-//        try {
-//            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        if (packageInfo == null)
-//            Log.e("KeyHash", "KeyHash:null");
-//
-//        for (Signature signature : packageInfo.signatures) {
-//            try {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            } catch (NoSuchAlgorithmException e) {
-//                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
-//            }
-//        }
-//    }
 
     public void selectTest(String email,String PW){
         ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
@@ -344,19 +301,12 @@ public class Login extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        // [END config_signin]
-
-        // [START initialize_auth]
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
-        //showProgressDialog();
-        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -428,18 +378,8 @@ public class Login extends AppCompatActivity {
                                 }
                             });
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_LONG).show();
-
-                            // updateUI(null);
                         }
 
-                        // [START_EXCLUDE]
-                        // hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }

@@ -2,30 +2,29 @@ package com.example.solo_project.webrtc;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.solo_project.R;
 
-public class CallingFragment extends Fragment{
+public class CallingFragment extends Fragment {
     private Signaling_Socket socket;
     private OnCallingClickListener mListener;
     private TextView cancel_Call;
     private TextView calling_Username;
     private String username;
     private String TAG = "CallingFragment";
-    public CallingFragment(Signaling_Socket socket,String username) {
+
+    public CallingFragment(Signaling_Socket socket, String username) {
         this.socket = socket;
         this.username = username;
     }
+
     public CallingFragment() {
         // Required empty public constructor
     }

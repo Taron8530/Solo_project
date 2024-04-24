@@ -1,8 +1,5 @@
 package com.example.solo_project;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import net.daum.android.map.MapController;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
@@ -145,7 +144,7 @@ public class Map_view_1 extends AppCompatActivity implements MapView.CurrentLoca
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+            case android.R.id.home:
                 finish();
                 return true;
         }

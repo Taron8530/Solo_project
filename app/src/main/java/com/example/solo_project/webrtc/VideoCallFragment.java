@@ -1,62 +1,42 @@
 package com.example.solo_project.webrtc;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.hardware.Camera;
-import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.solo_project.R;
 
-import org.webrtc.DefaultVideoDecoderFactory;
-import org.webrtc.DefaultVideoEncoderFactory;
-import org.webrtc.EglBase14;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
-import org.webrtc.Camera1Capturer;
 import org.webrtc.Camera1Enumerator;
-import org.webrtc.CameraEnumerationAndroid;
-import org.webrtc.CameraEnumerator;
-import org.webrtc.CameraVideoCapturer;
+import org.webrtc.DefaultVideoDecoderFactory;
+import org.webrtc.DefaultVideoEncoderFactory;
 import org.webrtc.EglBase;
-import org.webrtc.HardwareVideoEncoderFactory;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaConstraints;
-import org.webrtc.MediaSource;
 import org.webrtc.MediaStream;
-import org.webrtc.MediaStreamTrack;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.RtpReceiver;
-import org.webrtc.VideoCodecType;
-import org.webrtc.RtpTransceiver;
 import org.webrtc.SessionDescription;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoDecoderFactory;
-import org.webrtc.VideoEncoder;
 import org.webrtc.VideoEncoderFactory;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
@@ -66,16 +46,15 @@ import java.util.List;
 
 public class VideoCallFragment extends Fragment
 {
+    private final String TAG = "VideoCallFragment";
+    private final String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
     private PeerConnectionFactory peerConnectionFactory;
-    private String TAG = "VideoCallFragment";
-    private MediaConstraints audioConstraints;
     private AudioTrack localAudioTrack;
     private AudioSource audioSource;
     private VideoSource videoSource;
     private VideoTrack videoTrack;
     private MediaStream stream;
 
-    //    PeerConnectionFactory.Options options;
     private PeerConnection peerConnection;
     private List<PeerConnection.IceServer> iceServers;
     private Signaling_Socket socket;
@@ -91,7 +70,6 @@ public class VideoCallFragment extends Fragment
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     private EglBase eglBase;
-    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
     private Button close_Call;
     private boolean signalingStatus;
     private Button camera_Changer;
@@ -104,14 +82,12 @@ public class VideoCallFragment extends Fragment
         this.status = status;
         this.sender = sender;
         this.receiver = receiver;
-        // Required empty public constructor
     }
     public VideoCallFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_video_call, container, false);
-//        requestPermissions();
         initWebRTC();
         init_view();
         return root;
@@ -127,80 +103,64 @@ public class VideoCallFragment extends Fragment
         camera_Changer = root.findViewById(R.id.video_call_camera_switch);
         mic_Close = root.findViewById(R.id.video_call_micOff);
         sound_Close = root.findViewById(R.id.video_call_volume_off);
-        camera_Changer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                camera_Change();
-                Log.d(TAG, "onClick: camera_Changer 클릭됨");
-            }
+        camera_Changer.setOnClickListener(view -> {
+            camera_Change();
+            Log.d(TAG, "onClick: camera_Changer 클릭됨");
         });
-        mic_Close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(audio_Status){
-                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_off);
-                    mic_Close.setBackground(drawable);
-                    stream.removeTrack(localAudioTrack);
-                    audio_Status = false;
-                }else{
-                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_on);
-                    mic_Close.setBackground(drawable);
-                    localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
-                    localAudioTrack.setEnabled(true);
-                    stream.addTrack(localAudioTrack);
-                    audio_Status = true;
-                }
+        mic_Close.setOnClickListener(view -> {
+            if(audio_Status){
+                Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_off);
+                mic_Close.setBackground(drawable);
+                stream.removeTrack(localAudioTrack);
+                audio_Status = false;
+            }else{
+                Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_mic_on);
+                mic_Close.setBackground(drawable);
+                localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
+                localAudioTrack.setEnabled(true);
+                stream.addTrack(localAudioTrack);
+                audio_Status = true;
+            }
 
+        });
+        sound_Close.setOnClickListener(view -> {
+            if(remote_audio_Status){
+                Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_volume_off);
+                sound_Close.setBackground(drawable);
+                remoteAudioTrack.setEnabled(false);
+                remote_audio_Status = false;
+            }else{
+                Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_volume_on);
+                sound_Close.setBackground(drawable);
+                remoteAudioTrack.setEnabled(true);
+                remote_audio_Status = true;
             }
         });
-        sound_Close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(remote_audio_Status){
-                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_volume_off);
-                    sound_Close.setBackground(drawable);
-                    remoteAudioTrack.setEnabled(false);
-                    remote_audio_Status = false;
-                }else{
-                    Drawable drawable = ContextCompat.getDrawable(getActivity().getApplicationContext(), R.mipmap.ic_call_volume_on);
-                    sound_Close.setBackground(drawable);
-                    remoteAudioTrack.setEnabled(true);
-                    remote_audio_Status = true;
-                }
-            }
-        });
-        close_Call.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                socket.sendMsg(sender,receiver,"close_call");
-                getActivity().finish();
-            }
+        close_Call.setOnClickListener(view -> {
+            socket.sendMsg(sender,receiver,"close_call");
+            getActivity().finish();
         });
         Log.d(TAG, "init_view: status check" + status);
 
-        socket.setOnItemClickListener(new Signaling_Socket.readMsgListener() {
-            @Override
-            public void onServerMsgRead(String msg) throws JSONException {
-                if(msg != null){
-                    JSONObject jsonObject = new JSONObject(msg);
-                    String type = (String) jsonObject.get("type");
-                    if(type.equals("offer")){
-                        createAnswer((String)jsonObject.get("sdp"));
-                    }else if(type.equals("answer")){
-                        setAnswer((String)jsonObject.get("sdp"));
-                    }else if(type.equals("ice_candidate")){
-                        String iceCandidate_sdp = (String) jsonObject.get("sdp");
-                        String iceCandidate_sdp_mid = (String) jsonObject.get("sdpMid");
-                        int iceCandidate_sdpMLineIndex = (int) jsonObject.get("sdpMLineIndex");
-                        IceCandidate iceCandidate = new IceCandidate(iceCandidate_sdp_mid,iceCandidate_sdpMLineIndex,iceCandidate_sdp);
-                        Log.d(TAG, "onServerMsgRead: "+iceCandidate.sdp);
-                        peerConnection.addIceCandidate(iceCandidate);
-                    }else if(type.equals("close_call")){
-                        // 종료되었다고 알림
-                        getActivity().finish();
-                    }
-
+        socket.setOnItemClickListener(msg -> {
+            if(msg != null){
+                JSONObject jsonObject = new JSONObject(msg);
+                String type = (String) jsonObject.get("type");
+                if(type.equals("offer")){
+                    createAnswer((String)jsonObject.get("sdp"));
+                }else if(type.equals("answer")){
+                    setAnswer((String)jsonObject.get("sdp"));
+                }else if(type.equals("ice_candidate")){
+                    String iceCandidate_sdp = (String) jsonObject.get("sdp");
+                    String iceCandidate_sdp_mid = (String) jsonObject.get("sdpMid");
+                    int iceCandidate_sdpMLineIndex = (int) jsonObject.get("sdpMLineIndex");
+                    IceCandidate iceCandidate = new IceCandidate(iceCandidate_sdp_mid,iceCandidate_sdpMLineIndex,iceCandidate_sdp);
+                    Log.d(TAG, "onServerMsgRead: "+iceCandidate.sdp);
+                    peerConnection.addIceCandidate(iceCandidate);
+                }else if(type.equals("close_call")){
+                    getActivity().finish();
                 }
+
             }
         });
         if (status) {
@@ -221,11 +181,8 @@ public class VideoCallFragment extends Fragment
                 .setOptions(options)
                 .setVideoDecoderFactory(decoderFactory)
                 .setVideoEncoderFactory(encoderFactory)
-                .createPeerConnectionFactory()
-        ;
-//        CameraEnumerator cameraEnumerator =
-//        VideoCapturer videoCapturer = createCameraCapture();
-        audioConstraints = new MediaConstraints();
+                .createPeerConnectionFactory();
+        MediaConstraints audioConstraints = new MediaConstraints();
         initIceServers();
         peerConnection = peerConnectionFactory.createPeerConnection(
                 new PeerConnection.RTCConfiguration(iceServers),
@@ -287,13 +244,10 @@ public class VideoCallFragment extends Fragment
     }
     private void createOffer() {
         MediaConstraints constraints = new MediaConstraints();
-// Add video codecs
         constraints.mandatory.add(new MediaConstraints.KeyValuePair("videoCodec", "H.264H"));
         constraints.mandatory.add(new MediaConstraints.KeyValuePair("audioCodec", "opus"));
 
-// Set other constraints
         constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"));
-//        constraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"));
         constraints.mandatory.add(new MediaConstraints.KeyValuePair("maxWidth", "1000"));
         constraints.mandatory.add(new MediaConstraints.KeyValuePair("maxHeight", "1000"));
         constraints.optional.add(new MediaConstraints.KeyValuePair("maxFrameRate", "30"));
@@ -301,7 +255,6 @@ public class VideoCallFragment extends Fragment
         peerConnection.createOffer(new SDPObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sdp) {
-                // LocalDescription 설정
                 Log.e(TAG, "offer 생성됨: " + sdp.description);
                 peerConnection.setLocalDescription(new SDPObserver(), sdp);
                 socket.sendOffer(sender,receiver,sdp.description);
@@ -310,7 +263,6 @@ public class VideoCallFragment extends Fragment
 
     }
     public void setAnswer(String remoteSdp){
-        MediaConstraints constraints = new MediaConstraints();
         String sdpType = "answer"; // "offer" 또는 "answer"
         Log.e(TAG, "answer 이 날라와서 셋팅됨: " + remoteSdp);
         SessionDescription receivedSessionDescription = new SessionDescription(SessionDescription.Type.fromCanonicalForm(sdpType), remoteSdp);
@@ -356,7 +308,6 @@ public class VideoCallFragment extends Fragment
         peerConnection.createAnswer(new SDPObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sdp) {
-                // LocalDescription 설정
                 Log.e(TAG, "answer 생성됨: " + sdp.description);
                 peerConnection.setLocalDescription(new SDPObserver(), sdp);
                 socket.sendAnswer(sender,receiver,sdp.description);
@@ -441,7 +392,6 @@ public class VideoCallFragment extends Fragment
                     remoteAudioTrack.setEnabled(true);
                 }
 
-                // If you want to process the remote audio
             } catch (Exception e) {
                 e.printStackTrace();
             }

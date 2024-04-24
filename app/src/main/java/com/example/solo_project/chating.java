@@ -3,7 +3,6 @@ package com.example.solo_project;
 import static java.lang.Thread.sleep;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,12 +14,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -96,18 +93,11 @@ public class chating extends AppCompatActivity {
     private ActivityResultLauncher<Intent> location_start_for_result;
     private LinearLayout container;
     private BufferedReader input;
-    private EditText inputText;
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        socket_Disconnect();
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        dataList = new ArrayList<>();
         location_start_for_result = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -153,7 +143,6 @@ public class chating extends AppCompatActivity {
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if(response != null){
                                     Log.d("chating",response.body());
-                                    //여기서 소켓으로 메세지 던질거임
                                     sendMsg(nickname+"님이 약속을 잡았습니다 상단을 확인해주세요!",sender,room_num,"Promise");
                                     dataList.add(new chat_item(nickname+"님이 약속을 잡았습니다! 상단을 확인해주세요",nickname,"전송중...",5));
                                     recyclerView.scrollToPosition(dataList.size() -1);
@@ -182,7 +171,6 @@ public class chating extends AppCompatActivity {
         container = findViewById(R.id.chating_container);
         Intent i = getIntent();
         nickname = i.getStringExtra("my_nickname");
-        Log.e(TAG, "onCreate: 닉네임 들어옴" );
         sender = i.getStringExtra("sender");
         room_num = i.getStringExtra("room_num");
         container.setVisibility(View.GONE);
@@ -212,19 +200,18 @@ public class chating extends AppCompatActivity {
                 .error(R.drawable.app_icon)
                 .into(sender_profile);
 
-        Log.e("닉네임 화깅ㄴ",nickname);
         mHandler = new Handler();//핸들러 변수
-        recyclerView = findViewById(R.id.chating_recyclerview); //리사이클러뷰 할당
-        message = findViewById(R.id.chating_text);// auto Scroll 코드
+        recyclerView = findViewById(R.id.chating_recyclerview);
+        message = findViewById(R.id.chating_text);
         LinearLayoutManager manager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL,false);//리사이클러뷰 매니저
-        recyclerView.setLayoutManager(manager); // LayoutManager 등록
+        recyclerView.setLayoutManager(manager);
         adapter = new MyAdapter(dataList);
-        recyclerView.setAdapter(adapter); //리사이클러뷰에 어뎁터 장착
+        recyclerView.setAdapter(adapter);
         if(dataList.size()>0){
             recyclerView.scrollToPosition(dataList.size());
         }
-        Waiting_msg(); //서버에서 보내는 메세지 받을 준비
+        Waiting_msg();
         adapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
             @Override
             public void onImageClick(View v, int position) {
@@ -272,49 +259,8 @@ public class chating extends AppCompatActivity {
             }
         });
 
-        //버튼 활성화 비 활성화 로직 구현하기!!
     }
-//    private void setStringArrayPref(Context context, String key, ArrayList<chat_item> values) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        SharedPreferences.Editor editor = prefs.edit();
-//        JSONArray data = new JSONArray();
-//        JSONObject temp_data = new JSONObject();
-//        for (int i = 0; i < values.size(); i++) {
-//            try {
-//                temp_data.put("content",values.get(i).getContent());
-//                temp_data.put("name",values.get(i).getName());
-//                temp_data.put("time",values.get(i).getTime());
-//                temp_data.put("view_type",values.get(i).getViewType());
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            data.put(temp_data);
-//        }
-//        if (!values.isEmpty()) {
-//            editor.putString(key, data.toString());
-//        } else {
-//            editor.putString(key, null);
-//        }
-//        editor.apply();
-//    }
-//
-//    private ArrayList<chat_item> getStringArrayPref(Context context, String key) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        String json = prefs.getString(key, null);
-//        ArrayList<chat_item> chat_datas = new ArrayList<>();
-//        if (json != null) {
-//            try {
-//                JSONArray chat_data_Json = new JSONArray(json);
-//                for (int i = 0; i < chat_data_Json.length(); i++) {
-//                    String url = chat_data_Json.optString(i);
-//                    chat_datas.add(new chat_item(chat_data_Json.ge));
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return chat_datas;
-//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -331,12 +277,11 @@ public class chating extends AppCompatActivity {
 
         switch(item.getItemId())
         {
-            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+            case android.R.id.home:
                 socket_Disconnect();
                 finish();
                 break;
             case R.id.promise:
-                //약속잡기 구현 호출
                 promise();
                 break;
             case R.id.location_share:
@@ -350,7 +295,6 @@ public class chating extends AppCompatActivity {
                 builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 취소 버튼이 클릭된 경우 실행할 코드를 작성하세요.
                         dialog.dismiss();
                     }
                 });
@@ -358,7 +302,6 @@ public class chating extends AppCompatActivity {
                 builder.setNegativeButton("나가기", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 나가기 버튼이 클릭된 경우 실행할 코드를 작성하세요.
                         if(myDb.remove_room(room_num)){
                             finish();
                         }else{
@@ -369,7 +312,6 @@ public class chating extends AppCompatActivity {
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-                //채팅방 데이터 모두 지우기
                 break;
             case R.id.video_call:
                 Intent i = new Intent(chating.this, Video_call_Activity.class);
@@ -419,8 +361,6 @@ public class chating extends AppCompatActivity {
                     jsonObject.put("sender",nickname);
                     jsonObject.put("receiver",sender);
                     jsonObject.put("type",type);
-                    Log.e("채팅 액티비티", String.valueOf(jsonObject));
-                    Log.e("채팅 엑티비티",sendWriter.toString());
 
                     sendWriter.println(jsonObject);
                     sendWriter.flush();
@@ -522,10 +462,6 @@ public class chating extends AppCompatActivity {
             public void onResponse(Call<chat_promise_model> call, Response<chat_promise_model> response) {
                 if(response.body() != null){
                     if(response.body().getResponse().equals("성공")){
-                        Log.d("chating",response.body().getPromise_date());
-                        Log.d("chating",response.body().getPromise_time());
-                        Log.d("chating",response.body().getNickname());
-                        Log.d("chating",response.body().getTime());
                         container.setVisibility(View.VISIBLE);
                         TextView promise_date = findViewById(R.id.promise_date);
                         promise_date.setText(response.body().getPromise_date());
@@ -537,7 +473,6 @@ public class chating extends AppCompatActivity {
                                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-//                        Toast.makeText(getApplicationContext(), "Yeah!!", Toast.LENGTH_LONG).show();
 
                                     }
                                 });
@@ -545,7 +480,6 @@ public class chating extends AppCompatActivity {
                                 alertDialog.show();
                             }
                         });
-//                        Log.d("chating",String.valueOf(response.body().getRoom_num()));
                     }else{
                         Log.e("ChattingActivity",response.body().getResponse());
                     }
@@ -617,14 +551,6 @@ public class chating extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == REQUEST_IMAGE_CAPTURE) {
-//            if (resultCode == RESULT_OK) {
-//                Bundle extras = data.getExtras();
-//                Bitmap imageBitmap = (Bitmap) extras.get("data");
-//                Log.e("이미지 URI", String.valueOf(data.getData()));
-//                ((ImageButton) findViewById(R.id.profilebtn)).setImageBitmap(imageBitmap);
-//            }
-//        }
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Uri Uri = data.getData();
@@ -705,15 +631,14 @@ public class chating extends AppCompatActivity {
     public String saveBitmapToJpeg(Bitmap bitmap,String imgName) throws IOException {   // 선택한 이미지 내부 저장소에 저장
         File tempFile = new File(getCacheDir(), imgName);
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);    //회전시킬 각도
+        matrix.postRotate(90);
         Bitmap newBmp = Bitmap.createBitmap(bitmap, 0, 0, //bmp를 matrix로 회전하여 newBmp에
                 bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        // 파일 경로와 이름 넣기
         try {
-            tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
+            tempFile.createNewFile();
             FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
             newBmp.compress(Bitmap.CompressFormat.JPEG, 30, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
-            out.close();    // 스트림 닫아주기
+            out.close();
             Log.e("파일 저장",tempFile.getPath());
             return getCacheDir()+"/"+imgName;
         } catch (Exception e) {

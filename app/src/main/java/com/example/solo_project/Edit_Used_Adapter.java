@@ -1,7 +1,6 @@
 package com.example.solo_project;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Edit_Used_Adapter extends RecyclerView.Adapter<Edit_Used_Adapter.ViewHolder>{
     private ArrayList<String> mData = null ;
@@ -51,7 +49,6 @@ public class Edit_Used_Adapter extends RecyclerView.Adapter<Edit_Used_Adapter.Vi
     }
 
 
-    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
     public Edit_Used_Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
@@ -62,7 +59,6 @@ public class Edit_Used_Adapter extends RecyclerView.Adapter<Edit_Used_Adapter.Vi
         return vh ;
     }
 
-    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(Edit_Used_Adapter.ViewHolder holder, int position) {
         Log.e("onbindViewHolder",mData.get(position).toString()+"// "+position);

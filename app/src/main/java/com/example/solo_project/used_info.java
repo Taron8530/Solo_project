@@ -1,14 +1,6 @@
 package com.example.solo_project;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.content.Intent;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,12 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.api.Api;
-import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -86,7 +79,6 @@ public class used_info extends AppCompatActivity implements Serializable {
                 .circleCrop()
                 .error(R.drawable.app_icon)
                 .into(profile);
-//        image_size = i.getIntExtra("image_size",0);
         if(image_names != null){
             image_size = image_names.size();
         }
@@ -257,7 +249,6 @@ public class used_info extends AppCompatActivity implements Serializable {
         i.putExtra("used_name",used_name.getText().toString());
         i.putExtra("detail",str_detail);
         i.putExtra("price",str_price);
-//        i.putExtra("nickname",nickname)
         i.putExtra("num",num);
         startActivity(i);
     }
@@ -289,7 +280,7 @@ public class used_info extends AppCompatActivity implements Serializable {
 
         switch(item.getItemId())
         {
-            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+            case android.R.id.home:
                 finish();
                 return true;
             case R.id.used_sold_out:

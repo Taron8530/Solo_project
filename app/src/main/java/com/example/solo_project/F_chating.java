@@ -3,6 +3,11 @@ package com.example.solo_project;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -10,27 +15,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.HorizontalScrollView;
-import android.widget.TextView;
-
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class F_chating extends Fragment {
@@ -104,22 +92,10 @@ public class F_chating extends Fragment {
         list_select();
         EventBus.getDefault().register(this);
     }
-    public void room_update(){
-        list_select();
-    }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void FinishLoad(msg_box msg){
-        Log.e("FinishLoad",msg.getMsg());
-        TextView comment = root.findViewById(R.id.chat_empty_comment);
-        comment.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
-        list_select();
     }
 }

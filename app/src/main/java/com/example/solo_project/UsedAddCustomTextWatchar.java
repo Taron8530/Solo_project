@@ -37,7 +37,7 @@ public class UsedAddCustomTextWatchar implements TextWatcher {
 
     }
 
-    protected String makeStringComma(String str) {    // 천단위 콤마설정.
+    protected String makeStringComma(String str) {
         if (str.length() == 0) {
             return "";
         }

@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -35,9 +34,6 @@ public class chat_FCM extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-//        //token을 서버로` 전송
-//        ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
-//        Call<Signup_model> call = apiInterface.profile_sel(verify);
         Log.e("FCM_token", token);
     }
 
@@ -49,12 +45,6 @@ public class chat_FCM extends FirebaseMessagingService {
         @SuppressLint("InvalidWakeLockTag")
         PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
         wakeLock.acquire(3000);
-        if (remoteMessage.getData() != null) {
-            // 여기가 webrtc fcm 부분
-//            showNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("message"));
-            Log.e("노티피케이션", String.valueOf(remoteMessage.getData()));
-        }
-
         if (remoteMessage.getNotification() != null) {
             pref = getSharedPreferences("user_verify", Context.MODE_PRIVATE);
             nickname = pref.getString("user_nickname", "");
@@ -62,10 +52,8 @@ public class chat_FCM extends FirebaseMessagingService {
             String time = null;
             String room_num = null;
             String receiver = null;
-            Log.e("노티피케이션", remoteMessage.getNotification().getTitle() + remoteMessage.getNotification().getBody());
 
             Log.e("body", remoteMessage.getNotification().getBody());
-//            String[] bodys = remoteMessage.getNotification().getBody().split("/"); //노티피케이션 body를 구분자 / 기준으로 자른것
             try {
                 JSONObject jsonObject = new JSONObject(remoteMessage.getNotification().getBody());
                 receiver = jsonObject.getString("receiver");
@@ -99,7 +87,6 @@ public class chat_FCM extends FirebaseMessagingService {
             }
         }
         EventBus.getDefault().post(new msg_box("보내짐"));
-        //수신한 메시지를 처리
     }
 
     public String String_extract_time(String time) throws ParseException {
@@ -114,8 +101,7 @@ public class chat_FCM extends FirebaseMessagingService {
         intent.putExtra("sender", title);
         intent.putExtra("room_num", room_num);
 
-        String channel_id = "gd";
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        String channel_id = "FCMChannel";
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channel_id)
@@ -125,14 +111,6 @@ public class chat_FCM extends FirebaseMessagingService {
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pendingIntent);
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            builder = builder.setContent(getCustomDesign(title, message, time));
-//        } else {
-//            builder = builder.setContentTitle(title)
-//                    .setContentText(message)
-//                    .setSmallIcon(R.drawable.app_icon).setContentIntent(pendingIntent);
-//        }
         builder = builder.setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.drawable.app_icon).setContentIntent(pendingIntent);

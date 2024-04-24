@@ -1,13 +1,6 @@
 package com.example.solo_project.webrtc;
 
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.solo_project.MyAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,13 +13,9 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class Signaling_Socket {
 
-    private Handler mHandler;//핸들러 변수
     private InetAddress serverAddr; //IP주소
     private Socket socket; //소켓 변수
     private PrintWriter sendWriter;//서버로 문자열 출력

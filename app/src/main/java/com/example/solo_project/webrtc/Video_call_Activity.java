@@ -1,45 +1,26 @@
 package com.example.solo_project.webrtc;
 
-import static androidx.core.content.ContextCompat.getSystemService;
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.solo_project.ApiInterface;
-import com.example.solo_project.Apiclient;
-import com.example.solo_project.F_chating;
-import com.example.solo_project.F_home;
-import com.example.solo_project.F_profile;
 import com.example.solo_project.R;
-import com.google.common.collect.ImmutableList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.webrtc.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class Video_call_Activity extends AppCompatActivity implements OnCall_Choice_ClickListener,OnCallingClickListener{
+public class Video_call_Activity extends AppCompatActivity implements OnCall_Choice_ClickListener, OnCallingClickListener {
     private Signaling_Socket socket;
     private String sender;
     private String status;
@@ -62,6 +43,7 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
             throw new RuntimeException(e);
         }
     }
+
     private void init_() throws IOException {
         requestPermissions();
         Intent i = getIntent();
@@ -69,26 +51,26 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
         sender = i.getStringExtra("sender");
         receiver = i.getStringExtra("receiver");
         socket = new Signaling_Socket(sender);
-        if(status.equals("call_request")){
-            callingFragment = new CallingFragment(socket,receiver);
+        if (status.equals("call_request")) {
+            callingFragment = new CallingFragment(socket, receiver);
             getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, callingFragment).commit();
-        }else{
-            callChoiceFragment = new CallChoiceFragment(socket,receiver);
+        } else {
+            callChoiceFragment = new CallChoiceFragment(socket, receiver);
             getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, callChoiceFragment).commit();
         }
         socket.setOnItemClickListener(new Signaling_Socket.readMsgListener() {
             @Override
             public void onServerMsgRead(String msg) throws JSONException {
-                Log.d(TAG, "onServerMsgRead: "+msg);
+                Log.d(TAG, "onServerMsgRead: " + msg);
                 JSONObject jsonObject = new JSONObject(msg);
                 String type = (String) jsonObject.get("type");
-                Log.d(TAG, "onServerMsgRead: "+type);
-                if(type.equals("call_accept")){
+                Log.d(TAG, "onServerMsgRead: " + type);
+                if (type.equals("call_accept")) {
                     Log.d(TAG, "onServerMsgRead: 첫번째 조건문 호출됨");
-                    videoCallFragment = new VideoCallFragment(socket,true,sender,receiver);
+                    videoCallFragment = new VideoCallFragment(socket, true, sender, receiver);
                     getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, videoCallFragment).commit();
                     onSpeaker();
-                }else if(type.equals("call_failed")) {
+                } else if (type.equals("call_failed")) {
                     Log.d(TAG, "onServerMsgRead: 두번째 조건문 호출됨");
                     finish();
                     Log.d(TAG, "onServerMsgRead: 두번째 조건문 호출됨2");
@@ -99,41 +81,37 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
 
     @Override
     public void onFailedButtonClicked() {
-        // 콜을 받았을때 취소 버튼 클릭
-        socket.sendMsg(sender,receiver,"call_failed");
+        socket.sendMsg(sender, receiver, "call_failed");
         finish();
     }
 
     @Override
     public void onAcceptButtonClicked() {
-        // 콜을 받았을때 수락 버튼 클릭
-        socket.sendMsg(sender,receiver,"call_accept");
-        videoCallFragment = new VideoCallFragment(socket,false,sender,receiver);
+        socket.sendMsg(sender, receiver, "call_accept");
+        videoCallFragment = new VideoCallFragment(socket, false, sender, receiver);
         getSupportFragmentManager().beginTransaction().replace(R.id.video_call_container, videoCallFragment).commit();
         onSpeaker();
     }
-    private void onSpeaker(){
-        // Audio Manager를 생성할 때 Context 객체를 전달해야 함
+
+    private void onSpeaker() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-
-// 전화 스피커폰 모드로 설정
         audioManager.setMode(AudioManager.MODE_IN_CALL);
         audioManager.setSpeakerphoneOn(true);
     }
-    private void offSpeaker(){
-        // Audio Manager를 생성할 때 Context 객체를 전달해야 함
+
+    private void offSpeaker() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 
-// 전화 스피커폰 모드로 설정
         audioManager.setMode(AudioManager.MODE_IN_CALL);
         audioManager.setSpeakerphoneOn(false);
     }
+
     @Override
     public void onCancelButtonClicked() {
         // 콜을 걸다가 취소를 눌렀을때 버튼 클릭
-        socket.sendMsg(sender,receiver,"call_cancel");
+        socket.sendMsg(sender, receiver, "call_cancel");
         finish();
     }
 
@@ -149,9 +127,11 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
             throw new RuntimeException(e);
         }
     }
+
     private void requestPermissions() {
         ActivityCompat.requestPermissions(Video_call_Activity.this, permissions, PERMISSION_REQUEST_CODE);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -160,7 +140,7 @@ public class Video_call_Activity extends AppCompatActivity implements OnCall_Cho
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(Video_call_Activity.this, "권한 요청 거부됨. 앱이 제대로 작동하지 않을 수 있습니다.", Toast.LENGTH_SHORT).show();
                     break;
-                }else{
+                } else {
 
                 }
             }

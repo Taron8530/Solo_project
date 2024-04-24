@@ -1,12 +1,5 @@
 package com.example.solo_project;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -15,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -25,6 +17,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -188,9 +186,9 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) {   // 어떤 이미지도 선택하지 않은 경우
+        if (data == null) {
             Toast.makeText(Edit_UseditemActivity.this, "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
-        } else {   // 이미지를 하나라도 선택한 경우
+        } else {
             if (data.getClipData() == null) {     // 이미지를 하나만 선택한 경우
                 Log.e("single choice: ", String.valueOf(data.getData()));
                 Uri imageUri = data.getData();
@@ -201,19 +199,18 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
                     image_size.setTextColor(Color.parseColor("#ff0000"));
                 }
                 adapter.notifyDataSetChanged();
-            } else {      // 이미지를 여러장 선택한 경우
+            } else {
                 ClipData clipData = data.getClipData();
                 Log.e("clipData", String.valueOf(clipData.getItemCount()));
 
                 if (clipData.getItemCount() + images.size() > 5) {   // 선택한 이미지가 5장 이상인 경우
                     Toast.makeText(Edit_UseditemActivity.this, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
-                } else {   // 선택한 이미지가 1장 이상 5장 이하인 경우
+                } else {
                     Log.e(TAG, "multiple choice");
                     for (int i = 0; i < clipData.getItemCount(); i++) {
                         Uri imageUri = clipData.getItemAt(i).getUri();
-                        // 선택한 이미지들의 uri를 가져온다.
                         try {
-                            images.add(imageUri.toString());  //uri를 list에 담는다.
+                            images.add(imageUri.toString());
                             uriList.add(imageUri);
                             image_size.setText(images.size() + "/5");
                             if (images.size() >= 5) {
@@ -233,18 +230,15 @@ public class Edit_UseditemActivity extends AppCompatActivity implements Serializ
     public String saveBitmapToJpeg(Bitmap bitmap, String imgName) {   // 선택한 이미지 내부 저장소에 저장
         File tempFile = new File(getCacheDir(), imgName);
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);    //회전시킬 각도
+        matrix.postRotate(90);
         Bitmap newBmp = Bitmap.createBitmap(bitmap, 0, 0, //bmp를 matrix로 회전하여 newBmp에
                 bitmap.getWidth(), bitmap.getHeight(), matrix, true);// 파일 경로와 이름 넣기
         try {
-            tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
+            tempFile.createNewFile();
             FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
             newBmp.compress(Bitmap.CompressFormat.JPEG, 60, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
-            out.close();    // 스트림 닫아주기
-//            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
-            return getCacheDir() + "/" + imgName;
+            out.close();         return getCacheDir() + "/" + imgName;
         } catch (Exception e) {
-//            Toast.makeText(getApplicationContext(), "파일 저장 실패", Toast.LENGTH_SHORT).show();
             return null;
         }
     }

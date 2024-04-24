@@ -5,19 +5,13 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.Selection;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -94,12 +88,6 @@ public class used_add extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(used_add.this, "5장까지 선택 가능합니다", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-//                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(intent, 2222);
 
                 Toast.makeText(used_add.this, "5장까지 선택 가능합니다", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -118,10 +106,6 @@ public class used_add extends AppCompatActivity {
                     Toast.makeText(used_add.this, "게시글을 모두 채워주세요", Toast.LENGTH_SHORT).show();
                 } else {
                     ProgressDialog loagindDialog = ProgressDialog.show(used_add.this, "물건 올리는중","잠시만 기다려주세요", true, false);
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-//                    builder.setTitle("게시물").setMessage("올리는중...");
-//                    AlertDialog alertDialog = builder.create();
-//                    alertDialog.show();
                     submit.setClickable(false);
                     setFilepath(uriList);
                     for (int i = 0; i < filepath.size(); i++) {
@@ -138,7 +122,6 @@ public class used_add extends AppCompatActivity {
                                 Log.e(TAG, "frag_addused: " + response.body().getResponse());
                                 Log.e(TAG, "onResponsen: " + response.body().getNickname());
                                 if (response.body().getResponse().trim().equals("success")&&response.body().getNickname().equals("성공")) {
-//                                    alertDialog.dismiss();
                                     loagindDialog.dismiss();
                                     Intent i = new Intent(used_add.this,MainActivity.class);
                                     startActivity(i);
@@ -166,32 +149,32 @@ public class used_add extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data == null){   // 어떤 이미지도 선택하지 않은 경우
+        if(data == null){
             Toast.makeText(used_add.this, "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
         }
         else{   // 이미지를 하나라도 선택한 경우
-            if(data.getClipData() == null){     // 이미지를 하나만 선택한 경우
+            if(data.getClipData() == null){
                 Log.e("single choice: ", String.valueOf(data.getData()));
                 Uri imageUri = data.getData();
                 uriList.add(imageUri);
                 size = size+1;
                 image_size.setText(size+"/5");
             }
-            else{      // 이미지를 여러장 선택한 경우
+            else{
                 ClipData clipData = data.getClipData();
                 Log.e("clipData", String.valueOf(clipData.getItemCount()));
 
                 if(clipData.getItemCount() + uriList.size()> 5 ){   // 선택한 이미지가 5장 이상인 경우
                     Toast.makeText(used_add.this, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
                 }
-                else{   // 선택한 이미지가 1장 이상 5장 이하인 경우
+                else{
                     Log.e(TAG, "multiple choice");
 
                     for (int i = 0; i < clipData.getItemCount(); i++){
                         Uri imageUri = clipData.getItemAt(i).getUri();
-                        // 선택한 이미지들의 uri를 가져온다.
+
                         try {
-                            uriList.add(imageUri);  //uri를 list에 담는다.
+                            uriList.add(imageUri);
                             size = size + 1;
                             image_size.setText(size+"/5");
                             if(size == 5){
@@ -207,15 +190,6 @@ public class used_add extends AppCompatActivity {
                 }
             }
         }
-    }
-    public String comma_to_int(String number){
-        if (number.length() == 0) {
-            return "";
-        }
-        long value = Long.parseLong(number);
-        DecimalFormat df = new DecimalFormat("###,###");
-        String money = df.format(value);
-        return money;
     }
     private void setFilepath(List<Uri> uri){
         ContentResolver resolver = getContentResolver();
@@ -236,21 +210,19 @@ public class used_add extends AppCompatActivity {
             Log.e(TAG, "setFilepath: "+filepath.get(i));
         }
     }
-    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {   // 선택한 이미지 내부 저장소에 저장
+    public String saveBitmapToJpeg(Bitmap bitmap,String imgName) {
         File tempFile = new File(getCacheDir(), imgName);
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);    //회전시킬 각도
-        Bitmap newBmp = Bitmap.createBitmap(bitmap, 0, 0, //bmp를 matrix로 회전하여 newBmp에
-                bitmap.getWidth(), bitmap.getHeight(), matrix, true);// 파일 경로와 이름 넣기
+        matrix.postRotate(90);
+        Bitmap newBmp = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         try {
-            tempFile.createNewFile();   // 자동으로 빈 파일을 생성하기
-            FileOutputStream out = new FileOutputStream(tempFile);  // 파일을 쓸 수 있는 스트림을 준비하기
-            newBmp.compress(Bitmap.CompressFormat.JPEG, 60, out);   // compress 함수를 사용해 스트림에 비트맵을 저장하기
-            out.close();    // 스트림 닫아주기
-//            Toast.makeText(getApplicationContext(), tempFile.getPath(), Toast.LENGTH_SHORT).show();
+            tempFile.createNewFile();
+            FileOutputStream out = new FileOutputStream(tempFile);
+            newBmp.compress(Bitmap.CompressFormat.JPEG, 60, out);
+            out.close();
             return getCacheDir()+"/"+imgName;
         } catch (Exception e) {
-//            Toast.makeText(getApplicationContext(), "파일 저장 실패", Toast.LENGTH_SHORT).show();
             return null;
         }
     }
@@ -271,7 +243,7 @@ public class used_add extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+            case android.R.id.home:
                 finish();
                 return true;
         }

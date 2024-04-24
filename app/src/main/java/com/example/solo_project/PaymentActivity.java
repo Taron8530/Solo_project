@@ -1,14 +1,14 @@
 package com.example.solo_project;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,17 +22,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-/////
-// params.put("cid", "TC0ONETIME"); // 가맹점 코드
-//         params.put("partner_order_id", "1001"); // 가맹점 주문 번호
-//         params.put("partner_user_id", "gorany"); // 가맹점 회원 아이디
-//         params.put("item_name", productName); // 상품 이름
-//         params.put("quantity", "1"); // 상품 수량
-//         params.put("total_amount", productPrice); // 상품 총액
-//         params.put("tax_free_amount", "0"); // 상품 비과세
-//         params.put("approval_url", "https://www.naver.com/success"); // 결제 성공시 돌려 받을 url 주소
-//         params.put("cancel_url", "https://www.naver.com/cancel"); // 결제 취소시 돌려 받을 url 주소
-//         params.put("fail_url", "https://www.naver.com/fali"); // 결제 실패시 돌려 받을 url 주소
 
 public class PaymentActivity extends AppCompatActivity {
     private Retrofit retrofit;
@@ -76,9 +65,7 @@ public class PaymentActivity extends AppCompatActivity {
             if (url != null && url.contains("pg_token=")) {
                 String pg_Token = url.substring(url.indexOf("pg_token=") + 9);
                 pgToken = pg_Token;
-//                approveRequest();
                 update_token(pg_Token);
-//                approveRequest(); // 결제요청
                 finish();
                 return false;
 
@@ -99,7 +86,6 @@ public class PaymentActivity extends AppCompatActivity {
             }
             view.loadUrl(url);
             return false;
-//            return super.shouldOverrideUrlLoading(view, url);
         }
         public void update_token(String token){
             ApiInterface apiInterface = Apiclient.getApiClient().create(ApiInterface.class);
@@ -119,45 +105,6 @@ public class PaymentActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<Signup_model> call, Throwable t) {
                     Log.e("카카오페이",t.toString());
-                }
-            });
-        }
-        public void approveRequest(){
-            if(retrofit == null){
-                Gson gson = new GsonBuilder()
-                        .setLenient()
-                        .create();
-                retrofit = new Retrofit.Builder()
-                        .baseUrl("https://kapi.kakao.com/")
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .build();
-            }
-            Log.e("카카오페이","결제요청"+pgToken);
-            ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-            Map<String, String> params = new HashMap<>();
-            params.put("cid", "TC0ONETIME");
-            params.put("tid", tidPin);
-            params.put("partner_order_id", order_Id);
-            params.put("partner_user_id", user_Id);
-            params.put("pg_token", pgToken);
-            params.put("total_amount", total_Amount);
-            Log.e("카카오페이",params.toString());
-            Call<Payment> call = apiInterface.kakao_pay_approve_request(params);
-            call.enqueue(new Callback<Payment>() {
-                @Override
-                public void onResponse(Call<Payment> call, Response<Payment> response) {
-                    //결제 완료 내 서버로 결제 완료 요청 리스폰스 -> 내 서버로 온 결제 확인 후 토큰 충전
-                    Log.e("카카오페이 결제",response.toString());
-                    if(response.isSuccessful()){
-                        Toast.makeText(PaymentActivity.this, "결재가 완료되었습니다", Toast.LENGTH_SHORT).show();
-                        Log.e("카카오페이 결제", String.valueOf(response));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Payment> call, Throwable t) {
-                    Log.e("카카오페이??",String.valueOf(t));
                 }
             });
         }
@@ -201,7 +148,6 @@ public class PaymentActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Kakao_pay_item_model> call, Throwable t) {
-                    Log.e("카카오페이", "응답없음: " + t.toString());
                     Toast.makeText(PaymentActivity.this, "인터넷상태를 확인해주세요!", Toast.LENGTH_SHORT).show();
                 }
 
